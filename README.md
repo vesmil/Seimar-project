@@ -1,92 +1,60 @@
-# Vesely
+# Zobrazení streamu 4k kamery na Zynq Ultrascale+
 
+**Ročníkový projekt na MFF v zimním semestru 2022/23**
+Autor Milan Veselý ve spolupráci s Workswell s.r.o.
 
+---
 
-## Getting started
+## Úvod
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+Cílem mého ročníkového projektu bude vytvořit program s grafickým rozhraním na platformě Zynq Ultrascale+ s operačním systém PetaLinux pro zobrazení LVDS streamu ze 4k Sony kamery.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+Kromě zobrazení bude možné také v grafickém rozhraní možné kameru ovládat prostřednictvím komunikace přes UART a to jednak změnit standardní vlastnosti jako nastavení expozice, zoom, ostření, atd. a také více specifické vlastnosti jako nastavení kvality odesílaného obrazu *(detaily doplním po nastudování datasheet konkrétní Sony kamery)*. 
 
-## Add your files
+Následně bude také možnost obrazový stream uložit na SSD - v první řadě v RAW formátu a později i enkódovaně (je pravdědponé, že k enkódování bude využit přímo hardwarový modul.
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+Pro rozšíření bude možné implementovat zobrazení i jiné než visible kamery a odesílání dat po ethernetu.
 
-```
-cd existing_repo
-git remote add origin https://gitlab.mff.cuni.cz/teaching/nprg045/yaghob/2022/vesely.git
-git branch -M master
-git push -uf origin master
-```
+Grafický výstup bude na desce prostřednictvím DisplayPort.
 
-## Integrate with your tools
+Program bude napsán v C++ a grafické rozhraní bude implementováno pomocí frameworku QT.
 
-- [ ] [Set up project integrations](https://gitlab.mff.cuni.cz/teaching/nprg045/yaghob/2022/vesely/-/settings/integrations)
+*Schéma grafického rozhraní:*
 
-## Collaborate with your team
+<img src="README.assets/UI.png" alt="UI" style="zoom:67%;" />
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+<div style="page-break-after: always;"></div>
 
-## Test and Deploy
+## Hardware
 
-Use the built-in continuous integration in GitLab.
+### Xilinx Zynq UltraScale+
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+Jedná se o MPSoC (Multiprocessor system on a chip) s ARM procesorem.
 
-***
+#### Trenz kit (TE0701-06)
 
-# Editing this README
+Bude pravděpodobně využit jako nosná deska pro Zynq
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+#### Sony 4k kamera s optickým zoomem
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+...bude doplněno později
 
-## Name
-Choose a self-explaining name for your project.
+### HW schéma projektu:
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+<img src="README.assets/Scheme.png" alt="Scheme" style="zoom: 80%;" />
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+---
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+## Provedení
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+### Současný stav
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+V současné chvíli nejsou ještě hotové dvě hardwarové věci - převodník výstupu kamery na desku a hradlové pole pro zprostředkování streamu pro procesor. To ale ovšem není pro postup potřeba, jelikož je na FPGA připraven test pattern generátor, který mi bude dočasně generovat náhodný obraz.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+### Navrhovaný postup
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+1. V první řadě vytvořím nějaký základ v QT - místo pro menu a stream
+2. Zobrazení obrazu z test pattern generátoru
+3. Zprovoznění menu pro ovládání kamery
+4. Zprovoznění menu pro ukládání obrazu
+5. Bonusy...
