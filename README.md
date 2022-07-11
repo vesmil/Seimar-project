@@ -29,15 +29,19 @@ V současné chvíli jsou závislosti na jiných knihovnách nejasné.
 
 ### Xilinx Zynq UltraScale+
 
+*Jako součást modulu [Trenz TE820-04](https://wiki.trenz-electronic.de/display/PD/TE0820+TRM)*
+
 Jedná se o MPSoC (Multiprocessor system on a chip) s ARM procesorem.
 
-#### Trenz kit - TE0701-06
+### [Trenz TE0701-06](https://wiki.trenz-electronic.de/display/PD/TE0701+TRM)
 
-Bude pravděpodobně využit jako nosná deska pro Zynq
+Nosná deska na které bude výše zmíněný modul
 
-#### Sony 4k kamera s optickým zoomem
+#### [Sony FCB-ER8550](https://www.image-sensing-solutions.eu/FCB-ER8550.html)
 
-...bude doplněno později
+Kamera s optickým zoomem a rozlišením 4k
+
+Podporuje Visca protokol pro komunikaci přes UART
 
 ### HW schéma projektu:
 
