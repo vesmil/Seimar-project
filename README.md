@@ -2,15 +2,11 @@
 
 ## Úvod
 
-Cílem mého ročníkového projektu bude vytvořit program s grafickým rozhraním na platformě
-Zynq Ultrascale+ s operačním systém PetaLinux pro zobrazení streamu ze 4k Sony kamery.
+Cílem mého ročníkového projektu bude vytvořit program s grafickým rozhraním na platformě Zynq Ultrascale+ s operačním systém PetaLinux pro zobrazení streamu ze 4k Sony kamery.
 
-Kromě zobrazení bude možné také v grafickém rozhraní možné kameru ovládat prostřednictvím
-komunikace přes UART (VISCA protokol) a to jednak změnit standardní vlastnosti jako nastavení expozice,
-zoom, ostření, atd. a také více specifické vlastnosti jako nastavení kvality odesílaného obrazu.
+Kromě zobrazení bude možné také v grafickém rozhraní možné kameru ovládat prostřednictvím komunikace přes UART (VISCA protokol) a to jednak změnit standardní vlastnosti jako nastavení expozice, zoom, ostření, atd. a také více specifické vlastnosti jako nastavení kvality odesílaného obrazu.
 
-Následně bude také možnost obrazový stream uložit na SSD - v první řadě v RAW formátu a 
-později i enkódovaně (je pravdědponé, že k enkódování bude využit přímo hardwarový modul).
+Následně bude také možnost obrazový stream uložit na SSD - v první řadě v RAW formátu a později i enkódovaně (je pravdědponé, že k enkódování bude využit přímo hardwarový modul).
 
 Pro rozšíření bude možné implementovat zobrazení i jiné než visible kamery a odesílání dat po ethernetu.
 
@@ -51,19 +47,27 @@ Kamera bude odesílat obraz ve formátu YCbCr.
 
 ### Současný stav
 
-V současné chvíli nejsou ještě hotové dvě hardwarové věci - převodník výstupu kamery 
-na desku a hradlové pole pro zprostředkování streamu pro procesor. To ale ovšem není
-pro postup potřeba, jelikož je na FPGA připraven test pattern generátor, který mi bude
-dočasně generovat náhodný obraz.
+V současné chvíli nejsou ještě hotové dvě hardwarové věci - převodník výstupu kamery na desku a hradlové pole pro zprostředkování streamu pro procesor. To ale ovšem není pro postup potřeba, jelikož je na FPGA připraven test pattern generátor, který mi bude dočasně generovat náhodný obraz.
 
-### Navrhovaný postup
+Navíc se stále čeká na nosnou desku od ČVUT, která místo HDMI nabídne DisplayPort. HDMI u aktuální desky totiž nevysílá žádný obraz a pouze je k němu přístup z hradlového pole. V nejhorším případě mám ale k dispozici desku na které DisplayPort je a s úpravou prostředí by šla využít.
 
-1. V první řadě vytvořím nějaký základ v QT - místo pro menu a stream
-2. Následně otestuji, že jsem schopný se k datům z test pattern generátoru dostat a to uložením na SD kartu v RAW formátu
-3. Zde budu muset počkat na dokončení modulu pro enkódování, případně ho dočasně udělat softwarově
-4. Zobrazení obrazu z test pattern generátoru na display port
-5. Zprovoznění menu
-6. Bonusy...
+### TODO
+
+- [x] Specifikace
+- [x] Prázdný QT projekt
+- [ ] Setup kompilace
+  - [x] Boot desky
+  - [ ] Příprava QT creator
+- [ ] Ukládání RAW streamu na SD kartu
+- [ ] Počkat na enkódovací modul - či dočasně udělat softwarově
+- [ ] S funkční ČVUT nosnou deskou - zobrazit stream na display port (note: HDMI současné desky je problematický)
+- [ ] Zobrazit menu
+  - [ ] Práce se streamem - ukládání, atd.
+  - [ ] Komunikace s kamerou - VISCA protkol
+- [ ] Bonusy:
+  - [ ] Komunikace s deskou pomocí ethernetu
+  - [ ] Zobrazení jiné kamery než s viditelným světlem
+  - [ ] ...
 
 ---
 

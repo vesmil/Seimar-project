@@ -1,0 +1,130 @@
+<import><profile><data>
+  <variable>Profile.2</variable>
+  <valuemap type="QVariantMap">
+   <value type="bool" key="PE.Profile.AutoDetected">false</value>
+   <value type="QString" key="PE.Profile.AutoDetectionSource" />
+   <valuemap type="QVariantMap" key="PE.Profile.Data">
+    <valuelist type="QVariantList" key="CMake.ConfigurationKitInformation">
+     <value type="QString">QT_QMAKE_EXECUTABLE:STRING=%{Qt:qmakeExecutable}</value>
+     <value type="QString">CMAKE_PREFIX_PATH:STRING=%{Qt:QT_INSTALL_PREFIX}</value>
+     <value type="QString">CMAKE_C_COMPILER:STRING=%{Compiler:Executable:C}</value>
+     <value type="QString">CMAKE_CXX_COMPILER:STRING=%{Compiler:Executable:Cxx}</value>
+    </valuelist>
+    <valuemap type="QVariantMap" key="CMake.GeneratorKitInformation">
+     <value type="QString" key="ExtraGenerator" />
+     <value type="QString" key="Generator">Ninja</value>
+     <value type="QString" key="Platform" />
+     <value type="QString" key="Toolset" />
+    </valuemap>
+    <value type="QString" key="CMakeProjectManager.CMakeKitInformation">{8e6e084b-f8cc-4925-9499-6c67491ccee9}</value>
+    <value type="QString" key="Debugger.Information">{561d6ff8-5b55-4670-a4ed-2668a69c2e2a}</value>
+    <value type="QString" key="PE.Profile.BuildDevice">Desktop Device</value>
+    <value type="QString" key="PE.Profile.Device">{6fe75478-daec-4e44-8c0f-478d4915a93a}</value>
+    <value type="QString" key="PE.Profile.DeviceType">GenericLinuxOsType</value>
+    <valuelist type="QVariantList" key="PE.Profile.Environment">
+     <value type="QString">SDKTARGETSYSROOT=//home/vesmil/Work/sdk/sysroots/cortexa72-cortexa53-xilinx-linux</value>
+    </valuelist>
+    <value type="QString" key="PE.Profile.SysRoot">/home/vesmil/Work/sdk/sysroots/cortexa72-cortexa53-xilinx-linux</value>
+    <valuemap type="QVariantMap" key="PE.Profile.ToolChainsV3">
+     <value type="QByteArray" key="C">{6b59eccc-1163-4b1c-b137-aafe8b9339c3}</value>
+     <value type="QByteArray" key="Cxx">{6dadb4ba-0595-436b-9708-29a7a319bbb9}</value>
+    </valuemap>
+    <value type="int" key="QtSupport.QtInformation">8</value>
+   </valuemap>
+   <value type="QString" key="PE.Profile.DeviceTypeForIcon" />
+   <value type="QString" key="PE.Profile.Icon" />
+   <value type="QString" key="PE.Profile.Id">{8a57707e-95d2-471b-93c3-2dd9620c5ee1}</value>
+   <valuelist type="QVariantList" key="PE.Profile.MutableInfo" />
+   <value type="QString" key="PE.Profile.Name">Zynq</value>
+   <value type="bool" key="PE.Profile.SDK">false</value>
+   <valuelist type="QVariantList" key="PE.Profile.StickyInfo" />
+  </valuemap>
+ </data>
+ </profile><debugger><data>
+  <variable>DebuggerItem.2</variable>
+  <valuemap type="QVariantMap">
+   <valuelist type="QVariantList" key="Abis">
+    <value type="QString">arm-linux-generic-elf-64bit</value>
+   </valuelist>
+   <value type="bool" key="AutoDetected">false</value>
+   <value type="QString" key="Binary">/opt/petalinux/2021.2/sysroots/x86_64-petalinux-linux/usr/bin/aarch64-xilinx-linux/aarch64-xilinx-linux-gdb</value>
+   <value type="QString" key="DetectionSource" />
+   <value type="QString" key="DisplayName">GDB (aarch64)</value>
+   <value type="int" key="EngineType">1</value>
+   <value type="QString" key="Id">{561d6ff8-5b55-4670-a4ed-2668a69c2e2a}</value>
+   <value type="QDateTime" key="LastModified" />
+   <value type="QString" key="Version">9.2.0</value>
+   <value type="QString" key="WorkingDirectory" />
+  </valuemap>
+ </data>
+ </debugger><toolchain><data>
+  <variable>ToolChain.6</variable>
+  <valuemap type="QVariantMap">
+   <value type="QString" key="ProjectExplorer.GccToolChain.OriginalTargetTriple">aarch64-xilinx-linux</value>
+   <value type="QString" key="ProjectExplorer.GccToolChain.Path">/opt/petalinux/2021.2/sysroots/x86_64-petalinux-linux/usr/bin/aarch64-xilinx-linux/aarch64-xilinx-linux-gcc</value>
+   <valuelist type="QVariantList" key="ProjectExplorer.GccToolChain.PlatformCodeGenFlags" />
+   <valuelist type="QVariantList" key="ProjectExplorer.GccToolChain.PlatformLinkerFlags" />
+   <valuelist type="QVariantList" key="ProjectExplorer.GccToolChain.SupportedAbis">
+    <value type="QString">arm-linux-generic-elf-64bit</value>
+   </valuelist>
+   <value type="QString" key="ProjectExplorer.GccToolChain.TargetAbi">arm-linux-generic-elf-64bit</value>
+   <value type="bool" key="ProjectExplorer.ToolChain.Autodetect">false</value>
+   <value type="QString" key="ProjectExplorer.ToolChain.DetectionSource" />
+   <value type="QString" key="ProjectExplorer.ToolChain.DisplayName">GCC (aarch64)</value>
+   <value type="QString" key="ProjectExplorer.ToolChain.Id">ProjectExplorer.ToolChain.Gcc:{6b59eccc-1163-4b1c-b137-aafe8b9339c3}</value>
+   <value type="int" key="ProjectExplorer.ToolChain.Language">1</value>
+   <value type="QString" key="ProjectExplorer.ToolChain.LanguageV2">C</value>
+  </valuemap>
+ </data>
+ </toolchain><toolchain><data>
+  <variable>ToolChain.7</variable>
+  <valuemap type="QVariantMap">
+   <value type="QString" key="ProjectExplorer.GccToolChain.OriginalTargetTriple">aarch64-xilinx-linux</value>
+   <value type="QString" key="ProjectExplorer.GccToolChain.Path">/opt/petalinux/2021.2/sysroots/x86_64-petalinux-linux/usr/bin/aarch64-xilinx-linux/aarch64-xilinx-linux-g++</value>
+   <valuelist type="QVariantList" key="ProjectExplorer.GccToolChain.PlatformCodeGenFlags" />
+   <valuelist type="QVariantList" key="ProjectExplorer.GccToolChain.PlatformLinkerFlags" />
+   <valuelist type="QVariantList" key="ProjectExplorer.GccToolChain.SupportedAbis">
+    <value type="QString">arm-linux-generic-elf-64bit</value>
+   </valuelist>
+   <value type="QString" key="ProjectExplorer.GccToolChain.TargetAbi">arm-linux-generic-elf-64bit</value>
+   <value type="bool" key="ProjectExplorer.ToolChain.Autodetect">false</value>
+   <value type="QString" key="ProjectExplorer.ToolChain.DetectionSource" />
+   <value type="QString" key="ProjectExplorer.ToolChain.DisplayName">G++ (aarch64)</value>
+   <value type="QString" key="ProjectExplorer.ToolChain.Id">ProjectExplorer.ToolChain.Gcc:{6dadb4ba-0595-436b-9708-29a7a319bbb9}</value>
+   <value type="int" key="ProjectExplorer.ToolChain.Language">2</value>
+   <value type="QString" key="ProjectExplorer.ToolChain.LanguageV2">Cxx</value>
+  </valuemap>
+ </data>
+ </toolchain><device><valuemap type="QVariantMap">
+     <value type="int" key="Authentication">0</value>
+     <value type="QString" key="DebugServerKey" />
+     <valuemap type="QVariantMap" key="ExtraData">
+      <value type="bool" key="RemoteLinux.SupportsRSync">false</value>
+     </valuemap>
+     <value type="QString" key="FreePortsSpec">10000-10100</value>
+     <value type="QString" key="Host">10.15.1.171</value>
+     <value type="int" key="HostKeyChecking">2</value>
+     <value type="QString" key="InternalId">{6fe75478-daec-4e44-8c0f-478d4915a93a}</value>
+     <value type="QString" key="KeyFile" />
+     <value type="QString" key="Name">Zynq</value>
+     <value type="int" key="Origin">0</value>
+     <value type="QString" key="OsType">GenericLinuxOsType</value>
+     <value type="QString" key="QmlsceneKey" />
+     <value type="int" key="SshPort">22</value>
+     <value type="int" key="Timeout">10</value>
+     <value type="int" key="Type">0</value>
+     <value type="QString" key="Uname">root</value>
+     <value type="int" key="Version">0</value>
+    </valuemap>
+   </device><qtversion><data>
+  <variable>QtVersion.1</variable>
+  <valuemap type="QVariantMap">
+   <value type="int" key="Id">8</value>
+   <value type="QString" key="Name">Qt 5.15.2  (aarch64)</value>
+   <value type="QString" key="QMakePath">/opt/petalinux/2021.2/sysroots/x86_64-petalinux-linux/usr/bin/qmake</value>
+   <value type="QString" key="QtVersion.Type">Qt4ProjectManager.QtVersion.Desktop</value>
+   <value type="QString" key="autodetectionSource" />
+   <value type="bool" key="isAutodetected">false</value>
+  </valuemap>
+ </data>
+ </qtversion></import>
