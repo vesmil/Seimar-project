@@ -58,10 +58,10 @@ Navíc se stále čeká na nosnou desku od ČVUT, která místo HDMI nabídne Di
 - [X] Setup kompilace
 - [ ] Ukládání RAW streamu na SD kartu
     - [x] Vytvoření prázdného souboru
-    - [ ] Příprava GStreamer
-    - [ ] Dokončení
-- [ ] Počkat na enkódovací modul - či dočasně udělat softwarově
-- [ ] S funkční ČVUT nosnou deskou - zobrazit stream na display port (note: HDMI současné desky je problematický)
+    - [x] GStreamer pipeline z příkazového řádku
+    - [ ] GStreamer v C++
+- [ ] Enkódovací modul hotový (počkat či dočasně udělat softwarově)
+- [ ] Zobrazit stream na display port (note: HDMI na Trenz desce je problematický. je potřeba použít Zynq desku nebo počkat na ČVUT desku)
 - [ ] Zobrazit menu
   - [ ] Práce se streamem - ukládání, atd.
   - [ ] Komunikace s kamerou - VISCA protkol
