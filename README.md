@@ -60,7 +60,6 @@ Navíc se stále čeká na nosnou desku od ČVUT, která místo HDMI nabídne Di
     - [x] Vytvoření prázdného souboru
     - [ ] Příprava GStreamer
     - [ ] Dokončení
-    
 - [ ] Počkat na enkódovací modul - či dočasně udělat softwarově
 - [ ] S funkční ČVUT nosnou deskou - zobrazit stream na display port (note: HDMI současné desky je problematický)
 - [ ] Zobrazit menu
