@@ -60,6 +60,8 @@ Navíc se stále čeká na nosnou desku od ČVUT, která místo HDMI nabídne Di
     - [x] Vytvoření prázdného souboru
     - [x] GStreamer pipeline z příkazového řádku
     - [ ] GStreamer v C++
+      - [x] První fungující verze
+      - [ ] Plnohodnotá verze
 - [ ] Enkódovací modul hotový (počkat či dočasně udělat softwarově)
 - [ ] Zobrazit stream na display port (note: HDMI na Trenz desce je problematický. je potřeba použít Zynq desku nebo počkat na ČVUT desku)
 - [ ] Zobrazit menu

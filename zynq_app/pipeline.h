@@ -2,15 +2,14 @@
 #define PIPELINE_H
 
 #include <string>
+#include <gst/gst.h>
+
+#include "global/constans.h"
 
 class Pipeline
 {
 public:
-    Pipeline(const std::string& src);
-    Pipeline(const Pipeline &pipeline) = delete;
-    Pipeline(Pipeline &&pipeline) = delete;
-    Pipeline operator =(const Pipeline &pipeline) = delete;
-    Pipeline operator =(Pipeline &&pipeline) = delete;
+    Pipeline();
 
 private:
     const std::string videoSrcPath;

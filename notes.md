@@ -15,12 +15,20 @@ yavta --no-query -w '0x009e0902 304' /dev/v4l-subdev0
 yavta --no-query -w '0x009f0903 0' /dev/v4l-subdev0
 yavta --no-query -w '0x0098c912 1' /dev/v4l-subdev0
 
-gst-launch-1.0 v4l2src io-mode=dmabuf ! video/x-raw, format=I420, width=1024, height=768, framerate=1/5, format=RGB ! identity sync=true ! jpegenc ! multifilesink location="img_%0 6.jpg"
+gst-launch-1.0 v4l2src io-mode=dmabuf ! video/x-raw, width=1024, height=768, framerate=60/1, format=RGB !  filesink location=/media/sd-mmcblk1p2/video-raw-file
 ```
 
-Jeden ze vzniklých obrázků:
+Pro spuštění nebo uložení:
 
-<img src="/home/vesmil/vesely/README.assets/img_0x1.jpg" style="zoom:50%;" />
+```bash
+gst-launch-1.0 filesrc location=video-raw-file ! rawvideoparse width=1024 height=768 format=16 framerate=60/1 ! autovideoconvert ! autovideosink
+
+gst-launch-1.0 filesrc location=video-raw-file ! rawvideoparse width=1024 height=768 format=16 framerate=60/1 ! autovideoconvert ! x264enc ! mp4mux ! filesink location=tpg.mp4
+```
+
+Náhled:
+
+<img src="README.assets/img_0x1.jpg" style="zoom:50%;" />
 
 *Nyní toto musím "přepsat" do C++*
 
