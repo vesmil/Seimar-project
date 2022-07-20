@@ -2,9 +2,11 @@
 
 *Zde si budu psát předběžné poznámky k vývoji*
 
-### První část - uložení generovaného obrazu na SD kartu
+## První část - uložení generovaného obrazu na SD kartu
 
-V tuto chvíli jsem zprovoznil uložení jako jpg na SD kartu z příkazové řádky
+### Setup
+
+Před použitím gstreameru je nutný setup pro video for linux - ze kterého pak 
 
 ```bash
 media-ctl -d /dev/media0 -V '5:0 [fmt:RBG888_1X24/1024x768@1/60 field:none]'
@@ -14,11 +16,27 @@ yavta --no-query -w '0x009e0901 30' /dev/v4l-subdev0
 yavta --no-query -w '0x009e0902 304' /dev/v4l-subdev0
 yavta --no-query -w '0x009f0903 0' /dev/v4l-subdev0
 yavta --no-query -w '0x0098c912 1' /dev/v4l-subdev0
+```
 
+### Příkazová řádka
+
+V tuto chvíli jsem zprovoznil uložení jako na SD kartu z příkazové řádky
+
+```bash
 gst-launch-1.0 v4l2src io-mode=dmabuf ! video/x-raw, width=1024, height=768, framerate=60/1, format=RGB !  filesink location=/media/sd-mmcblk1p2/video-raw-file
 ```
 
-Pro spuštění nebo uložení:
+### C++
+
+Pouižtí je ve výsledku velmi podobné, musím vytvořit jednotlivé elementy a ty dát do pipeline.
+
+Navíc je tedy potřeba řešit změna stavu na přehrávání - je to blokující funkce. V současné chvíli, ale stav změním z `PLAYING` na `PAUSED` a následně `READY` v destroktoru.
+
+Navíc se musím postarat o vyjímky a memory leaks.
+
+### RAW náhled
+
+Pro spuštění nebo enkódování vzniklého videa můžu využít následující příkazy:
 
 ```bash
 gst-launch-1.0 filesrc location=video-raw-file ! rawvideoparse width=1024 height=768 format=16 framerate=60/1 ! autovideoconvert ! autovideosink
@@ -28,7 +46,5 @@ gst-launch-1.0 filesrc location=video-raw-file ! rawvideoparse width=1024 height
 
 Náhled:
 
-<img src="README.assets/img_0x1.jpg" style="zoom:50%;" />
-
-*Nyní toto musím "přepsat" do C++*
+<img src="README.assets/tpg.gif" style="zoom:50%;" />
 
