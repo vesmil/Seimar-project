@@ -8,14 +8,18 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
+    // Inspiration
+    // https://stackoverflow.com/questions/66550597/gstreamer-pipeline-from-cam-to-file-c-code-ends-up-with-empty-output-file
+
     if (!gst_is_initialized()) {
-        setenv("GST_DEBUG", ("*:" + std::to_string(3)).c_str(), 1);
+        // setenv("GST_DEBUG", ("*:" + std::to_string(3)).c_str(), 1);
         gst_init(nullptr, nullptr);
     }
 
-    // GstBus *bus;
     GstElement *videosrc, *capsfilter, *sink, *pipeline;
     GstCaps *videoCaps;
+
+    // GstBus *bus;
 
     videosrc = gst_element_factory_make("v4l2src", "videosrc");
     g_object_set(videosrc,"device", glb::constants::VIDEO_SRC_PATH.c_str(),
@@ -38,6 +42,7 @@ int main(int argc, char *argv[])
     gst_caps_unref(videoCaps);
 
     pipeline = gst_pipeline_new("pipeline");
+
     // bus = gst_element_get_bus(pipeline);
 
     gst_bin_add_many(GST_BIN(pipeline), videosrc, capsfilter, sink, NULL);
@@ -52,6 +57,8 @@ int main(int argc, char *argv[])
     });
 
     gst_element_set_state (pipeline, GST_STATE_PLAYING);
+
+    // TODO Clean resources
 
     return a.exec();
 }
