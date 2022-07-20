@@ -20,9 +20,14 @@ public:
     Pipeline operator =(Pipeline &&pipeline) = delete;
 
 private:
-    GstElement *videosrc, *capsfilter, *sink, *pipeline;
+    GstElement *videosrc, *capsfilter, *filesink, *pipeline;
     GstCaps *videoCaps;
     GstBus *bus;
+
+    void set_source();
+    void set_caps_filter();
+    void set_filesink();
+    void set_pipeline();
 
     void unref_all();
 };
