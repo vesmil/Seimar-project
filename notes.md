@@ -2,11 +2,11 @@
 
 *Zde si budu psát předběžné poznámky k vývoji*
 
-## První část - uložení generovaného obrazu na SD kartu
+## 1. část - uložení generovaného obrazu na SD kartu
 
 ### Setup
 
-Před použitím gstreameru je nutný setup pro video for linux - ze kterého pak 
+Před použitím gstreameru je nutný setup pro video for linux. 
 
 ```bash
 media-ctl -d /dev/media0 -V '5:0 [fmt:RBG888_1X24/1024x768@1/60 field:none]'
@@ -44,7 +44,20 @@ gst-launch-1.0 filesrc location=video-raw-file ! rawvideoparse width=1024 height
 gst-launch-1.0 filesrc location=video-raw-file ! rawvideoparse width=1024 height=768 format=16 framerate=60/1 ! autovideoconvert ! x264enc ! mp4mux ! filesink location=tpg.mp4
 ```
 
-Náhled:
+Výsledek:
 
 <img src="README.assets/tpg.gif" style="zoom:50%;" />
 
+## 2. část - zobrazení
+
+Potřeba přidat další GStreamer pipeline...
+
+Využití QML...
+
+## 3. Část - menu
+
+
+
+## 4. část - ovládání kamery
+
+VISCA protokol

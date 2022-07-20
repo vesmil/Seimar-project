@@ -1,16 +1,27 @@
 #include "pipeline.h"
+
+#include <stdexcept>
 #include <thread>
 
 Pipeline::Pipeline()
 {
-    if (!gst_is_initialized()) {
-        setenv("GST_DEBUG", ("*:" + std::to_string(3)).c_str(), 1);
+    if (TRUE){
+        g_print("tr");
+    }
+
+    if (!FALSE){
+        g_print("fs");
+    }
+
+    if (!gst_is_initialized())
+    {
         gst_init(nullptr, nullptr);
     }
 
     videosrc = gst_element_factory_make("v4l2src", "videosrc");
     g_object_set(videosrc,"device", glb::constants::VIDEO_SRC_PATH.c_str(),
-                 "io-mode", 4, "do-timestamp", TRUE, NULL);
+                 "io-mode", 4,
+                 "do-timestamp", TRUE, NULL);
 
     sink = gst_element_factory_make("filesink", "sink");
     g_object_set(sink, "location", glb::constants::OUT_PATH.c_str(), NULL);
@@ -31,29 +42,58 @@ Pipeline::Pipeline()
     pipeline = gst_pipeline_new("pipeline");
     bus = gst_element_get_bus(pipeline);
 
-    gst_bin_add_many(GST_BIN(pipeline), videosrc, capsfilter, sink, NULL);
-    gst_element_link_many(videosrc, capsfilter, sink, NULL);
+    // GstElement *timeoverlay = gst_element_factory_make("timeoverlay", "timeoverlay");
 
+    gst_bin_add_many(GST_BIN(pipeline), videosrc, /* timeoverlay ,*/ capsfilter, sink, NULL);
+
+    if (!gst_element_link_many(videosrc, /* timeoverlay, */ capsfilter, sink, NULL))
+    {
+        throw std::runtime_error("Elements could not be linked.\n");
+    }
+
+    start_video();
+}
+
+void Pipeline::start_video()
+{
     gst_element_set_state (pipeline, GST_STATE_PLAYING);
 }
 
-Pipeline::~Pipeline()
+void Pipeline::stop_video()
 {
     gst_element_change_state(pipeline, GST_STATE_CHANGE_PLAYING_TO_PAUSED);
     gst_element_change_state(pipeline, GST_STATE_CHANGE_PAUSED_TO_READY);
+}
 
-    gst_element_set_state (pipeline, GST_STATE_NULL);
 
-    /* Free resources */
-    if (bus) {
+Pipeline::~Pipeline()
+{
+    stop_video();
+    unref_all();
+    gst_deinit();
+}
+
+void Pipeline::unref_all()
+{
+    if (bus)
+    {
         gst_bus_remove_signal_watch(bus);
         gst_object_unref(bus);
     }
 
-    if (pipeline) {
+    if (pipeline)
+    {
         gst_element_set_state(pipeline, GST_STATE_NULL);
         gst_object_unref(pipeline);
     }
 
-    gst_deinit();
+    if (videosrc)
+    {
+        gst_object_unref(videosrc);
+    }
+
+    if (sink)
+    {
+        gst_object_unref(sink);
+    }
 }
