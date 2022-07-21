@@ -1,9 +1,9 @@
-#include "pipeline.h"
+#include "raFilePipeline.h"
 
 #include <stdexcept>
 #include <thread>
 
-Pipeline::Pipeline()
+RawFilePipeline::RawFilePipeline()
 {
     if (!gst_is_initialized())
     {
@@ -16,7 +16,7 @@ Pipeline::Pipeline()
     set_pipeline();
 }
 
-void Pipeline::set_source()
+void RawFilePipeline::set_source()
 {
     videosrc = gst_element_factory_make("v4l2src", "videosrc");
     g_object_set(videosrc,"device", glb::constants::VIDEO_SRC_PATH.c_str(),
@@ -24,7 +24,7 @@ void Pipeline::set_source()
                  "do-timestamp", TRUE, NULL);
 }
 
-void Pipeline::set_caps_filter()
+void RawFilePipeline::set_caps_filter()
 {
     videoCaps = gst_caps_new_simple("video/x-raw",
             "format", G_TYPE_STRING, "RGB",
@@ -39,13 +39,13 @@ void Pipeline::set_caps_filter()
     gst_caps_unref(videoCaps);
 }
 
-void Pipeline::set_filesink()
+void RawFilePipeline::set_filesink()
 {
     filesink = gst_element_factory_make("filesink", "sink");
     g_object_set(filesink, "location", glb::constants::OUT_PATH.c_str(), NULL);
 }
 
-void Pipeline::set_pipeline()
+void RawFilePipeline::set_pipeline()
 {
     pipeline = gst_pipeline_new("pipeline");
     bus = gst_element_get_bus(pipeline);
@@ -58,25 +58,25 @@ void Pipeline::set_pipeline()
     }
 }
 
-void Pipeline::start_video()
+void RawFilePipeline::start_video()
 {
     gst_element_set_state (pipeline, GST_STATE_PLAYING);
 }
 
-void Pipeline::stop_video()
+void RawFilePipeline::stop_video()
 {
     gst_element_change_state(pipeline, GST_STATE_CHANGE_PLAYING_TO_PAUSED);
     gst_element_change_state(pipeline, GST_STATE_CHANGE_PAUSED_TO_READY);
 }
 
-Pipeline::~Pipeline()
+RawFilePipeline::~RawFilePipeline()
 {
     stop_video();
     unref_all();
     gst_deinit();
 }
 
-void Pipeline::unref_all()
+void RawFilePipeline::unref_all()
 {
     if (bus)
     {

@@ -32,7 +32,7 @@ Pouižtí je ve výsledku velmi podobné, musím vytvořit jednotlivé elementy 
 
 Navíc je tedy potřeba řešit změna stavu na přehrávání - je to blokující funkce. V současné chvíli, ale stav změním z `PLAYING` na `PAUSED` a následně `READY` v destroktoru.
 
-Navíc se musím postarat o vyjímky a memory leaks.
+Dále se musím postarat o vyjímky a spárvnou destrukci.
 
 ### RAW náhled
 

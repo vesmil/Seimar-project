@@ -1,4 +1,4 @@
-﻿#include "pipeline.h"
+﻿#include "raFilePipeline.h"
 
 #include <QCoreApplication>
 #include <thread>
@@ -7,17 +7,17 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    // pipeline saving RAW video
-    Pipeline pipeline;
-
-    std::thread rawPipeline([&](){
-        pipeline.start_video();
+    std::thread rawPipelineThread([&](){
+        RawFilePipeline rawFilePipeline;
+        rawFilePipeline.start_video();
+        // stop_video() is temporarily in destructor of RawFilePipeline
     });
-
-    rawPipeline.join();
 
     // pipeline for displaying video
     // ...
+
+
+    rawPipelineThread.join();
 
     return a.exec();
 }

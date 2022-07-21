@@ -5,7 +5,7 @@ PKGCONFIG += gstreamer-1.0 gstreamer-video-1.0
 
 SOURCES += \
         main.cpp \
-        pipeline.cpp
+        raFilePipeline.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -14,4 +14,4 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     global/constans.h \
-    pipeline.h
+    raFilePipeline.h

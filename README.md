@@ -55,18 +55,22 @@ Navíc se stále čeká na nosnou desku od ČVUT, která místo HDMI nabídne Di
 
 - [x] Specifikace
 - [x] Prázdný QT projekt
-- [X] Setup kompilace
-- [ ] Ukládání RAW streamu na SD kartu
-    - [x] Vytvoření prázdného souboru
-    - [x] GStreamer pipeline z příkazového řádku
-    - [ ] GStreamer v C++
-      - [x] První fungující verze
-      - [ ] Plnohodnotá verze
+- [x] Setup kompilace
+- [ ] RAW stream
+    - [x] Na SD kartu
+        - [x] Pipeline z příkazového řádku
+        - [x] GStreamer v C++
+        - [ ] (Volitelně) Vyřešit proč SD karta nestíhá - na ČVUT desce bude SSD 
+    - [ ] Přes ethernet
+
 - [ ] Enkódovací modul hotový (počkat či dočasně udělat softwarově)
 - [ ] Zobrazit stream na display port (note: HDMI na Trenz desce je problematický. je potřeba použít Zynq desku nebo počkat na ČVUT desku)
 - [ ] Zobrazit menu
   - [ ] Práce se streamem - ukládání, atd.
   - [ ] Komunikace s kamerou - VISCA protkol
+    - [ ] Setup dočasné kamery s HDMI na monitor a UART do desky
+    - [ ] Funguící protkol
+    - [ ] Všechny potřebné příkazy
 - [ ] Bonusy:
   - [ ] Komunikace s deskou pomocí ethernetu
   - [ ] Zobrazení jiné kamery než s viditelným světlem
