@@ -2,7 +2,6 @@
 #define RAWFILEPIPELINE_H
 
 #include "global/constans.h"
-#include <string>
 #include <gst/gst.h>
 
 class RawFilePipeline

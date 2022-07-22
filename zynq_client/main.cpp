@@ -7,8 +7,8 @@ int main(int argc, char *argv[])
 
     QMediaPlayer *player = new QMediaPlayer;
     player->setMedia(QUrl("gst-pipeline: udpsrc port=\"9002\" "
-                          "caps = \"application/x-rtp, media=(string)video, width=(string)1024, framerate=(fraction)60/1, height=(string)768, format=(string)RGB\" "
-                          "! rtpvrawdepay ! queue ! videoconvert ! autovideosink"));
+                          "caps = \"application/x-rtp, media=(string)video, width=(string)1024, framerate=(fraction)60/1, height=(string)768, format=(string)RGB\" !"
+                          "rtpvrawdepay ! queue ! videoconvert ! autovideosink"));
 
     player->play();
 

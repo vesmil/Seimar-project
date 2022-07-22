@@ -60,7 +60,7 @@ gst-launch-1.0 udpsrc port="9002" caps = "application/x-rtp, media=(string)video
 
 TODO: program...
 
-
+...
 
 ## 2. část - zobrazení
 

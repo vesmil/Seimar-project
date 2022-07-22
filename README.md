@@ -56,12 +56,17 @@ Navíc se stále čeká na nosnou desku od ČVUT, která místo HDMI nabídne Di
 - [x] Specifikace
 - [x] Prázdný QT projekt
 - [x] Setup kompilace
-- [ ] RAW stream
+- [ ] RAW stream - GStreamer
     - [x] Na SD kartu
-        - [x] Pipeline z příkazového řádku
-        - [x] GStreamer v C++
+        - [x] Příkazový řádek
+        - [x] v C++
         - [ ] (Volitelně) Vyřešit proč SD karta nestíhá - na ČVUT desce bude SSD 
     - [ ] Přes ethernet
+        - [x] Příkazový řádek
+        - [ ] C++
+          - [x] Základ
+          - [ ] Objektový návrh
+        - [x] Klient
 - [ ] Enkódovací modul hotový (počkat či dočasně udělat softwarově)
 - [ ] Zobrazit stream na display port (note: HDMI na Trenz desce je problematický. je potřeba použít Zynq desku nebo počkat na ČVUT desku)
 - [ ] Zobrazit menu
