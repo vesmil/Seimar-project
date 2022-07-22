@@ -1,12 +1,12 @@
 # Příprava
 
-*Kvůli časové náročnosti přípravy se nejedná o step by step příručku*
+*Kvůli časové náročnosti přípravy se nejedná úplně o step by step příručku. Snažil jsem se ale aby žádné podstatné kroky nebyly vynechány.*
 
 **Potřebné vybavení:**
 
-* Trenz TE0701
-* Trenz TE0820
-* SD karta, mini USB kabel, ...
+* Nosná deska (v mém případě Trenz TE0701)
+* Modul Trenz TE0820
+* SD karta, mini USB kabel, Linux PC
 
 ## Příprava PetaLinux
 
@@ -44,7 +44,7 @@ petalinux-package --boot --fsbl images/linux/zynqmp_fsbl.elf --pmufw images/linu
 
 Výsledné soubory `boot.scr`, `BOOT.bin` a `image.ub` je potřeba nahrát do boot partition na [vhodně připravenou](https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842385/How+to+format+SD+card+for+SD+boot) SD kartu, do root partiotion rozbalit `rootfs.ext4` a po té desku jenom zapojit,
 
-> Zde jsem dostal postranní úkol postarat se o bootování z eMMC paměti (není součástí ročníkové práce, ale svoji desku tedy zvládnu nabootovat bez SD karty).
+> Zde jsem dostal postranní úkol postarat se o bootování z QSPI flash paměti (pravděpodobně to není součástí ročníkové práce, ale svoji desku tedy zvládnu nabootovat bez SD karty). V podstatě jde o vytvoření ext4 filesystému na eMMC z nabootovaného PetaLinux, změna nastavení v konfiguraci před buildem a úprava boot flagů a nahrání boot partition do QSPI díky TFTP serveru.
 
 Na desku se lze připopojit pomocí `minicom`:
 
@@ -77,12 +77,29 @@ QtCrator
 
 A po té v devices ještě vhodně nastavit IP adresu po té, co v minicomu zadáme `ip a`,
 
-## HW akcelerace
+## Grafická akcelerace
 
-...
+Jako grafický backend používáme fbdev. K tomu je třeba přidat `libmali-xlnx` driver do rootfs. Následně v souboru `./project-spec/meta-user/conf/petalinuxbsp.conf` tento backend specifikujeme (přidáme na konec souboru řádek).
+
+```
+MALI_BACKEND_DEFAULT = "fbdev"
+```
+
+Aby se nám spouštěly qt aplikace s GPU akcelerací, je potřeba nastavit proměnné `QT_QPA_EGLFS_INTEGRATION` a `QT_QPA_PLATFORM`. Abychom tento proces zautomatizovali, vytvoříme nový recept `./project-spec/meta-user/recipes-core/base-files/base-files_%.bbappend`, který tyto proměnné zapíše do `.profile`.
+
+```
+do_install_append () {
+        cat >> ${D}${sysconfdir}/skel/.profile <<EOF
+export QT_QPA_EGLFS_INTEGRATION=none
+export QT_QPA_PLATFORM=eglfs
+EOF
+}
+```
+
+Případně můžeme přidat v QT Creator do build environment následující:
 
 ```bash
-export QT_QPA_PLATFORM=eglfs
-export QT_QPA_EGLFS_INTEGRATION=none
+QT_QPA_PLATFORM=eglfs
+QT_QPA_EGLFS_INTEGRATION=none
 ```
 

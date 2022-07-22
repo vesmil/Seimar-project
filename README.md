@@ -62,7 +62,6 @@ Navíc se stále čeká na nosnou desku od ČVUT, která místo HDMI nabídne Di
         - [x] GStreamer v C++
         - [ ] (Volitelně) Vyřešit proč SD karta nestíhá - na ČVUT desce bude SSD 
     - [ ] Přes ethernet
-
 - [ ] Enkódovací modul hotový (počkat či dočasně udělat softwarově)
 - [ ] Zobrazit stream na display port (note: HDMI na Trenz desce je problematický. je potřeba použít Zynq desku nebo počkat na ČVUT desku)
 - [ ] Zobrazit menu

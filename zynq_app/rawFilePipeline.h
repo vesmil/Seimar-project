@@ -1,5 +1,5 @@
-#ifndef RAFILEPIPELINE_H
-#define RAFILEPIPELINE_H
+#ifndef RAWFILEPIPELINE_H
+#define RAWFILEPIPELINE_H
 
 #include "global/constans.h"
 #include <string>
@@ -32,4 +32,4 @@ private:
     void unref_all();
 };
 
-#endif // RAFILEPIPELINE_H
+#endif // RAWFILEPIPELINE_H
