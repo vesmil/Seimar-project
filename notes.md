@@ -48,9 +48,25 @@ Výsledek:
 
 <img src="README.assets/tpg.gif" style="zoom:50%;" />
 
+### Stream přes DHCP
+
+...
+
+```bash
+gst-launch-1.0 v4l2src ! video/x-raw, width=1024, height=768, framerate=60/1, format=RGB ! rtpvrawpay ! udpsink port=9002 host=10.15.1.77
+
+gst-launch-1.0 udpsrc port="9002" caps = "application/x-rtp, media=(string)video, width=(string)1024, framerate=(fraction)60/1, height=(string)768, format=(string)RGB" ! rtpvrawdepay ! videoconvert ! autovideosink
+```
+
+TODO: program...
+
+
+
 ## 2. část - zobrazení
 
 Potřeba přidat další GStreamer pipeline...
+
+
 
 Využití QML...
 

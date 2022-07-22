@@ -1,4 +1,4 @@
-﻿#include "raFilePipeline.h"
+﻿#include "rawFilePipeline.h"
 
 #include <QCoreApplication>
 #include <thread>

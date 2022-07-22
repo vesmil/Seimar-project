@@ -4,6 +4,7 @@ CONFIG += link_pkgconfig
 PKGCONFIG += gstreamer-1.0 gstreamer-video-1.0
 
 SOURCES += \
+        ethernetPipeline.cpp \
         main.cpp \
         rawFilePipeline.cpp
 
@@ -13,5 +14,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    ethernetPipeline.h \
     global/constans.h \
     rawFilePipeline.h
