@@ -12,10 +12,8 @@ EthernetPipeline::EthernetPipeline()
 
     set_source();
     set_caps_filter();
-
-    // TODO
-
-    set_filesink();
+    set_rtp_payload();
+    set_udpsink();
     set_pipeline();
 }
 
@@ -41,10 +39,18 @@ void EthernetPipeline::set_caps_filter()
     gst_caps_unref(videoCaps);
 }
 
-void EthernetPipeline::set_filesink()
+void EthernetPipeline::set_rtp_payload()
 {
-    udpsink = gst_element_factory_make("filesink", "sink");
-    g_object_set(udpsink, "location", glb::constants::OUT_PATH.c_str(), NULL);
+    rtpvrawpay = gst_element_factory_make("rtpvrawpay", "rtpvrawpay");
+}
+
+void EthernetPipeline::set_udpsink()
+{
+    udpsink = gst_element_factory_make("udpsink", "sink");
+
+    // TODO temp
+    g_object_set(udpsink, "port", 9002, NULL);
+    g_object_set(udpsink, "host", "10.15.1.77", NULL);
 }
 
 void EthernetPipeline::set_pipeline()
@@ -52,9 +58,9 @@ void EthernetPipeline::set_pipeline()
     pipeline = gst_pipeline_new("pipeline");
     bus = gst_element_get_bus(pipeline);
 
-    gst_bin_add_many(GST_BIN(pipeline), videosrc, capsfilter, udpsink, NULL);
+    gst_bin_add_many(GST_BIN(pipeline), videosrc, capsfilter, rtpvrawpay, udpsink, NULL);
 
-    if (!gst_element_link_many(videosrc, capsfilter, udpsink, NULL))
+    if (!gst_element_link_many(videosrc, capsfilter, rtpvrawpay, udpsink, NULL))
     {
         throw std::runtime_error("Elements could not be linked.\n");
     }
@@ -98,4 +104,6 @@ void EthernetPipeline::unref_all()
     {
         gst_object_unref(udpsink);
     }
+
+    gst_object_unref(rtpvrawpay);
 }

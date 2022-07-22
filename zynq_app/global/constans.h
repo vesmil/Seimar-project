@@ -1,3 +1,6 @@
+#ifndef GLB_CONSTANS_H
+#define GLB_CONSTANS_H
+
 #include <string>
 
 namespace glb
@@ -11,3 +14,5 @@ namespace glb
         const int HEIGHT = 768;
     }
 }
+
+#endif
