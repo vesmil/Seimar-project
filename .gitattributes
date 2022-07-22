@@ -1,2 +1,2 @@
-setup/petalinux-tpg-trenz/* linguist-vendored=false
-setup/docker-petalinux/* linguist-vendored=false
+setup/petalinux-tpg-trenz/* linguist-vendored
+setup/docker-petalinux/* linguist-vendored
