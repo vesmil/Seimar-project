@@ -1,4 +1,6 @@
 build-zynq_app-Zynq-Debug/
+build-zynq_client-Desktop-Debug
+
 .idea/
 
 # This file is used to ignore files which are generated
