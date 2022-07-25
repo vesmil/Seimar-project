@@ -1,5 +1,5 @@
-﻿#include "ethernetPipeline.h"
-#include "rawFilePipeline.h"
+﻿#include "pipelines/ethernetPipeline.h"
+#include "pipelines/rawFilePipeline.h"
 
 #include <QCoreApplication>
 #include <thread>
@@ -17,12 +17,14 @@ int main(int argc, char *argv[])
     */
 
     // pipeline for displaying video
-    std::thread ethernetPipelineThread([&](){
-        EthernetPipeline ethernetPipeline;
-        ethernetPipeline.start_broadcast();
-    });
+    // std::thread ethernetPipelineThread([&](){
 
-    ethernetPipelineThread.join();
+    EthernetPipeline ethernetPipeline;
+    ethernetPipeline.start();
+
+    // });
+
+    // ethernetPipelineThread.join();
 
     return a.exec();
 }

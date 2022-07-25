@@ -1,17 +1,16 @@
 #ifndef RAWFILEPIPELINE_H
 #define RAWFILEPIPELINE_H
 
-#include "global/constans.h"
-#include <gst/gst.h>
+#include "pipelineBase.h"
 
-class RawFilePipeline
+class RawFilePipeline : public PipelineBase
 {
 public:
     RawFilePipeline();
     ~RawFilePipeline();
 
-    void start_video();
-    void stop_video();
+    void start();
+    void stop();
 
     RawFilePipeline(const RawFilePipeline &pipeline) = delete;
     RawFilePipeline(RawFilePipeline &&pipeline) = delete;
@@ -19,16 +18,8 @@ public:
     RawFilePipeline operator =(RawFilePipeline &&pipeline) = delete;
 
 private:
-    GstElement *videosrc, *capsfilter, *filesink, *pipeline;
-    GstCaps *videoCaps;
-    GstBus *bus;
-
-    void set_source();
-    void set_caps_filter();
     void set_filesink();
-    void set_pipeline();
-
-    void unref_all();
+    void complete_pipeline();
 };
 
 #endif // RAWFILEPIPELINE_H
