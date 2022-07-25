@@ -1,5 +1,7 @@
 #include "pipelineBase.h"
 
+#include <stdexcept>
+
 PipelineBase::PipelineBase()
 {
     if (!gst_is_initialized())
@@ -9,6 +11,20 @@ PipelineBase::PipelineBase()
 
     set_source();
     set_caps_filter();
+}
+
+void PipelineBase::start()
+{
+    if (completed)
+        gst_element_set_state (pipeline, GST_STATE_PLAYING);
+    else
+        throw std::runtime_error("Pipeline start before completion.\n");
+}
+
+void PipelineBase::stop()
+{
+    gst_element_change_state(pipeline, GST_STATE_CHANGE_PLAYING_TO_PAUSED);
+    gst_element_change_state(pipeline, GST_STATE_CHANGE_PAUSED_TO_READY);
 }
 
 PipelineBase::~PipelineBase()
@@ -40,7 +56,7 @@ void PipelineBase::unref_all()
 void PipelineBase::set_source()
 {
     videosrc = gst_element_factory_make("v4l2src", "videosrc");
-    g_object_set(videosrc,"device", glb::path::VIDEO_SRC_PATH.c_str(),
+    g_object_set(videosrc,"device", glb::path::VIDEO_SRC.c_str(),
                  "io-mode", 4, "do-timestamp", TRUE, NULL);
 }
 

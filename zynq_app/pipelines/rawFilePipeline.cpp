@@ -1,7 +1,6 @@
 #include "rawFilePipeline.h"
 
 #include <stdexcept>
-#include <thread>
 
 RawFilePipeline::RawFilePipeline() : PipelineBase()
 {
@@ -12,7 +11,7 @@ RawFilePipeline::RawFilePipeline() : PipelineBase()
 void RawFilePipeline::set_filesink()
 {
     sink = gst_element_factory_make("filesink", "sink");
-    g_object_set(sink, "location", glb::path::OUT_PATH.c_str(), NULL);
+    g_object_set(sink, "location", glb::path::VIDEO_OUT.c_str(), NULL);
 }
 
 void RawFilePipeline::complete_pipeline()
@@ -30,17 +29,6 @@ void RawFilePipeline::complete_pipeline()
     {
         completed = true;
     }
-}
-
-void RawFilePipeline::start()
-{
-    gst_element_set_state (pipeline, GST_STATE_PLAYING);
-}
-
-void RawFilePipeline::stop()
-{
-    gst_element_change_state(pipeline, GST_STATE_CHANGE_PLAYING_TO_PAUSED);
-    gst_element_change_state(pipeline, GST_STATE_CHANGE_PAUSED_TO_READY);
 }
 
 RawFilePipeline::~RawFilePipeline()

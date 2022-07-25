@@ -16,15 +16,8 @@ int main(int argc, char *argv[])
     });
     */
 
-    // pipeline for displaying video
-    // std::thread ethernetPipelineThread([&](){
-
     EthernetPipeline ethernetPipeline;
     ethernetPipeline.start();
-
-    // });
-
-    // ethernetPipelineThread.join();
 
     return a.exec();
 }

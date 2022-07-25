@@ -19,8 +19,8 @@ void EthernetPipeline::set_udpsink()
 {
     sink = gst_element_factory_make("udpsink", "sink");
 
-    g_object_set(sink, "port", 9002, NULL);
-    g_object_set(sink, "host", glb::path::IP_ADDRESS.c_str(), NULL);
+    g_object_set(sink, "port", glb::rtp::PORT, NULL);
+    g_object_set(sink, "host", glb::rtp::IP_ADDRESS.c_str(), NULL);
 }
 
 void EthernetPipeline::complete_pipeline()
@@ -42,28 +42,12 @@ void EthernetPipeline::complete_pipeline()
     // g_signal_connect(G_OBJECT(bus), "message::eos", G_CALLBACK(eosCallback), this);
 }
 
-void EthernetPipeline::start()
-{
-    // TODO test completion
-
-    gst_element_set_state (pipeline, GST_STATE_PLAYING);
-}
-
-void EthernetPipeline::stop()
-{
-    gst_element_change_state(pipeline, GST_STATE_CHANGE_PLAYING_TO_PAUSED);
-    gst_element_change_state(pipeline, GST_STATE_CHANGE_PAUSED_TO_READY);
-}
-
 EthernetPipeline::~EthernetPipeline()
 {
     stop();
-    unref_all();
-    gst_deinit();
-}
 
-void EthernetPipeline::unref_all()
-{
     if (rtpvrawpay)
         gst_object_unref(rtpvrawpay);
+
+    gst_deinit();
 }

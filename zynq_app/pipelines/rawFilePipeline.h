@@ -9,9 +9,6 @@ public:
     RawFilePipeline();
     ~RawFilePipeline();
 
-    void start();
-    void stop();
-
     RawFilePipeline(const RawFilePipeline &pipeline) = delete;
     RawFilePipeline(RawFilePipeline &&pipeline) = delete;
     RawFilePipeline operator =(const RawFilePipeline &pipeline) = delete;

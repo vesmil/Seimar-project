@@ -9,9 +9,6 @@ public:
     EthernetPipeline();
     ~EthernetPipeline();
 
-    void start();
-    void stop();
-
     EthernetPipeline(const EthernetPipeline &pipeline) = delete;
     EthernetPipeline(EthernetPipeline &&pipeline) = delete;
     EthernetPipeline operator =(const EthernetPipeline &pipeline) = delete;
@@ -23,8 +20,6 @@ private:
     void set_rtp_payload();
     void set_udpsink();
     void complete_pipeline();
-
-    void unref_all();
 };
 
 #endif // ETHERNETPIPELINE_H
