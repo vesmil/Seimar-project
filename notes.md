@@ -25,7 +25,7 @@ yavta --no-query -w '0x0098c912 1' /dev/v4l-subdev0
 V tuto chvíli jsem zprovoznil uložení jako na SD kartu z příkazové řádky
 
 ```bash
-gst-launch-1.0 v4l2src io-mode=dmabuf ! video/x-raw, width=1024, height=768, framerate=60/1, format=RGB !  filesink location=/media/sd-mmcblk1p2/video-raw-file
+gst-launch-1.0 v4l2src ! video/x-raw, width=1024, height=768, framerate=60/1, format=RGB !  filesink location=/media/sd-mmcblk1p2/video-raw-file
 ```
 
 ### C++

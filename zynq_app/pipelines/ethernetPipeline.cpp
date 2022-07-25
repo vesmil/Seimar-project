@@ -1,10 +1,14 @@
 #include "ethernetPipeline.h"
 
 #include <stdexcept>
+
+#include "gsWrapper.h"
 #include <thread>
 
 EthernetPipeline::EthernetPipeline()
 {
+    set_source("sourcertp");
+    set_caps_filter("rtpcaps");
     set_rtp_payload();
     set_udpsink();
     complete_pipeline();
@@ -12,12 +16,12 @@ EthernetPipeline::EthernetPipeline()
 
 void EthernetPipeline::set_rtp_payload()
 {
-    rtpvrawpay = gst_element_factory_make("rtpvrawpay", "rtpvrawpay");
+    rtpvrawpay = GSWrapper::makeElement("rtpvrawpay", "rtpvrawpay");
 }
 
 void EthernetPipeline::set_udpsink()
 {
-    sink = gst_element_factory_make("udpsink", "sink");
+    sink = GSWrapper::makeElement("udpsink", "udpsink");
 
     g_object_set(sink, "port", glb::rtp::PORT, NULL);
     g_object_set(sink, "host", glb::rtp::IP_ADDRESS.c_str(), NULL);

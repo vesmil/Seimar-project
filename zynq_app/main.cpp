@@ -11,14 +11,8 @@ int main(int argc, char *argv[])
     EthernetPipeline ethernetPipeline;
     ethernetPipeline.start();
 
-    // RawFilePipeline blocks...
-
-    // std::thread rawPipelineThread([&](){
-        RawFilePipeline rawFilePipeline;
-        rawFilePipeline.start();
-    // });
-
-    // rawPipelineThread.join();
+    RawFilePipeline rawFilePipeline;
+    rawFilePipeline.start();
 
     gst_deinit();
 

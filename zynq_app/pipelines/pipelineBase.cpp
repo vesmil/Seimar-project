@@ -1,5 +1,6 @@
 #include "pipelineBase.h"
 
+#include <gsWrapper.h>
 #include <stdexcept>
 
 PipelineBase::PipelineBase()
@@ -8,9 +9,6 @@ PipelineBase::PipelineBase()
     {
         gst_init(nullptr, nullptr);
     }
-
-    set_source();
-    set_caps_filter();
 }
 
 void PipelineBase::start()
@@ -53,14 +51,14 @@ void PipelineBase::unref_all()
         gst_object_unref(sink);
 }
 
-void PipelineBase::set_source()
+void PipelineBase::set_source(const gchar* name)
 {
-    videosrc = gst_element_factory_make("v4l2src", "videosrc");
+    videosrc = GSWrapper::makeElement("v4l2src",name);
     g_object_set(videosrc,"device", glb::path::VIDEO_SRC.c_str(),
-                 "io-mode", 4, "do-timestamp", TRUE, NULL);
+                 "do-timestamp", TRUE, NULL);
 }
 
-void PipelineBase::set_caps_filter()
+void PipelineBase::set_caps_filter(const gchar* name)
 {
     videoCaps = gst_caps_new_simple("video/x-raw",
             "format", G_TYPE_STRING, "RGB",
@@ -70,7 +68,7 @@ void PipelineBase::set_caps_filter()
             "height", G_TYPE_INT, glb::dim::HEIGHT,
             NULL);
 
-    capsfilter = gst_element_factory_make("capsfilter", "capsfilter");
+    capsfilter = GSWrapper::makeElement("capsfilter", name);
     g_object_set(capsfilter, "caps", videoCaps, NULL);
     gst_caps_unref(videoCaps);
 }

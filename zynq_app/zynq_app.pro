@@ -5,6 +5,7 @@ PKGCONFIG += gstreamer-1.0 gstreamer-video-1.0
 
 SOURCES += \
         main.cpp \
+        gsWrapper.cpp \
         pipelines/ethernetPipeline.cpp \
         pipelines/pipelineBase.cpp \
         pipelines/rawFilePipeline.cpp \
@@ -17,6 +18,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     ethernetPipeline.h \
     global/constans.h \
+    gsWrapper.h \
     pipelines/ethernetPipeline.h \
     pipelines/pipelineBase.h \
     pipelines/rawFilePipeline.h \

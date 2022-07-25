@@ -1,16 +1,19 @@
 #include "rawFilePipeline.h"
 
+#include "gsWrapper.h"
 #include <stdexcept>
 
 RawFilePipeline::RawFilePipeline() : PipelineBase()
 {
+    set_source("sourceraw");
+    set_caps_filter("rawcaps");
     set_filesink();
     complete_pipeline();
 }
 
 void RawFilePipeline::set_filesink()
 {
-    sink = gst_element_factory_make("filesink", "sink");
+    sink = GSWrapper::makeElement("filesink", "filesink");
     g_object_set(sink, "location", glb::path::VIDEO_OUT.c_str(), NULL);
 }
 

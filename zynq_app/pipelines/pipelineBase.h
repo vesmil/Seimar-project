@@ -27,11 +27,8 @@ protected:
 
     bool completed;
 
-private:
-    void set_source();
-    void set_caps_filter();
-
-    bool complted;
+    void set_source(const gchar *name);
+    void set_caps_filter(const gchar *name);
 };
 
 #endif // PIPELINEBASE_H
