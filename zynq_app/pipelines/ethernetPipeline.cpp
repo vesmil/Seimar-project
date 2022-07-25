@@ -27,6 +27,7 @@ void EthernetPipeline::complete_pipeline()
 {
     pipeline = gst_pipeline_new("pipeline");
     bus = gst_element_get_bus(pipeline);
+    gst_bus_add_signal_watch(bus);
 
     gst_bin_add_many(GST_BIN(pipeline), videosrc, capsfilter, rtpvrawpay, sink, NULL);
 
@@ -34,9 +35,10 @@ void EthernetPipeline::complete_pipeline()
     {
         throw std::runtime_error("Elements could not be linked.\n");
     }
-
-    bus = gst_element_get_bus(pipeline);
-    gst_bus_add_signal_watch(bus);
+    else
+    {
+        completed = true;
+    }
 
     // g_signal_connect(G_OBJECT(bus), "message::error", G_CALLBACK(errorCallback), this);
     // g_signal_connect(G_OBJECT(bus), "message::eos", G_CALLBACK(eosCallback), this);
@@ -48,6 +50,4 @@ EthernetPipeline::~EthernetPipeline()
 
     if (rtpvrawpay)
         gst_object_unref(rtpvrawpay);
-
-    gst_deinit();
 }

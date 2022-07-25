@@ -9,7 +9,7 @@ namespace glb
     namespace path
     {
         const std::string VIDEO_SRC {"/dev/video0"};
-        const std::string VIDEO_OUT {"/media/sd-mmcblk0p2/video-res"};
+        const std::string VIDEO_OUT {"/video-res"};
     }
 
     namespace rtp

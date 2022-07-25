@@ -17,7 +17,9 @@ void RawFilePipeline::set_filesink()
 void RawFilePipeline::complete_pipeline()
 {
     pipeline = gst_pipeline_new("pipeline");
+
     bus = gst_element_get_bus(pipeline);
+    gst_bus_add_signal_watch(bus);
 
     gst_bin_add_many(GST_BIN(pipeline), videosrc, capsfilter, sink, NULL);
 
@@ -34,5 +36,4 @@ void RawFilePipeline::complete_pipeline()
 RawFilePipeline::~RawFilePipeline()
 {
     stop();
-    gst_deinit();
 }

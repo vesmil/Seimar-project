@@ -6,7 +6,7 @@ PKGCONFIG += gstreamer-1.0 gstreamer-video-1.0
 SOURCES += \
         main.cpp \
         pipelines/ethernetPipeline.cpp \
-    pipelines/pipelineBase.cpp \
+        pipelines/pipelineBase.cpp \
         pipelines/rawFilePipeline.cpp \
 
 # Default rules for deployment.
