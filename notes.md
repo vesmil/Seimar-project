@@ -18,6 +18,8 @@ yavta --no-query -w '0x009f0903 0' /dev/v4l-subdev0
 yavta --no-query -w '0x0098c912 1' /dev/v4l-subdev0
 ```
 
+> Pozn. pro jednoduchost dočasně využívám nižší rozlišení
+
 ### Příkazová řádka
 
 V tuto chvíli jsem zprovoznil uložení jako na SD kartu z příkazové řádky
@@ -34,7 +36,7 @@ Navíc je tedy potřeba řešit změna stavu na přehrávání - je to blokujíc
 
 Dále se musím postarat o vyjímky a spárvnou destrukci.
 
-### RAW náhled
+### Raw náhled
 
 Pro spuštění nebo enkódování vzniklého videa můžu využít následující příkazy:
 
@@ -48,9 +50,11 @@ Výsledek:
 
 <img src="README.assets/tpg.gif" style="zoom:50%;" />
 
-### Stream přes DHCP
+### Stream přes RTP
 
-...
+Opět velmi jednoduchá pipeline, kde před odeslání stačí data zabalit pomocí rtpvrawpay.
+
+Příkazová řádka:
 
 ```bash
 gst-launch-1.0 v4l2src ! video/x-raw, width=1024, height=768, framerate=60/1, format=RGB ! rtpvrawpay ! udpsink port=9002 host=10.15.1.77
@@ -58,15 +62,13 @@ gst-launch-1.0 v4l2src ! video/x-raw, width=1024, height=768, framerate=60/1, fo
 gst-launch-1.0 udpsrc port="9002" caps = "application/x-rtp, media=(string)video, width=(string)1024, framerate=(fraction)60/1, height=(string)768, format=(string)RGB" ! rtpvrawdepay ! videoconvert ! autovideosink
 ```
 
-TODO: program...
+C++ je pak analogické jako v případě ukládání raw videa.
 
-...
+Určitá problematická část je nastavování IP adresy - to se pravděpodobně bude v budoucnu nastavovat UI. A v praxi nebudu navíc odesílat raw video, protože s vyšším rozlišením to nebude možné.
 
 ## 2. část - zobrazení
 
 Potřeba přidat další GStreamer pipeline...
-
-
 
 Využití QML...
 
