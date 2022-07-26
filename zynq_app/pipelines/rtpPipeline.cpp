@@ -16,12 +16,12 @@ RtpPipeline::RtpPipeline()
 
 void RtpPipeline::setRtpPayload()
 {
-    m_rtpvrawpay = GsWrapper::makeElement("rtpvrawpay", "rtpvrawpay");
+    m_rtpvrawpay = GstWrapper::makeElement("rtpvrawpay", "rtpvrawpay");
 }
 
 void RtpPipeline::setUdpsink()
 {
-    m_sink = GsWrapper::makeElement("udpsink", "udpsink");
+    m_sink = GstWrapper::makeElement("udpsink", "udpsink");
 
     g_object_set(m_sink, "port", glb::rtp::PORT, NULL);
     g_object_set(m_sink, "host", glb::rtp::IP_ADDRESS.c_str(), NULL);
@@ -36,13 +36,9 @@ void RtpPipeline::completePipeline()
     gst_bin_add_many(GST_BIN(m_pipeline), m_videoSrc, m_capsfilter, m_rtpvrawpay, m_sink, NULL);
 
     if (!gst_element_link_many(m_videoSrc, m_capsfilter, m_rtpvrawpay, m_sink, NULL))
-    {
         throw std::runtime_error("Elements could not be linked.\n");
-    }
-    else
-    {
-        m_completed = true;
-    }
+
+    m_completed = true;
 
     // g_signal_connect(G_OBJECT(bus), "message::error", G_CALLBACK(errorCallback), this);
     // g_signal_connect(G_OBJECT(bus), "message::eos", G_CALLBACK(eosCallback), this);

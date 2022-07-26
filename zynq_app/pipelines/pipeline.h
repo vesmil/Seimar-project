@@ -1,24 +1,21 @@
-#ifndef PIPELINEBASE_H
-#define PIPELINEBASE_H
+#ifndef PIPELINE_H
+#define PIPELINE_H
 
-#include "global/constans.h"
 #include <gst/gst.h>
 
-class PipelineBase
+class Pipeline
 {
 public:
-    ~PipelineBase();
-
     void start();
     void stop();
 
+    ~Pipeline();
+
 protected:
-    PipelineBase();
+    Pipeline();
 
-    void unrefAll();
-
-    void setSource(const gchar *name);
     void setCapsFilter(const gchar *name);
+    void unrefAll();
 
     GstElement *m_videoSrc, *m_capsfilter, *m_sink, *m_pipeline;
     GstCaps *m_videoCaps;
@@ -27,4 +24,4 @@ protected:
     bool m_completed;
 };
 
-#endif // PIPELINEBASE_H
+#endif // PIPELINE_H

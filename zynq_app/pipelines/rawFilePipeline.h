@@ -1,9 +1,9 @@
 #ifndef RAWFILEPIPELINE_H
 #define RAWFILEPIPELINE_H
 
-#include "pipelineBase.h"
+#include "intersrcPipeline.h"
 
-class RawFilePipeline : public PipelineBase
+class RawFilePipeline : public IntersrcPipeline
 {
 public:
     RawFilePipeline();

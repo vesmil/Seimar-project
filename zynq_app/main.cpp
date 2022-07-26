@@ -9,15 +9,15 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    GsWrapper::initialize();
+    GstWrapper::init();
 
-    RawFilePipeline rawFilePipeline;
-    rawFilePipeline.start();
+    // RawFilePipeline rawFilePipeline;
+    // rawFilePipeline.start();
 
     RtpPipeline ethernetPipeline;
     ethernetPipeline.start();
 
-    GsWrapper::deinitialize();
+    GstWrapper::deinit();
 
     return a.exec();
 }

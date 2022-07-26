@@ -1,9 +1,9 @@
 #ifndef RTPPIPELINE_H
 #define RTPPIPELINE_H
 
-#include "pipelineBase.h"
+#include "intersrcPipeline.h"
 
-class RtpPipeline : public PipelineBase
+class RtpPipeline : public IntersrcPipeline
 {
 public:
     RtpPipeline();

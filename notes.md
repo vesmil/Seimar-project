@@ -28,14 +28,6 @@ V tuto chvíli jsem zprovoznil uložení jako na SD kartu z příkazové řádky
 gst-launch-1.0 v4l2src ! video/x-raw, width=1024, height=768, framerate=60/1, format=RGB !  filesink location=/media/sd-mmcblk1p2/video-raw-file
 ```
 
-### C++
-
-Pouižtí je ve výsledku velmi podobné, musím vytvořit jednotlivé elementy a ty dát do pipeline.
-
-Navíc je tedy potřeba řešit změna stavu na přehrávání - je to blokující funkce. V současné chvíli, ale stav změním z `PLAYING` na `PAUSED` a následně `READY` v destroktoru.
-
-Dále se musím postarat o vyjímky a spárvnou destrukci.
-
 ### Raw náhled
 
 Pro spuštění nebo enkódování vzniklého videa můžu využít následující příkazy:
@@ -62,9 +54,14 @@ gst-launch-1.0 v4l2src ! video/x-raw, width=1024, height=768, framerate=60/1, fo
 gst-launch-1.0 udpsrc port="9002" caps = "application/x-rtp, media=(string)video, width=(string)1024, framerate=(fraction)60/1, height=(string)768, format=(string)RGB" ! rtpvrawdepay ! videoconvert ! autovideosink
 ```
 
-C++ je pak analogické jako v případě ukládání raw videa.
+### Realizace v C++
 
-Určitá problematická část je nastavování IP adresy - to se pravděpodobně bude v budoucnu nastavovat UI. A v praxi nebudu navíc odesílat raw video, protože s vyšším rozlišením to nebude možné.
+Kromě zjevných věcí jako například že je potřeba řešit destrukci a objektový návrh, je největší komplikace více pipelines z jednoho zdroje. Zde jsem využil plugin z balíčku bad (GStreamer má tři úrovně pluginů - good, bad a ugly) a k těmto účelům využívám tzv. `intervideosrc` a `intervideosink`.
+
+#### Pozn. k RTP
+
+Určitá problematická část je nastavování IP adresy - to se pravděpodobně bude v budoucnu nastavovat UI.
+A v praxi nebudu navíc odesílat raw video, protože s vyšším rozlišením to nebude možné.
 
 ## 2. část - zobrazení
 

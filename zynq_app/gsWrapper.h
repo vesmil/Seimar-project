@@ -3,10 +3,23 @@
 
 #include "gst/gst.h"
 
-class GSWrapper
+struct GstWrapper
 {
-public:
-    static GstElement* makeElement(const gchar *factoryname, const gchar *name);    
+    static void init();
+    static void deinit();
+
+    static GstElement* makeElement(const gchar *factoryname, const gchar *name);
+
+    static GstElement* makeIntersource(const gchar* name);
+    static GstCaps* makeDefualtCaps();
+
+    static const gchar* getIntervideoChannel();
+
+private:
+    static void initIntervideoPipeline();
+
+    static const char* m_intervideoName;
+    static bool m_intervideopiPelineSetup;
 };
 
 #endif // GSWRAPPER_H

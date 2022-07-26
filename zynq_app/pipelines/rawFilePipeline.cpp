@@ -3,7 +3,7 @@
 #include "gsWrapper.h"
 #include <stdexcept>
 
-RawFilePipeline::RawFilePipeline() : PipelineBase()
+RawFilePipeline::RawFilePipeline() : IntersrcPipeline()
 {
     setSource("rawsource");
     setCapsFilter("rawcaps");
@@ -13,7 +13,7 @@ RawFilePipeline::RawFilePipeline() : PipelineBase()
 
 void RawFilePipeline::setFilesink()
 {
-    m_sink = GsWrapper::makeElement("filesink", "filesink");
+    m_sink = GstWrapper::makeElement("filesink", "filesink");
     g_object_set(m_sink, "location", glb::path::VIDEO_OUT.c_str(), NULL);
 }
 
@@ -27,13 +27,9 @@ void RawFilePipeline::completePipeline()
     gst_bin_add_many(GST_BIN(m_pipeline), m_videoSrc, m_capsfilter, m_sink, NULL);
 
     if (!gst_element_link_many(m_videoSrc, m_capsfilter, m_sink, NULL))
-    {
         throw std::runtime_error("Elements could not be linked.\n");
-    }
-    else
-    {
-        m_completed = true;
-    }
+
+    m_completed = true;
 }
 
 RawFilePipeline::~RawFilePipeline()
