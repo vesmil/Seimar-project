@@ -6,9 +6,9 @@ PKGCONFIG += gstreamer-1.0 gstreamer-video-1.0
 SOURCES += \
         main.cpp \
         gsWrapper.cpp \
-        pipelines/ethernetPipeline.cpp \
         pipelines/pipelineBase.cpp \
         pipelines/rawFilePipeline.cpp \
+    pipelines/rtpPipeline.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -19,7 +19,7 @@ HEADERS += \
     ethernetPipeline.h \
     global/constans.h \
     gsWrapper.h \
-    pipelines/ethernetPipeline.h \
     pipelines/pipelineBase.h \
     pipelines/rawFilePipeline.h \
+    pipelines/rtpPipeline.h \
     rawFilePipeline.h

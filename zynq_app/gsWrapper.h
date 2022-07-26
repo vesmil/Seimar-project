@@ -6,7 +6,7 @@
 class GSWrapper
 {
 public:
-    static GstElement* makeElement(const gchar *factoryname, const gchar *name);
+    static GstElement* makeElement(const gchar *factoryname, const gchar *name);    
 };
 
 #endif // GSWRAPPER_H

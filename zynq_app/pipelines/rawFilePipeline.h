@@ -9,14 +9,12 @@ public:
     RawFilePipeline();
     ~RawFilePipeline();
 
-    RawFilePipeline(const RawFilePipeline &pipeline) = delete;
-    RawFilePipeline(RawFilePipeline &&pipeline) = delete;
-    RawFilePipeline operator =(const RawFilePipeline &pipeline) = delete;
-    RawFilePipeline operator =(RawFilePipeline &&pipeline) = delete;
+    RawFilePipeline(const RawFilePipeline&) = delete;
+    RawFilePipeline& operator =(const RawFilePipeline&) = delete;
 
 private:
-    void set_filesink();
-    void complete_pipeline();
+    void setFilesink();
+    void completePipeline();
 };
 
 #endif // RAWFILEPIPELINE_H

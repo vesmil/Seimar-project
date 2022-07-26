@@ -5,34 +5,34 @@
 
 RawFilePipeline::RawFilePipeline() : PipelineBase()
 {
-    set_source("sourceraw");
-    set_caps_filter("rawcaps");
-    set_filesink();
-    complete_pipeline();
+    setSource("rawsource");
+    setCapsFilter("rawcaps");
+    setFilesink();
+    completePipeline();
 }
 
-void RawFilePipeline::set_filesink()
+void RawFilePipeline::setFilesink()
 {
-    sink = GSWrapper::makeElement("filesink", "filesink");
-    g_object_set(sink, "location", glb::path::VIDEO_OUT.c_str(), NULL);
+    m_sink = GsWrapper::makeElement("filesink", "filesink");
+    g_object_set(m_sink, "location", glb::path::VIDEO_OUT.c_str(), NULL);
 }
 
-void RawFilePipeline::complete_pipeline()
+void RawFilePipeline::completePipeline()
 {
-    pipeline = gst_pipeline_new("pipeline");
+    m_pipeline = gst_pipeline_new("rawpipeline");
 
-    bus = gst_element_get_bus(pipeline);
-    gst_bus_add_signal_watch(bus);
+    m_bus = gst_element_get_bus(m_pipeline);
+    gst_bus_add_signal_watch(m_bus);
 
-    gst_bin_add_many(GST_BIN(pipeline), videosrc, capsfilter, sink, NULL);
+    gst_bin_add_many(GST_BIN(m_pipeline), m_videoSrc, m_capsfilter, m_sink, NULL);
 
-    if (!gst_element_link_many(videosrc, capsfilter, sink, NULL))
+    if (!gst_element_link_many(m_videoSrc, m_capsfilter, m_sink, NULL))
     {
         throw std::runtime_error("Elements could not be linked.\n");
     }
     else
     {
-        completed = true;
+        m_completed = true;
     }
 }
 

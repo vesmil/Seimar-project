@@ -7,28 +7,24 @@
 class PipelineBase
 {
 public:
-    PipelineBase();
     ~PipelineBase();
-
-    PipelineBase(const PipelineBase &pipeline) = delete;
-    PipelineBase(PipelineBase &&pipeline) = delete;
-    PipelineBase operator =(const PipelineBase &pipeline) = delete;
-    PipelineBase operator =(PipelineBase &&pipeline) = delete;
 
     void start();
     void stop();
 
 protected:
-    void unref_all();
+    PipelineBase();
 
-    GstElement *videosrc, *capsfilter, *sink, *pipeline;
-    GstCaps *videoCaps;
-    GstBus *bus;
+    void unrefAll();
 
-    bool completed;
+    void setSource(const gchar *name);
+    void setCapsFilter(const gchar *name);
 
-    void set_source(const gchar *name);
-    void set_caps_filter(const gchar *name);
+    GstElement *m_videoSrc, *m_capsfilter, *m_sink, *m_pipeline;
+    GstCaps *m_videoCaps;
+    GstBus *m_bus;
+
+    bool m_completed;
 };
 
 #endif // PIPELINEBASE_H

@@ -5,62 +5,57 @@
 
 PipelineBase::PipelineBase()
 {
-    if (!gst_is_initialized())
-    {
-        gst_init(nullptr, nullptr);
-    }
 }
 
 void PipelineBase::start()
 {
-    if (completed)
-        gst_element_set_state (pipeline, GST_STATE_PLAYING);
+    if (m_completed)
+        gst_element_set_state (m_pipeline, GST_STATE_PLAYING);
     else
         throw std::runtime_error("Pipeline start before completion.\n");
 }
 
 void PipelineBase::stop()
 {
-    gst_element_change_state(pipeline, GST_STATE_CHANGE_PLAYING_TO_PAUSED);
-    gst_element_change_state(pipeline, GST_STATE_CHANGE_PAUSED_TO_READY);
+    gst_element_change_state(m_pipeline, GST_STATE_CHANGE_PLAYING_TO_PAUSED);
+    gst_element_change_state(m_pipeline, GST_STATE_CHANGE_PAUSED_TO_READY);
 }
 
 PipelineBase::~PipelineBase()
 {
-    unref_all();
+    unrefAll();
 }
 
-void PipelineBase::unref_all()
+void PipelineBase::unrefAll()
 {
-    if (bus)
+    if (m_bus)
     {
-        gst_bus_remove_signal_watch(bus);
-        gst_object_unref(bus);
+        gst_bus_remove_signal_watch(m_bus);
+        gst_object_unref(m_bus);
     }
 
-    if (pipeline)
+    if (m_pipeline)
     {
-        gst_element_set_state(pipeline, GST_STATE_NULL);
-        gst_object_unref(pipeline);
+        gst_element_set_state(m_pipeline, GST_STATE_NULL);
+        gst_object_unref(m_pipeline);
     }
 
-    if (videosrc)
-        gst_object_unref(videosrc);
+    if (m_videoSrc)
+        gst_object_unref(m_videoSrc);
 
-    if (sink)
-        gst_object_unref(sink);
+    if (m_sink)
+        gst_object_unref(m_sink);
 }
 
-void PipelineBase::set_source(const gchar* name)
+void PipelineBase::setSource(const gchar* name)
 {
-    videosrc = GSWrapper::makeElement("v4l2src",name);
-    g_object_set(videosrc,"device", glb::path::VIDEO_SRC.c_str(),
-                 "do-timestamp", TRUE, NULL);
+    m_videoSrc = GSWrapper::makeElement("v4l2src",name);
+    g_object_set(m_videoSrc,"device", glb::path::VIDEO_SRC.c_str(), NULL); // "do-timestamp", TRUE
 }
 
-void PipelineBase::set_caps_filter(const gchar* name)
+void PipelineBase::setCapsFilter(const gchar* name)
 {
-    videoCaps = gst_caps_new_simple("video/x-raw",
+    m_videoCaps = gst_caps_new_simple("video/x-raw",
             "format", G_TYPE_STRING, "RGB",
             "framerate", GST_TYPE_FRACTION, 60, 1,
             "pixel-aspect-ratio", GST_TYPE_FRACTION, 1, 1,
@@ -68,7 +63,7 @@ void PipelineBase::set_caps_filter(const gchar* name)
             "height", G_TYPE_INT, glb::dim::HEIGHT,
             NULL);
 
-    capsfilter = GSWrapper::makeElement("capsfilter", name);
-    g_object_set(capsfilter, "caps", videoCaps, NULL);
-    gst_caps_unref(videoCaps);
+    m_capsfilter = GSWrapper::makeElement("capsfilter", name);
+    g_object_set(m_capsfilter, "caps", m_videoCaps, NULL);
+    gst_caps_unref(m_videoCaps);
 }

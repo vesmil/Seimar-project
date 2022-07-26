@@ -1,5 +1,6 @@
-﻿#include "pipelines/ethernetPipeline.h"
+﻿#include "pipelines/rtpPipeline.h"
 #include "pipelines/rawFilePipeline.h"
+#include "gsWrapper.h"
 
 #include <QCoreApplication>
 #include <thread>
@@ -8,13 +9,15 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    EthernetPipeline ethernetPipeline;
-    ethernetPipeline.start();
+    GsWrapper::initialize();
 
     RawFilePipeline rawFilePipeline;
     rawFilePipeline.start();
 
-    gst_deinit();
+    RtpPipeline ethernetPipeline;
+    ethernetPipeline.start();
+
+    GsWrapper::deinitialize();
 
     return a.exec();
 }
