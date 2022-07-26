@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 """
-QT kit importer
-===============
+QT kit importer for Linux
+=========================
 
 - Used to import existing kits into qt config files
   (with their dependencies such as devices, toolchains...)
@@ -165,6 +165,7 @@ def device_append(importProfileNode, filename, prefix):
 		return
 		
 	destinationFile.write(filename)
+
 
 
 if __name__=="__main__":
