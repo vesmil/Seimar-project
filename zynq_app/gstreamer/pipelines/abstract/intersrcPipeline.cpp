@@ -1,7 +1,6 @@
 #include "intersrcPipeline.h"
 
 #include <stdexcept>
-
 #include "gstreamer/gsWrapper.h"
 
 void IntersrcPipeline::setSource(const gchar* name)

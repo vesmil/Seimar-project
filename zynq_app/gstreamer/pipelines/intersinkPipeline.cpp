@@ -1,7 +1,6 @@
 #include "intersinkPipeline.h"
 
 #include <stdexcept>
-
 #include "gstreamer/gsWrapper.h"
 #include "global/config.h"
 

@@ -11,21 +11,36 @@ GsFacade::GsFacade()
 
 GsFacade::~GsFacade()
 {
+    delete rawPipe;
+    delete rtpPipe;
+
     GsWrapper::deinit();
 }
 
-void GsFacade::start(PipelineEnum pipelineEnum)
+void GsFacade::initAndStart(PipelineEnum pipelineEnum)
 {
     if (pipelineEnum & RAW)
     {
-        m_pipelineVector.emplace_back(std::make_unique<RawFilePipeline>());
-        m_pipelineVector.back()->start();
+        rawPipe = new RawFilePipeline();
+        rawPipe->start();
     }
 
     if (pipelineEnum & RTP)
     {
-        m_pipelineVector.emplace_back(std::make_unique<RtpPipeline>());
-        m_pipelineVector.back()->start();
+        rtpPipe = new RtpPipeline();
+        rtpPipe->start();
     }
 }
 
+void GsFacade::stop(PipelineEnum pipelineEnum)
+{
+    if (pipelineEnum & RAW && rawPipe)
+    {
+        rawPipe ->stop();
+    }
+
+    if (pipelineEnum & RTP && rtpPipe)
+    {
+        rtpPipe ->stop();
+    }
+}

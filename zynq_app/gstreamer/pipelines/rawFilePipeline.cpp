@@ -1,7 +1,6 @@
 #include "rawFilePipeline.h"
 
 #include <stdexcept>
-
 #include "global/config.h"
 #include "gstreamer/gsWrapper.h"
 

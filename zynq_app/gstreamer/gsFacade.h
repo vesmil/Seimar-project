@@ -7,7 +7,7 @@
 #include "pipelines/abstract/pipeline.h"
 
 /*!
- * \brief Facade design pattern simplifying usage of GStreamer
+ * \brief Facade design pattern simplifying usage of GStreamer and created pipelines
  */
 class GsFacade
 {
@@ -22,10 +22,13 @@ public:
     GsFacade();
     ~GsFacade();
 
-    void start(PipelineEnum pipeline);
+    void initAndStart(PipelineEnum pipeline);
+    void stop(PipelineEnum pipeline);
 
 private:
-    std::vector<std::unique_ptr<Pipeline>> m_pipelineVector;
+    Pipeline* rtpPipe = nullptr;
+    Pipeline* rawPipe = nullptr;
+    // ...
 };
 
 inline enum GsFacade::PipelineEnum operator|(GsFacade::PipelineEnum a, GsFacade::PipelineEnum b)

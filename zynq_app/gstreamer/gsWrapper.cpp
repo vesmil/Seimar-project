@@ -2,7 +2,6 @@
 
 #include <stdexcept>
 #include <string>
-
 #include "global/config.h"
 
 const char* GsWrapper::m_intervideoChannelName = "interchannel";
