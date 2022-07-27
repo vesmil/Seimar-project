@@ -10,8 +10,6 @@ struct GsWrapper
     static void deinit();
 
     static GstElement* makeElement(const gchar *factoryname, const gchar *name);
-
-    static GstElement* makeIntersource(const gchar* name);
     static GstCaps* makeDefualtCaps();
 
     static const gchar* getIntervideoChannel();

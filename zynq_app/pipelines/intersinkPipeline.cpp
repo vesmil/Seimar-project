@@ -16,7 +16,6 @@ IntersinkPipeline::IntersinkPipeline()
 IntersinkPipeline &IntersinkPipeline::getInstance()
 {
     static IntersinkPipeline instance;
-
     return instance;
 }
 

@@ -41,22 +41,11 @@ const gchar* GsWrapper::getIntervideoChannel()
     return m_intervideoName;
 }
 
-GstElement* GsWrapper::makeIntersource(const gchar* name)
-{
-    if (!m_interpipelineInited)
-        gst_printerr("Intervideosrc request without initialized intervideo pipeline");
-
-    GstElement* src = GsWrapper::makeElement("intervideosrc", name);
-    g_object_set(src,"channel", getIntervideoChannel, NULL);
-
-    return src;
-}
-
 GstCaps* GsWrapper::makeDefualtCaps()
 {
     return gst_caps_new_simple("video/x-raw",
                 "format", G_TYPE_STRING, "RGB",
-                "framerate", GST_TYPE_FRACTION, 30, 1,
+                "framerate", GST_TYPE_FRACTION, 60, 1,
                 "pixel-aspect-ratio", GST_TYPE_FRACTION, 1, 1,
                 "width", G_TYPE_INT, glb::dim::WIDTH,
                 "height", G_TYPE_INT, glb::dim::HEIGHT, NULL);
