@@ -3,10 +3,14 @@
 
 #include "pipeline.h"
 
+/*!
+ * \brief Pipeline which uses data from intervideosrc
+ */
 class IntersrcPipeline : public Pipeline
 {
 protected:
     IntersrcPipeline() = default;
+
     void setSource(const gchar *name);
 };
 

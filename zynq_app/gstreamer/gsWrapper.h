@@ -4,20 +4,23 @@
 #include "gst/gst.h"
 #include "pipelines/intersinkPipeline.h"
 
+/*!
+ * \brief Wrapper adding default elements and imporved debugging capabilities
+ */
 struct GsWrapper
 {
-    static void init();
+    static void init(int debug = 0);
     static void deinit();
 
     static GstElement* makeElement(const gchar *factoryname, const gchar *name);
     static GstCaps* makeDefualtCaps();
 
-    static const gchar* getIntervideoChannel();
+    static const gchar* getDefaultIntervidChanName();
 
 private:
     static void initIntervideoPipeline();
 
-    static const char* m_intervideoName;
+    static const char* m_intervideoChannelName;
     static bool m_interpipelineInited;
 };
 

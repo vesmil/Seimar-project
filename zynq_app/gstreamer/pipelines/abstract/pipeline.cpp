@@ -1,7 +1,8 @@
 #include "pipeline.h"
 
-#include <gsWrapper.h>
 #include <stdexcept>
+
+#include "gstreamer/gsWrapper.h"
 
 void Pipeline::start()
 {
@@ -18,11 +19,6 @@ void Pipeline::stop()
 }
 
 Pipeline::~Pipeline()
-{
-    unrefAll();
-}
-
-void Pipeline::unrefAll()
 {
     if (m_bus)
     {

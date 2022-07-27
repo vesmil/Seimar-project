@@ -3,6 +3,9 @@
 
 #include "abstract/intersrcPipeline.h"
 
+/*!
+ * \brief Complete pipeline saving raw data from interpipelinesrc
+ */
 class RawFilePipeline : public IntersrcPipeline
 {
 public:

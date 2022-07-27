@@ -5,12 +5,17 @@
 
 #include "global/config.h"
 
-const char* GsWrapper::m_intervideoName = "interchannel";
+const char* GsWrapper::m_intervideoChannelName = "interchannel";
 bool GsWrapper::m_interpipelineInited = false;
 
-void GsWrapper::init()
+void GsWrapper::init(int debug)
 {
     gst_init(nullptr, nullptr);
+
+    if (debug > 0) {
+        gst_debug_set_active(TRUE);
+        gst_debug_set_default_threshold(GST_LEVEL_FIXME);
+    }
     initIntervideoPipeline();
 }
 
@@ -35,10 +40,9 @@ GstElement* GsWrapper::makeElement(const gchar *factoryname, const gchar *name)
     return res;
 }
 
-// TODO move
-const gchar* GsWrapper::getIntervideoChannel()
+const gchar* GsWrapper::getDefaultIntervidChanName()
 {
-    return m_intervideoName;
+    return m_intervideoChannelName;
 }
 
 GstCaps* GsWrapper::makeDefualtCaps()

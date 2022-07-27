@@ -3,6 +3,9 @@
 
 #include <gst/gst.h>
 
+/*!
+ * \brief Abstract Pipeline class with basic pipeline attributes
+ */
 class Pipeline
 {
 public:
@@ -11,14 +14,16 @@ public:
 
     ~Pipeline();
 
+    // Disable copy constructors for all pipelines (pipeline subclasses)
     Pipeline(const Pipeline&) = delete;
     Pipeline& operator =(const Pipeline&) = delete;
 
 protected:
+    // Only subclassses can construct pipeline
+    //  - it's missing key elements which needs to be added
     Pipeline() = default;
 
     void setCapsFilter(const gchar *name);
-    void unrefAll();
 
     GstElement *m_videoSrc, *m_capsfilter, *m_sink, *m_pipeline;
     GstCaps *m_videoCaps;

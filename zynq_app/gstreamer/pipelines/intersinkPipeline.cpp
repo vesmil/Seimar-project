@@ -1,7 +1,8 @@
 #include "intersinkPipeline.h"
 
-#include <gsWrapper.h>
 #include <stdexcept>
+
+#include "gstreamer/gsWrapper.h"
 #include "global/config.h"
 
 IntersinkPipeline::IntersinkPipeline()
@@ -28,7 +29,7 @@ void IntersinkPipeline::setSource(const gchar *name)
 void IntersinkPipeline::setSink(const gchar *name)
 {
     m_sink = GsWrapper::makeElement("intervideosink",name);
-    g_object_set(m_sink,"channel", GsWrapper::getIntervideoChannel(), NULL);
+    g_object_set(m_sink,"channel", GsWrapper::getDefaultIntervidChanName(), NULL);
 }
 
 void IntersinkPipeline::completePipeline()

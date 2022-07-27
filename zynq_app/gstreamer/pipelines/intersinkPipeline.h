@@ -3,6 +3,9 @@
 
 #include "abstract/pipeline.h"
 
+/*!
+ * \brief Complete pipeline transfaring data from vl42src to intervideosink
+ */
 class IntersinkPipeline : public Pipeline
 {
 public:
