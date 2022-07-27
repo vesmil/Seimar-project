@@ -6,11 +6,11 @@ PKGCONFIG += gstreamer-1.0 gstreamer-video-1.0
 SOURCES += \
         main.cpp \
         gsWrapper.cpp \
-    pipelines/intersinkPipeline.cpp \
-    pipelines/intersrcPipeline.cpp \
-    pipelines/pipeline.cpp \
+        pipelines/abstract/intersrcPipeline.cpp \
+        pipelines/abstract/pipeline.cpp \
+        pipelines/intersinkPipeline.cpp \
         pipelines/rawFilePipeline.cpp \
-    pipelines/rtpPipeline.cpp
+        pipelines/rtpPipeline.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -18,12 +18,11 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    ethernetPipeline.h \
-    global/config.h \
-    gsWrapper.h \
-    pipelines/intersinkPipeline.h \
-    pipelines/intersrcPipeline.h \
-    pipelines/pipeline.h \
-    pipelines/rawFilePipeline.h \
-    pipelines/rtpPipeline.h \
-    rawFilePipeline.h
+        global/config.h \
+        gsWrapper.h \
+        rtpPipeline.h \
+        pipelines/abstract/intersrcPipeline.h \
+        pipelines/abstract/pipeline.h \
+        pipelines/intersinkPipeline.h \
+        pipelines/rawFilePipeline.h \
+        pipelines/rtpPipeline.h \

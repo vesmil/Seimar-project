@@ -5,66 +5,60 @@
 
 #include "global/config.h"
 
-#include <pipelines/intersinkPipeline.h>
+const char* GsWrapper::m_intervideoName = "interchannel";
+bool GsWrapper::m_interpipelineInited = false;
 
-const char* GstWrapper::m_intervideoName = "interchannel";
-bool GstWrapper::m_intervideopiPelineSetup = false;
-
-void GstWrapper::init()
+void GsWrapper::init()
 {
     gst_init(nullptr, nullptr);
-    // setenv("GST_DEBUG", ("*:" + std::to_string(3)).c_str(), 1);
-
     initIntervideoPipeline();
 }
 
-void GstWrapper::deinit()
+void GsWrapper::deinit()
 {
     gst_deinit();
 }
 
-void GstWrapper::initIntervideoPipeline()
+void GsWrapper::initIntervideoPipeline()
 {
-    intersinkPipeline::getInstance();  // TODO store the instance better way
-
-    m_intervideopiPelineSetup = true;
+    IntersinkPipeline::getInstance().start();
+    m_interpipelineInited = true;
 }
 
-GstElement* GstWrapper::makeElement(const gchar *factoryname, const gchar *name)
+GstElement* GsWrapper::makeElement(const gchar *factoryname, const gchar *name)
 {
     using namespace std::literals;
 
     GstElement *res = gst_element_factory_make(factoryname, name);
     if (!res)
         throw std::runtime_error("Can't instantiate element "s + name + " of type " + factoryname + ")");
-
     return res;
 }
 
-const gchar* GstWrapper::getIntervideoChannel()
+// TODO move
+const gchar* GsWrapper::getIntervideoChannel()
 {
     return m_intervideoName;
 }
 
-GstElement* GstWrapper::makeIntersource(const gchar* name)
+GstElement* GsWrapper::makeIntersource(const gchar* name)
 {
-    if (!m_intervideopiPelineSetup)
+    if (!m_interpipelineInited)
         gst_printerr("Intervideosrc request without initialized intervideo pipeline");
 
-    GstElement* src = GstWrapper::makeElement("intervideosrc", name);
+    GstElement* src = GsWrapper::makeElement("intervideosrc", name);
     g_object_set(src,"channel", getIntervideoChannel, NULL);
 
     return src;
 }
 
-GstCaps* GstWrapper::makeDefualtCaps()
+GstCaps* GsWrapper::makeDefualtCaps()
 {
     return gst_caps_new_simple("video/x-raw",
                 "format", G_TYPE_STRING, "RGB",
-                "framerate", GST_TYPE_FRACTION, 60, 1,
+                "framerate", GST_TYPE_FRACTION, 30, 1,
                 "pixel-aspect-ratio", GST_TYPE_FRACTION, 1, 1,
                 "width", G_TYPE_INT, glb::dim::WIDTH,
-                "height", G_TYPE_INT, glb::dim::HEIGHT,
-                               NULL);
+                "height", G_TYPE_INT, glb::dim::HEIGHT, NULL);
 }
 

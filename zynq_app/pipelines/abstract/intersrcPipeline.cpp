@@ -5,5 +5,5 @@
 
 void IntersrcPipeline::setSource(const gchar* name)
 {
-    m_videoSrc = GstWrapper::makeIntersource(name);
+    m_videoSrc = GsWrapper::makeIntersource(name);
 }

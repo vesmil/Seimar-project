@@ -1,9 +1,6 @@
 #ifndef INTERSINKPIPELINE_H
 #define INTERSINKPIPELINE_H
 
-#include <gst/gst.h>
-
-#include "global/config.h"
 #include "pipeline.h"
 
 class IntersrcPipeline : public Pipeline

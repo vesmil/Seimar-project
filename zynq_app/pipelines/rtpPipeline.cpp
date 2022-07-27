@@ -1,9 +1,10 @@
 #include "rtpPipeline.h"
 
 #include <stdexcept>
-
-#include "gsWrapper.h"
 #include <thread>
+
+#include "global/config.h"
+#include "gsWrapper.h"
 
 RtpPipeline::RtpPipeline()
 {
@@ -16,12 +17,12 @@ RtpPipeline::RtpPipeline()
 
 void RtpPipeline::setRtpPayload()
 {
-    m_rtpvrawpay = GstWrapper::makeElement("rtpvrawpay", "rtpvrawpay");
+    m_rtpvrawpay = GsWrapper::makeElement("rtpvrawpay", "rtpvrawpay");
 }
 
 void RtpPipeline::setUdpsink()
 {
-    m_sink = GstWrapper::makeElement("udpsink", "udpsink");
+    m_sink = GsWrapper::makeElement("udpsink", "udpsink");
 
     g_object_set(m_sink, "port", glb::rtp::PORT, NULL);
     g_object_set(m_sink, "host", glb::rtp::IP_ADDRESS.c_str(), NULL);

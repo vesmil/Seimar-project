@@ -3,17 +3,12 @@
 #include <gsWrapper.h>
 #include <stdexcept>
 
-Pipeline::Pipeline()
-{
-
-}
-
 void Pipeline::start()
 {
-    if (m_completed)
-        gst_element_set_state (m_pipeline, GST_STATE_PLAYING);
-    else
-        throw std::runtime_error("Pipeline start before completion.\n");
+    if (!m_completed)
+        throw std::runtime_error("Pipeline started before completion.\n");
+
+    gst_element_set_state (m_pipeline, GST_STATE_PLAYING);
 }
 
 void Pipeline::stop()
@@ -51,9 +46,9 @@ void Pipeline::unrefAll()
 
 void Pipeline::setCapsFilter(const gchar* name)
 {
-    m_videoCaps = GstWrapper::makeDefualtCaps();
+    m_videoCaps = GsWrapper::makeDefualtCaps();
 
-    m_capsfilter = GstWrapper::makeElement("capsfilter", name);
+    m_capsfilter = GsWrapper::makeElement("capsfilter", name);
     g_object_set(m_capsfilter, "caps", m_videoCaps, NULL);
     gst_caps_unref(m_videoCaps);
 }

@@ -1,22 +1,19 @@
 #ifndef INTERSINKPIPELINE_H
 #define INTERSINKPIPELINE_H
 
-#include "pipeline.h"
+#include "abstract/pipeline.h"
 
-class intersinkPipeline : Pipeline
+class IntersinkPipeline : public Pipeline
 {
 public:
-    static intersinkPipeline* getInstance();
-
-    void start();
-    void stop();
+    static IntersinkPipeline& getInstance();
 
 private:
     void setSource(const gchar *name);
     void setSink(const gchar *name);
+    void completePipeline();
 
-    intersinkPipeline();
-    ~intersinkPipeline();
+    IntersinkPipeline();
 };
 
 #endif // INTERSINKPIPELINE_H

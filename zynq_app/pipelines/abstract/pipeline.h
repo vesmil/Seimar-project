@@ -11,8 +11,11 @@ public:
 
     ~Pipeline();
 
+    Pipeline(const Pipeline&) = delete;
+    Pipeline& operator =(const Pipeline&) = delete;
+
 protected:
-    Pipeline();
+    Pipeline() = default;
 
     void setCapsFilter(const gchar *name);
     void unrefAll();

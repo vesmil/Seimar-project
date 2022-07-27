@@ -1,7 +1,9 @@
 #include "rawFilePipeline.h"
 
-#include "gsWrapper.h"
 #include <stdexcept>
+
+#include "global/config.h"
+#include "gsWrapper.h"
 
 RawFilePipeline::RawFilePipeline() : IntersrcPipeline()
 {
@@ -13,7 +15,7 @@ RawFilePipeline::RawFilePipeline() : IntersrcPipeline()
 
 void RawFilePipeline::setFilesink()
 {
-    m_sink = GstWrapper::makeElement("filesink", "filesink");
+    m_sink = GsWrapper::makeElement("filesink", "filesink");
     g_object_set(m_sink, "location", glb::path::VIDEO_OUT.c_str(), NULL);
 }
 
