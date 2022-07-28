@@ -69,7 +69,7 @@ Navíc se stále čeká na nosnou desku od ČVUT, která místo HDMI nabídne Di
 - [ ] Zobrazit menu
   - [ ] Práce se streamem - ukládání, atd.
   - [ ] Komunikace s kamerou - VISCA protkol
-    - [ ] Setup dočasné kamery s HDMI na monitor a UART do desky
+    - [x] Setup dočasné kamery s HDMI na monitor a UART do desky
     - [ ] Funguící protkol
     - [ ] Všechny potřebné příkazy
 - [ ] Bonusy:

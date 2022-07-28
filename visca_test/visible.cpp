@@ -38,11 +38,11 @@ Visible::Visible()
 
     if (isMxcVideo("video0")) {
         g_object_set (streamData.source, "device", "/dev/video0", NULL);
-    } else if (isMxcVideo("video1")) {
+    } /* else if (isMxcVideo("video1")) {
         g_object_set (streamData.source, "device", "/dev/video1", NULL);
     } else {
         throw std::runtime_error("Camera not connected");
-    }
+    } */
 
     g_object_set (streamData.enc, "idr-interval", 5, NULL);
     g_object_set (streamData.enc, "bitrate", 4096, NULL);

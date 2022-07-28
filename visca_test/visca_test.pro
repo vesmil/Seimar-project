@@ -11,10 +11,12 @@ CONFIG += c++1z
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
+    visca.cpp \
     visible.cpp
 
 HEADERS += \
     mainwindow.h \
+    visca.h \
     visible.h
 
 LIBS +=  -lgstreamer-1.0 -lgobject-2.0 -lglib-2.0 -lgstrtspserver-1.0
