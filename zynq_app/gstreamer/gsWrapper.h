@@ -5,7 +5,7 @@
 #include "pipelines/intersinkPipeline.h"
 
 /*!
- * \brief Wrapper adding default elements and imporved debugging capabilities
+ * \brief Wrapper adding default elements and improved debugging capabilities
  */
 struct GsWrapper
 {

@@ -75,4 +75,5 @@ Využití QML...
 
 ## 4. část - ovládání kamery
 
-VISCA protokol
+*Tuto část jsem začal dělat v době, kdy jsem ještě neměl přístup ke všemu hardware a tedy jsem využil jinou desku a jinou kameru. Protokol ale zůstává stejný a proto převod byl snadný, pouze přidávání ovládání nemohlo sdílet stejný projekt, takže jsem v rychlosti vytvořil nový s nějakým základním zobrazení pomocí RTP.*
+
