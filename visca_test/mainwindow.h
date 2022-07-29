@@ -2,12 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
-#include <QWidget>
-#include <QKeyEvent>
-#include <QDebug>
-
 #include "visca.h"
+
+#include <QLoggingCategory>
+Q_DECLARE_LOGGING_CATEGORY(driverUsb)
+
 
 class MainWindow : public QMainWindow
 {

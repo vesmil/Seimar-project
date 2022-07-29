@@ -38,11 +38,9 @@ Visible::Visible()
 
     if (isMxcVideo("video0")) {
         g_object_set (streamData.source, "device", "/dev/video0", NULL);
-    } /* else if (isMxcVideo("video1")) {
-        g_object_set (streamData.source, "device", "/dev/video1", NULL);
     } else {
-        throw std::runtime_error("Camera not connected");
-    } */
+        throw std::runtime_error("/dev/video0 is not a valid camera.");
+    }
 
     g_object_set (streamData.enc, "idr-interval", 5, NULL);
     g_object_set (streamData.enc, "bitrate", 4096, NULL);
@@ -59,7 +57,7 @@ Visible::Visible()
 
     if (gst_element_link_many(streamData.source, streamData.transform, streamData.enc, streamData.parse, streamData.rtph264pay, streamData.udpsink, NULL) != TRUE) {
         gst_object_unref (streamData.pipeline);
-        throw std::runtime_error("Elements could not be linked.\n");
+        throw std::runtime_error("Elements could not be linked.");
     }
 
     gst_element_set_state (streamData.pipeline, GST_STATE_PLAYING);

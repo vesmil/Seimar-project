@@ -9,18 +9,20 @@ CONFIG += c++1z
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    global/logCategories.cpp \
     main.cpp \
     mainwindow.cpp \
     visca.cpp \
     visible.cpp
 
 HEADERS += \
+    global/logCategories.h \
+    global/viscaConfig.h \
     mainwindow.h \
     visca.h \
     visible.h
 
 LIBS +=  -lgstreamer-1.0 -lgobject-2.0 -lglib-2.0 -lgstrtspserver-1.0
-
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
