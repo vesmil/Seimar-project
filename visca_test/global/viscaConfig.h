@@ -3,7 +3,7 @@
 
 namespace glb {
     namespace visca {
-        static const int numOfTries = 10;
+        static const int INIT_LIMIT_COUNT = 10;
     }
 }
 

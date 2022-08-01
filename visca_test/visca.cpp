@@ -33,7 +33,6 @@ Visca::Visca()
     for (int i = 0; i < glb::visca::numOfTries; i++) {
         if (setAddress() && clearIF())
             return;
-
         usleep(100000);
     }
 
@@ -43,22 +42,40 @@ Visca::Visca()
 bool Visca::setAddress()
 {
     if (!sendMessage(0x88, 0x30, 0x01, buffer, 0)) {
+        qCInfo(viscaWarning()) << "ViscaSetting::setAddress(): failed to send message";
         return false;
     }
 
-    uint8_t addr, socket;
+    usleep(100000);
+
+    uint8_t addr = 0;
+    uint8_t socket;
 
     if (!receiveMessage(addr, socket, buffer, 1)) {
-        // ...
+        qCInfo(viscaWarning()) << "ViscaSetting::setAddress(): faile to recieve message";
         return false;
     }
 
-    qCInfo(viscaInfo()) << "ViscaSetting::setAddress(): Returned device address " << addr - 1;
+    qCInfo(viscaInfo()) << "ViscaSetting::setAddress(): Returned device address " << addr;
     return true;
 }
 
 bool Visca::clearIF()
 {
+    uint8_t data[] = {0x01};
+
+    if (!sendMessage(0x88, 0x01, 0x00, data, 1)) {
+        return false;
+    }
+
+    uint8_t addr, soc;
+    uint8_t dataRet[2];
+
+    if (!receiveMessage(addr, soc, dataRet, 2, 500)) {
+        return false;
+    }
+
+    qCInfo(viscaInfo()) << "ViscaSetting::clearIF(): Command buffer cleared";
     return true;
 }
 
@@ -70,8 +87,6 @@ bool Visca::sendBytes(uint8_t *buffer, int size)
     }
 
     int sent_size = write(m_descriptor, buffer, size);
-
-    qCWarning(viscaInfo()) << "Sent" << sent_size << "bytes";
 
     if (sent_size < 0) {
         qCWarning(viscaWarning()) << "Visca::sendBytes(): Error, UART sending error!";
@@ -91,7 +106,8 @@ bool Visca::sendMessage(uint8_t addr, uint8_t comm, uint8_t cat, uint8_t *data, 
     message[2] = cat;
 
     memcpy(&message[3], data, size);
-    message[total-1] = 0xFF;
+
+    message[total-1] = 0xFF; // termination symbol
 
     return sendBytes(message, total);
 }
@@ -103,28 +119,29 @@ int Visca::receiveBytes(uint8_t *buffer)
         return -1;
     }
 
-    int recieved_size = read(m_descriptor, buffer, MAX_RX_BUFFER);
+    return read(m_descriptor, buffer, MAX_RX_BUFFER);
+}
 
-    qCWarning(viscaInfo()) << recieved_size;
+bool Visca::receiveMessage(uint8_t &addr, uint8_t &socket, uint8_t *data, int size, int waitMs)
+{
+    const int checkLoops = waitMs / 10 + 1;
 
-    if (recieved_size <= 3) {
-        qCWarning(viscaWarning()) << "Visca::recieveBytes(): Error, UART recieving error!";
+    for (int i = 0; i < checkLoops; ++i) {
+        if (ioctl(m_descriptor, FIONREAD) >= size)
+            break;
+
+        usleep(10000);
+    }
+
+    int recieved_size = receiveBytes(buffer);
+
+    if (recieved_size < 3) {
+        qCWarning(viscaWarning()) << "Visca::recieveBytes(): Error, less than 3 bytes recieved!";
         return recieved_size;
     }
 
-    return recieved_size;
-}
-
-bool Visca::receiveMessage(uint8_t &addr, uint8_t &socket, uint8_t *data, int size)
-{
-    int recieved_size = receiveBytes(buffer);
-
-    if (recieved_size < 3)
-        return false;
-
     addr = buffer[0];
     socket = buffer[1];
-
     memcpy(&buffer[2], data, recieved_size - 3);
 
     return recieved_size - 3 == size;

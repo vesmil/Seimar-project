@@ -16,7 +16,7 @@ private:
     bool sendMessage(uint8_t addr, uint8_t comm, uint8_t cat, uint8_t *data, int size);
 
     int receiveBytes(uint8_t *buffer);
-    bool receiveMessage(uint8_t &addr, uint8_t &socket, uint8_t *data, int size);
+    bool receiveMessage(uint8_t &addr, uint8_t &socket, uint8_t *data, int size, int waitMs = 0);
 
     int m_descriptor;
     const char* m_device = "/dev/ttymxc4";
