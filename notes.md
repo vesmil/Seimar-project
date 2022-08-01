@@ -75,5 +75,10 @@ Využití QML...
 
 ## 4. část - ovládání kamery
 
-*Tuto část jsem začal dělat v době, kdy jsem ještě neměl přístup ke všemu hardware a tedy jsem využil jinou desku a jinou kameru. Protokol ale zůstává stejný a proto převod byl snadný, pouze přidávání ovládání nemohlo sdílet stejný projekt, takže jsem v rychlosti vytvořil nový s nějakým základním zobrazení pomocí RTP.*
+Jak již bylo zmíněno v README, ovládání kamery je zajištěně pomocí UART komunikace s použitím tzv. VISCA prtokolu - viz. [dokumentace](https://www.sony.net/Products/CameraSystem/CA/BRC_X1000_BRC_H800/Technical_Document/C456100121.pdf).
 
+> Tuto část jsem začal dělat v době, kdy jsem ještě neměl přístup ke všemu HW a tedy jsem využil jinou desku a jinou kameru. V rychlosti jsem tedy vytvořil nový projekt s nějakým základním zobrazení pomocí RTP. - TODO dopsat
+
+Navázat UART komunikaci je díky Linuxu velmi snadné, stačí mi jednoduše otevřít soubor `/dev/ttymxc4` a nastavit termios flagy jako např. baud rate. Pro práci se samotným VISCA protkolem je potřeba následně provést ještě dva kroky a to nastavení adresy a vymazání příkazového bufferu.
+
+...

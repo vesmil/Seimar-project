@@ -69,9 +69,7 @@ Navíc se stále čeká na nosnou desku od ČVUT, která místo HDMI nabídne Di
     - [x] Funguící protokol
         - [x] Odesílání a přijímání příkazů
         - [x] Adresa a command buffer
-
     - [ ] Všechny potřebné příkazy
-
 - [ ] Enkódovací modul hotový (počkat či dočasně udělat softwarově)
 - [ ] Zobrazit stream na display port (note: HDMI na Trenz desce je problematický. je potřeba použít Zynq desku nebo počkat na ČVUT desku)
 - [ ] Zobrazit menu

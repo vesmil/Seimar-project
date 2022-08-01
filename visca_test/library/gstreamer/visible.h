@@ -4,6 +4,9 @@
 #include <gst/gst.h>
 #include <string>
 
+/*!
+ * \brief // Pipeline for RTP streaming - USE ONLY FOR TESTING!!!
+ */
 class Visible
 {
 public:

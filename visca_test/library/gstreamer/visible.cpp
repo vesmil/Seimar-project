@@ -15,7 +15,6 @@ bool Visible::isMxcVideo(const std::string &name)
     return camera == "Mxc";
 }
 
-// Ugly temp pipeline for testing effects of VISCA commands
 Visible::Visible()
 {
     gst_init(nullptr, nullptr);
@@ -42,7 +41,7 @@ Visible::Visible()
     }
     else
     {
-        throw std::runtime_error("/dev/video0 is not a valid camera.");
+        throw std::runtime_error("/dev/video0 is not a valid camera."); // nvm - won't be used
     }
 
     g_object_set (streamData.enc, "idr-interval", 5, NULL);

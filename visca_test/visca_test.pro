@@ -11,17 +11,16 @@ CONFIG += c++1z
 SOURCES += \
     global/logCategories.cpp \
     library/gstreamer/visible.cpp \
+    library/visca/uartCommunication.cpp \
     library/visca/visca.cpp \
-    library/visca/viscaCommunication.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     global/logCategories.h \
-    global/viscaConfig.h \
     library/gstreamer/visible.h \
+    library/visca/uartCommunication.h \
     library/visca/visca.h \
-    library/visca/viscaCommunication.h \
     mainwindow.h
 
 LIBS +=  -lgstreamer-1.0 -lgobject-2.0 -lglib-2.0 -lgstrtspserver-1.0
