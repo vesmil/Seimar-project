@@ -56,22 +56,27 @@ Navíc se stále čeká na nosnou desku od ČVUT, která místo HDMI nabídne Di
 - [x] Specifikace
 - [x] Prázdný QT projekt
 - [x] Setup kompilace
-- [ ] RAW stream - GStreamer
-    - [x] Na SD kartu
+- [x] GStreamer
+    - [x] RAW ukldání na SD kartu
         - [x] Příkazový řádek
         - [x] v C++
-    - [x] Přes ethernet
+    - [x] RTP stream přes ethernet
         - [x] Příkazový řádek
         - [x] C++
         - [x] Klient
+- [ ] VISCA protokol
+    - [x] Setup dočasné kamery s HDMI na monitor a UART do desky
+    - [x] Funguící protokol
+        - [x] Odesílání a přijímání příkazů
+        - [x] Adresa a command buffer
+
+    - [ ] Všechny potřebné příkazy
+
 - [ ] Enkódovací modul hotový (počkat či dočasně udělat softwarově)
 - [ ] Zobrazit stream na display port (note: HDMI na Trenz desce je problematický. je potřeba použít Zynq desku nebo počkat na ČVUT desku)
 - [ ] Zobrazit menu
   - [ ] Práce se streamem - ukládání, atd.
-  - [ ] Komunikace s kamerou - VISCA protkol
-    - [x] Setup dočasné kamery s HDMI na monitor a UART do desky
-    - [ ] Funguící protkol
-    - [ ] Všechny potřebné příkazy
+  - [ ] Komunikace s kamerou
 - [ ] Bonusy:
   - [ ] Komunikace s deskou pomocí ethernetu
   - [ ] Zobrazení jiné kamery než s viditelným světlem

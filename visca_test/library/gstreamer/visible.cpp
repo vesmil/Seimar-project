@@ -36,9 +36,12 @@ Visible::Visible()
 
     // $ gst-launch-1.0 udpsrc port="9002" caps="application/x-rtp, media=(string)video, encoding-name=H264, payload=96" ! rtph264depay ! avdec_h264  ! autovideosink
 
-    if (isMxcVideo("video0")) {
+    if (isMxcVideo("video0"))
+    {
         g_object_set (streamData.source, "device", "/dev/video0", NULL);
-    } else {
+    }
+    else
+    {
         throw std::runtime_error("/dev/video0 is not a valid camera.");
     }
 
@@ -56,7 +59,8 @@ Visible::Visible()
     gst_bin_add_many (GST_BIN (streamData.pipeline), streamData.source, streamData.queue, streamData.transform,
                       streamData.enc, streamData.parse, streamData.rtph264pay, streamData.udpsink, NULL);
 
-    if (gst_element_link_many(streamData.source, streamData.transform, streamData.enc, streamData.parse, streamData.rtph264pay, streamData.udpsink, NULL) != TRUE) {
+    if (gst_element_link_many(streamData.source, streamData.transform, streamData.enc, streamData.parse, streamData.rtph264pay, streamData.udpsink, NULL) != TRUE)
+    {
         gst_object_unref (streamData.pipeline);
         throw std::runtime_error("Elements could not be linked.");
     }
