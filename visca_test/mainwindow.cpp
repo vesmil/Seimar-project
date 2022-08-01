@@ -1,15 +1,14 @@
 #include "mainwindow.h"
 
 #include <QKeyEvent>
+
 #include "global/logCategories.h"
-
-Q_LOGGING_CATEGORY(driverUsb, "driver.usb")
-
+#include "global/viscaConfig.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow{parent}
 {
-    visca = new ViscaCommunication;
+    visca = new Visca(glb::visca::DEVICE_PATH);
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event)

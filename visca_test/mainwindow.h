@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "library/visca/viscaCommunication.h"
+#include "library/visca/visca.h"
 
 #include <QLoggingCategory>
 Q_DECLARE_LOGGING_CATEGORY(driverUsb)
@@ -18,7 +18,7 @@ protected:
      void keyPressEvent(QKeyEvent *event) override;
 
 private:
-     ViscaCommunication* visca;
+     Visca* visca;
 };
 
 #endif // MAINWINDOW_H

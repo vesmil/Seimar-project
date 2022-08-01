@@ -11,7 +11,7 @@
 #include "global/viscaConfig.h"
 #include "global/logCategories.h"
 
-ViscaCommunication::ViscaCommunication()
+ViscaCommunication::ViscaCommunication(const char* device_path) : m_device(device_path)
 {
     m_descriptor = open(m_device, O_RDWR | O_NOCTTY | O_NDELAY);
 
@@ -163,33 +163,3 @@ bool ViscaCommunication::receiveMessageData(uint8_t *data, int size, int waitMs)
     uint8_t addr, socket;
     return receiveMessage(addr,socket, data, size, waitMs);
 }
-
-// TODO create template for commands
-bool ViscaCommunication::zoomTeleStandard(void)
-{
-    uint8_t data[] = {0x07, 0x02};
-
-    if (!sendMessage(0x80 + 1, 0x01, 0x04, data, 2))
-        return false;
-
-    if (!receiveMessageData(nullptr, 0, 200))
-        return false;
-
-    qCInfo(viscaInfo()) << "ViscaCommunication::zoomTeleStandard(): Zooming";
-    return true;
-}
-
-bool ViscaCommunication::zoomWideStandard(void)
-{
-    uint8_t data[] = {0x07, 0x03};
-
-    if (sendMessage(0x80 + 1, 0x01, 0x04, data, 2))
-        return false;
-
-    if (receiveMessageData(nullptr, 0, 200))
-        return false;
-
-    qCInfo(viscaInfo()) << "ViscaCommunication::zoomWideStandard(): Unzooming";
-    return true;
-}
-

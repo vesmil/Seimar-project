@@ -6,14 +6,7 @@
 class ViscaCommunication
 {
 public:
-    ViscaCommunication();
-
-    bool zoomTeleStandard();
-    bool zoomWideStandard();
-
-private:
-    bool setAddress();
-    bool clearIF();
+    ViscaCommunication(const char* device_path);
 
     bool sendBytes(uint8_t *buffer, int size);
     bool sendMessage(uint8_t addr, uint8_t comm, uint8_t cat, uint8_t *data, int size);
@@ -22,8 +15,12 @@ private:
     bool receiveMessage(uint8_t &addr, uint8_t &socket, uint8_t *data, int size, int waitMs = 0);
     bool receiveMessageData(uint8_t *data, int size, int waitMs);
 
+private:
+    bool setAddress();
+    bool clearIF();
+
     int m_descriptor;
-    const char* m_device = "/dev/ttymxc4";
+    const char* m_device;
 
     static const unsigned MAX_RX_BUFFER = 512;
     uint8_t m_buffer[MAX_RX_BUFFER];

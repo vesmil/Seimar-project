@@ -11,6 +11,7 @@ CONFIG += c++1z
 SOURCES += \
     global/logCategories.cpp \
     library/gstreamer/visible.cpp \
+    library/visca/visca.cpp \
     library/visca/viscaCommunication.cpp \
     main.cpp \
     mainwindow.cpp
@@ -19,6 +20,7 @@ HEADERS += \
     global/logCategories.h \
     global/viscaConfig.h \
     library/gstreamer/visible.h \
+    library/visca/visca.h \
     library/visca/viscaCommunication.h \
     mainwindow.h
 
