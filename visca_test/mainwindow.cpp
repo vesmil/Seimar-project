@@ -9,15 +9,18 @@ Q_LOGGING_CATEGORY(driverUsb, "driver.usb")
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow{parent}
 {
-    visca = new Visca;
+    visca = new ViscaCommunication;
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
     if(event->key() == Qt::Key_R)
     {
-        qInfo() << "R pressed";
+        visca->zoomTeleStandard();
+    }
 
-        // visca->zoomTele(10);
+    if(event->key() == Qt::Key_T)
+    {
+        visca->zoomWideStandard();
     }
 }

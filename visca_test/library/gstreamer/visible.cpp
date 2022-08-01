@@ -53,7 +53,8 @@ Visible::Visible()
     g_object_set(streamData.capsfilter, "caps", caps, NULL);
     gst_caps_unref(caps);
 
-    gst_bin_add_many (GST_BIN (streamData.pipeline), streamData.source, streamData.queue, streamData.transform, streamData.enc, streamData.parse, streamData.rtph264pay, streamData.udpsink, NULL);
+    gst_bin_add_many (GST_BIN (streamData.pipeline), streamData.source, streamData.queue, streamData.transform,
+                      streamData.enc, streamData.parse, streamData.rtph264pay, streamData.udpsink, NULL);
 
     if (gst_element_link_many(streamData.source, streamData.transform, streamData.enc, streamData.parse, streamData.rtph264pay, streamData.udpsink, NULL) != TRUE) {
         gst_object_unref (streamData.pipeline);
