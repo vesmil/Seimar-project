@@ -1,4 +1,4 @@
-#include "uartCommunication.h"
+﻿#include "uartCommunication.h"
 
 #include <termios.h>
 #include <fcntl.h>
@@ -27,6 +27,8 @@ UartCommunication::UartCommunication(const char* device_path)
     options.c_lflag = 0;
     tcflush(m_descriptor, TCIFLUSH);
     tcsetattr(m_descriptor, TCSANOW, &options);
+
+    qCWarning(viscaInfo()) << __PRETTY_FUNCTION__ << ": UART communication initalized on port" << m_descriptor;
 }
 
 UartCommunication::~UartCommunication()
@@ -34,7 +36,7 @@ UartCommunication::~UartCommunication()
     close(m_descriptor);
 }
 
-bool UartCommunication::sendMessage(uint8_t *message, const uint8_t size)
+bool UartCommunication::sendMessageArr(uint8_t *message, const uint8_t size)
 {
     if (m_descriptor == -1)
     {
@@ -58,17 +60,6 @@ bool UartCommunication::sendMessage(uint8_t *message, const uint8_t size)
 
 bool UartCommunication::receiveMessage(uint8_t *data, int size, int waitMs)
 {
-    if (LoadMessageToPrivateBuffer(size, waitMs))
-    {
-        memcpy(&m_buffer, data, size);
-        return true;
-    }
-
-    return false;
-}
-
-bool UartCommunication::LoadMessageToPrivateBuffer(int size, int waitMs)
-{
     if (m_descriptor == -1)
     {
         qCWarning(viscaWarning()) << __PRETTY_FUNCTION__ << ": Error, port is closed";
@@ -84,11 +75,18 @@ bool UartCommunication::LoadMessageToPrivateBuffer(int size, int waitMs)
         usleep(USECONDS_PER_CHECK);
     }
 
-    if (read(m_descriptor, m_buffer, MAX_BUFFER_SIZE) < 3)
+    int read_count = read(m_descriptor, data, size);
+
+    if (read_count < 3)
     {
         qCWarning(viscaWarning()) << __PRETTY_FUNCTION__ << ": Error, less than 3 bytes recieved!";
         return false;
     }
 
     return true;
+}
+
+bool UartCommunication::loadMessageToBuffer(int size, int waitMs)
+{
+    return receiveMessage(m_buffer, size, waitMs);
 }

@@ -7,7 +7,6 @@
 #include <QLoggingCategory>
 Q_DECLARE_LOGGING_CATEGORY(driverUsb)
 
-
 class MainWindow : public QMainWindow
 {
     Q_OBJECT

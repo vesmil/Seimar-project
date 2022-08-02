@@ -21,6 +21,7 @@ HEADERS += \
     library/gstreamer/visible.h \
     library/visca/uartCommunication.h \
     library/visca/visca.h \
+    library/visca/viscaCommands.h \
     mainwindow.h
 
 LIBS +=  -lgstreamer-1.0 -lgobject-2.0 -lglib-2.0 -lgstrtspserver-1.0
