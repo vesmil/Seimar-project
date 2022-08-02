@@ -1,49 +1,31 @@
 #ifndef UARTCOMMUNICATION_H
 #define UARTCOMMUNICATION_H
 
-#include <unistd.h>
-#include "global/logCategories.h"
+#include <stdint.h>
 
 /*!
- * \brief Class for UART communication - intended for VISCA prtocol
+ * \brief Class for UART communication - intended mainly for VISCA prtocol
  */
 class UartCommunication
 {
 public:
     UartCommunication(const char* device_path);
+    ~UartCommunication();
 
-    static const uint8_t TERMINATOR = 0xFF;
+    /*!
+     * \brief Sends byte (uint8_t) array with appended 0xFF
+     * \return bool if the operation was successful
+     */
+    bool sendMessage(uint8_t* message, const uint8_t size);
 
-    bool sendMessage(uint8_t* message, int size);
-
-    // TODO - runtime support
-
-    /*
+    /*!
+     * \brief Sends byte (uint8_t) array created from variable number of params with appended 0xFF
+     * \return bool if the operation was successful
+     */
     template<typename... types>
     bool sendMessage(types... data){
-        if (m_descriptor == -1)
-        {
-            qCWarning(viscaWarning()) << __PRETTY_FUNCTION__ << ":Error, port is closed!";
-            return false;
-        }
-
-        uint8_t size = sizeof...(data) + 1;
-        uint8_t message[size] = { data..., TERMINATOR};
-
-        return sendMessage(message, size);
-    }
-    */
-
-    template<uint8_t... data>
-    bool sendMessage(){
-        if (m_descriptor == -1)
-        {
-            qCWarning(viscaWarning()) << __PRETTY_FUNCTION__ << ":Error, port is closed!";
-            return false;
-        }
-
-        uint8_t size = sizeof...(data) + 1;
-        uint8_t message[size] = { data..., TERMINATOR};
+        const uint8_t size = sizeof...(data) + 1;
+        uint8_t message[] = { static_cast<uint8_t>(data)..., TERMINATOR};
 
         return sendMessage(message, size);
     }
@@ -54,6 +36,7 @@ public:
 private:
     int m_descriptor;
 
+    static const uint8_t TERMINATOR = 0xFF;
     static const int MAX_BUFFER_SIZE = 256;
     static const int USECONDS_PER_CHECK = 10000;
 

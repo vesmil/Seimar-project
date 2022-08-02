@@ -1,4 +1,6 @@
 #include "visca.h"
+#include <unistd.h>
+
 #include "global/logCategories.h"
 
 Visca::Visca(const char* device_path) : m_visca_comm(device_path)
@@ -19,7 +21,7 @@ Visca::Visca(const char* device_path) : m_visca_comm(device_path)
 bool Visca::setAddress()
 {
     uint8_t reply[3];
-    if (!m_visca_comm.sendMessage<0x88, 0x30, 0x01>() || !m_visca_comm.receiveMessage(reply, 3, 100))
+    if (!m_visca_comm.sendMessage(0x88, 0x30, 0x01) || !m_visca_comm.receiveMessage(reply, 3, 100))
     {
         qCInfo(viscaWarning()) << __PRETTY_FUNCTION__ << ": failed to set address.";
         return false;
@@ -31,7 +33,7 @@ bool Visca::setAddress()
 
 bool Visca::clearIF()
 {
-    if (!m_visca_comm.sendMessage<0x81, 0x01, 0x00, 0x01>() || !m_visca_comm.LoadMessageToPrivateBuffer(2, 500))
+    if (!m_visca_comm.sendMessage(0x81, 0x01, 0x00, 0x01) || !m_visca_comm.LoadMessageToPrivateBuffer(2, 500))
     {
         qCInfo(viscaWarning()) << __PRETTY_FUNCTION__ << ": failed to clear command buffer.";
         return false;
@@ -43,7 +45,7 @@ bool Visca::clearIF()
 
 bool Visca::zoomTeleStandard(void)
 {
-    if (!m_visca_comm.sendMessage<0x80 + 1, 0x01, 0x04, 0x07, 0x02>())
+    if (!m_visca_comm.sendMessage(0x80 + 1, 0x01, 0x04, 0x07, 0x02))
         return false;
 
     if (!m_visca_comm.LoadMessageToPrivateBuffer(0, 200))
@@ -55,7 +57,7 @@ bool Visca::zoomTeleStandard(void)
 
 bool Visca::zoomWideStandard(void)
 {
-    if (!m_visca_comm.sendMessage<0x80 + 1, 0x01, 0x04, 0x07, 0x03>())
+    if (!m_visca_comm.sendMessage(0x80 + 1, 0x01, 0x04, 0x07, 0x03))
         return false;
 
     if (!m_visca_comm.LoadMessageToPrivateBuffer(0, 200))

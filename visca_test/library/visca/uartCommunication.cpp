@@ -1,12 +1,12 @@
 #include "uartCommunication.h"
 
-#include <cstdint>
 #include <termios.h>
 #include <fcntl.h>
 #include <stdexcept>
-#include <string.h>
+#include <unistd.h>
 #include <sys/ioctl.h>
-#include <QDebug>
+
+#include "global/logCategories.h"
 
 UartCommunication::UartCommunication(const char* device_path)
 {
@@ -29,8 +29,19 @@ UartCommunication::UartCommunication(const char* device_path)
     tcsetattr(m_descriptor, TCSANOW, &options);
 }
 
-bool UartCommunication::sendMessage(uint8_t *message, int size)
+UartCommunication::~UartCommunication()
 {
+    close(m_descriptor);
+}
+
+bool UartCommunication::sendMessage(uint8_t *message, const uint8_t size)
+{
+    if (m_descriptor == -1)
+    {
+        qCWarning(viscaWarning()) << __PRETTY_FUNCTION__ << ":Error, port is closed!";
+        return false;
+    }
+
     int sent_size = write(m_descriptor, message, size);
     if (sent_size != size)
     {
