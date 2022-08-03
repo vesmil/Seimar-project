@@ -6,7 +6,9 @@
 #include <string>
 
 namespace ViscaCommands {
-    template <std::size_t size> using byteArray = std::array<uint8_t, size>;
+
+    template <std::size_t size>
+    using byteArray = std::array<uint8_t, size>;
 
     struct Init {
         static const byteArray<3> AddressSet() { return {0x30, 0x01,  0xFF}; };
@@ -50,8 +52,8 @@ namespace ViscaCommands {
     struct Zoom {
         static byteArray<5> TeleStandard() { return {0x01, 0x04, 0x07, 0x02,  0xFF}; };
         static byteArray<5> WideStandard() { return {0x01, 0x04, 0x07, 0x03,  0xFF}; };
-        static byteArray<5> TeleVariable(uint8_t speed) { return {0x01, 0x04, 0x07, (uint8_t) (0x2|(speed > 7? 7 : 0)),  0xFF};};
-        static byteArray<5> WideVariable(uint8_t speed) { return {0x01, 0x04, 0x07, (uint8_t) (0x3|(speed > 7? 7 : 0)),  0xFF};};
+        static byteArray<5> TeleVariable(uint8_t speed) { return {0x01, 0x04, 0x07, (uint8_t) (0x20|(speed > 7? 7 : speed)),  0xFF}; };
+        static byteArray<5> WideVariable(uint8_t speed) { return {0x01, 0x04, 0x07, (uint8_t) (0x30|(speed > 7? 7 : speed)),  0xFF}; };
     };
 }
 

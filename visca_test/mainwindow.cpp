@@ -14,11 +14,11 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 {
     if(event->key() == Qt::Key_Plus)
     {
-        visca->zoomTeleStandard();
+        visca->executeCommand(ViscaCommands::Zoom::TeleVariable(7), 400, "Zooming");
     }
 
     if(event->key() == Qt::Key_Minus)
     {
-        visca->zoomWideStandard();
+        visca->executeCommand(ViscaCommands::Zoom::WideStandard(), 400, "Unzooming");
     }
 }

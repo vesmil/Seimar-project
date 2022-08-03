@@ -17,21 +17,20 @@ public:
     template <std::size_t size>
     bool executeCommand(const std::array<uint8_t, size>&& data, int waitTime = SHORT_WAIT_TIME_MS, const QString &logMessage = QString{})
     {
-        if (logMessage.length() > 0)
-            qCInfo(viscaInfo()) << logMessage;
-
         std::array<uint8_t, 4> reply;
         if (!m_uart.sendMessageArr(m_camAddr, data) || !m_uart.receiveMessage(reply, waitTime) || !checkReply(reply))
         {
-            qCInfo(viscaWarning()) << "Execution unsuccessful.";
+            if (logMessage.length() > 0)
+                qCInfo(viscaLog()) << logMessage << "- unsuccessful.";
+
             return false;
         }
 
+        if (logMessage.length() > 0)
+            qCInfo(viscaLog()) << logMessage << "- successful.";
+
         return true;
     }
-
-    bool zoomTeleStandard();
-    bool zoomWideStandard();
 
 private:    
     bool setAddress();
@@ -46,7 +45,7 @@ private:
     {
         if (size < 2 )
         {
-            qCWarning(viscaWarning()) << "Reply is too short.";
+            qCWarning(viscaLog()) << "Reply is too short.";
             return false;
         }
 
@@ -54,29 +53,29 @@ private:
         {
             if (size == 2 )
             {
-                qCWarning(viscaWarning()) << "Reply doesn't provide any description.";
+                qCWarning(viscaLog()) << "Reply doesn't provide any description.";
             }
             else
             {
                 switch (reply[2])
                 {
                     case err::LENGTH:
-                        qCWarning(viscaWarning()) << "Message length error";
+                        qCWarning(viscaLog()) << "Message length error";
                         break;
                     case err::SYNTAX:
-                        qCWarning(viscaWarning()) << "Syntax Error";
+                        qCWarning(viscaLog()) << "Syntax Error";
                         break;
                     case err::BUFULL:
-                        qCWarning(viscaWarning()) << "Command buffer full";
+                        qCWarning(viscaLog()) << "Command buffer full";
                         break;
                     case err::CANCEL:
-                        qCWarning(viscaWarning()) << "Command canceled";
+                        qCWarning(viscaLog()) << "Command canceled";
                         break;
                     case err::SOCKET:
-                        qCWarning(viscaWarning()) << "No socket (to be canceled)";
+                        qCWarning(viscaLog()) << "No socket (to be canceled)";
                         break;
                     case err::EXECUT:
-                        qCWarning(viscaWarning()) << "Command not executable";
+                        qCWarning(viscaLog()) << "Command not executable";
                         break;
                 }
             }

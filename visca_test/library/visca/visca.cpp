@@ -11,11 +11,11 @@ Visca::Visca(const char* device_path) : m_uart(device_path)
         if (setAddress() && clearIF())
             return;
 
-        qCInfo(viscaInfo()) << "Failed to initialize - attempt:" << i + 1 << "out of" << INIT_TRIES_COUNT;
+        qCWarning(viscaLog()) << "Failed to initialize - attempt:" << i + 1 << "out of" << INIT_TRIES_COUNT;
         usleep(DEFAULT_USLEEP_WAIT);
     }
 
-    qCWarning(viscaWarning()) << "Error while initializing UART communication!";
+    qCWarning(viscaLog()) << "Error while initializing UART communication!";
 }
 
 bool Visca::setAddress()
@@ -23,40 +23,17 @@ bool Visca::setAddress()
     std::array<uint8_t, 4> reply;
     if (!m_uart.sendMessageArr(addr::BROADCAST, ViscaCommands::Init::AddressSet()) || !m_uart.receiveMessage(reply, SHORT_WAIT_TIME_MS))
     {
-        qCInfo(viscaWarning()) << "Failed to set address.";
+        qCWarning(viscaLog()) << "Failed to set address.";
         return false;
     }
 
     m_camAddr = reply[2] - 1 + addr::CAM_BASE;
 
-    qCInfo(viscaInfo()) << "Address set succesfull, returned device address:" << hex << reply[2] - 1;
+    qCInfo(viscaLog()) << "Address set succesfull, returned device address:" << hex << reply[2] - 1;
     return true;
 }
 
 bool Visca::clearIF()
 {
-    bool result = executeCommand(ViscaCommands::Init::IfClear(), LONG_WAIT_TIME_MS);
-    if (result)
-        qCInfo(viscaInfo()) << "Command buffer cleared";
-
-    return result;
+    return executeCommand(ViscaCommands::Init::IfClear(), LONG_WAIT_TIME_MS, "Clearing command buffer");
 }
-
-bool Visca::zoomTeleStandard(void)
-{
-    bool result = executeCommand(ViscaCommands::Init::IfClear(), LONG_WAIT_TIME_MS);
-    if (result)
-        qCInfo(viscaInfo()) << "Zooming";
-
-    return result;
-}
-
-bool Visca::zoomWideStandard(void)
-{
-    bool result = executeCommand(ViscaCommands::Init::IfClear(), LONG_WAIT_TIME_MS);
-    if (result)
-        qCInfo(viscaInfo()) << "Unzooming";
-
-    return result;
-}
-

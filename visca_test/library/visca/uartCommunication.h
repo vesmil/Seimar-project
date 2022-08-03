@@ -22,21 +22,21 @@ public:
     {
         if (m_descriptor == -1)
         {
-            qCWarning(viscaWarning()) << "Error, port is closed!";
+            qCWarning(viscaLog()) << "Error, port is closed!";
             return false;
         }
 
         int sent_size = write(m_descriptor, &addr, 1);
         if (sent_size == -1)
         {
-            qCWarning(viscaWarning()) << "Error, UART sending error!";
+            qCWarning(viscaLog()) << "Error, UART sending error!";
             return false;
         }
 
         sent_size = write(m_descriptor, message.begin(), size);
         if (sent_size != size)
         {
-            qCWarning(viscaWarning()) << "Writing wasn't sucesful, sent" << sent_size + 1 << "out of" << size + 1 << "bytes";
+            qCWarning(viscaLog()) << "Writing wasn't sucesful, sent" << sent_size + 1 << "out of" << size + 1 << "bytes";
             return false;
         }
 
@@ -58,11 +58,12 @@ public:
     {
         if (m_descriptor == -1)
         {
-            qCWarning(viscaWarning()) << "Error, port is closed";
+            qCWarning(viscaLog()) << "Error, port is closed";
             return -1;
         }
 
         const int checkLoops = waitMs / 10 + 1;
+
         for (int i = 0; i < checkLoops; ++i)
         {
             if (ioctl(m_descriptor, FIONREAD) >= (int) size)
@@ -74,7 +75,7 @@ public:
         int read_count = read(m_descriptor, data.begin(), size);
         if (read_count != size && read_count < 3)
         {
-            qCWarning(viscaWarning()) << "Error, less than 3 bytes recieved!";
+            qCWarning(viscaLog()) << "Error, less than 3 bytes recieved!";
             return false;
         }
 

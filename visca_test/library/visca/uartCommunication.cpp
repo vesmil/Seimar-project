@@ -9,7 +9,7 @@ UartCommunication::UartCommunication(const char* device_path)
 
     if (m_descriptor == -1)
     {
-        qCWarning(viscaWarning()) << "Error while openning" << device_path << "for UART communication.";
+        qCWarning(viscaLog()) << "Error while openning" << device_path << "for UART communication.";
         return;
     }
 
@@ -23,7 +23,7 @@ UartCommunication::UartCommunication(const char* device_path)
     tcflush(m_descriptor, TCIFLUSH);
     tcsetattr(m_descriptor, TCSANOW, &options);
 
-    qCWarning(viscaInfo()) << "UART communication initalized on port" << m_descriptor;
+    qCInfo(viscaLog()) << "UART communication initalized on port" << m_descriptor;
 }
 
 UartCommunication::~UartCommunication()
