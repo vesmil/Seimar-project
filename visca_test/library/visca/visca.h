@@ -4,6 +4,8 @@
 #include "library/visca/uartCommunication.h"
 #include "global/logCategories.h"
 
+#include <algorithm>
+
 /*!
  * \brief Class with basic VISCA commands - facade on UartCommunication class
  */
@@ -12,8 +14,21 @@ class Visca
 public:
     Visca(const char* device_path);
 
-    bool executeCommand();
-    bool executeCommandUnchecked();
+    template <std::size_t size>
+    bool executeCommand(const std::array<uint8_t, size>&& data, int waitTime = SHORT_WAIT_TIME_MS, const QString &logMessage = QString{})
+    {
+        if (logMessage.length() > 0)
+            qCInfo(viscaInfo()) << logMessage;
+
+        std::array<uint8_t, 4> reply;
+        if (!m_uart.sendMessageArr(m_camAddr, data) || !m_uart.receiveMessage(reply, waitTime) || !checkReply(reply))
+        {
+            qCInfo(viscaWarning()) << "Execution unsuccessful.";
+            return false;
+        }
+
+        return true;
+    }
 
     bool zoomTeleStandard();
     bool zoomWideStandard();
@@ -26,20 +41,66 @@ private:
      * \brief prints errors contained in a reply to log
      * \return boolean if the reply was without any errors
      */
-    bool checkReply(uint8_t* reply, uint8_t size);
+    template <std::size_t size>
+    bool checkReply(std::array<uint8_t, size>& reply)
+    {
+        if (size < 2 )
+        {
+            qCWarning(viscaWarning()) << "Reply is too short.";
+            return false;
+        }
+
+        if ((reply[1] & 0xF0) == 0x60)
+        {
+            if (size == 2 )
+            {
+                qCWarning(viscaWarning()) << "Reply doesn't provide any description.";
+            }
+            else
+            {
+                switch (reply[2])
+                {
+                    case err::LENGTH:
+                        qCWarning(viscaWarning()) << "Message length error";
+                        break;
+                    case err::SYNTAX:
+                        qCWarning(viscaWarning()) << "Syntax Error";
+                        break;
+                    case err::BUFULL:
+                        qCWarning(viscaWarning()) << "Command buffer full";
+                        break;
+                    case err::CANCEL:
+                        qCWarning(viscaWarning()) << "Command canceled";
+                        break;
+                    case err::SOCKET:
+                        qCWarning(viscaWarning()) << "No socket (to be canceled)";
+                        break;
+                    case err::EXECUT:
+                        qCWarning(viscaWarning()) << "Command not executable";
+                        break;
+                }
+            }
+            return false;
+        }
+        return true;
+    }
 
     UartCommunication m_uart;
-
-    uint8_t m_camAddress;
+    uint8_t m_camAddr;
 
     static const int INIT_TRIES_COUNT = 10;
     static const int DEFAULT_USLEEP_WAIT = 50000;
+    static const int SHORT_WAIT_TIME_MS = 200;
+    static const int LONG_WAIT_TIME_MS = 400;
+
+    static const uint8_t TERMINATOR = 0xFF;
 
     struct addr {
         static const uint8_t BROADCAST = 0x88;
         static const uint8_t CAM_BASE = 0x80;
     };
 
+    // TODO remake as enum?
     struct err {
         static const uint8_t LENGTH = 0x01;
         static const uint8_t SYNTAX = 0x02;
@@ -48,11 +109,6 @@ private:
         static const uint8_t SOCKET = 0x05;
         static const uint8_t EXECUT = 0x06;
     };
-
-    static const uint8_t TERMINATOR = 0xFF;
-
-    static const int SHORT_WAIT_TIME = 200;
-    static const int LONG_WAIT_TIME = 400;
 };
 
 #endif // VISCA_H
