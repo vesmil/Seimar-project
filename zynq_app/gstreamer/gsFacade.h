@@ -12,12 +12,7 @@
 class GsFacade
 {
 public:
-    enum PipelineEnum {
-        NONE = 0,
-        RAW = 1,
-        RTP = 2,
-        DP = 4
-    };
+    enum PipelineEnum { NONE = 0, RAW = 1, RTP = 2, DP = 4 };
 
     GsFacade();
     ~GsFacade();

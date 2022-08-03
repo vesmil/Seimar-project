@@ -18,11 +18,15 @@ public:
     bool zoomTeleStandard();
     bool zoomWideStandard();
 
-private:
-    bool checkReply(uint8_t* reply, uint8_t size);
-
+private:    
     bool setAddress();
     bool clearIF();
+
+    /*!
+     * \brief prints errors contained in a reply to log
+     * \return boolean if the reply was without any errors
+     */
+    bool checkReply(uint8_t* reply, uint8_t size);
 
     UartCommunication m_uart;
 
@@ -47,7 +51,8 @@ private:
 
     static const uint8_t TERMINATOR = 0xFF;
 
-
+    static const int SHORT_WAIT_TIME = 200;
+    static const int LONG_WAIT_TIME = 400;
 };
 
 #endif // VISCA_H

@@ -14,7 +14,7 @@ UartCommunication::UartCommunication(const char* device_path)
 
     if (m_descriptor == -1)
     {
-        qCWarning(viscaWarning()) << __PRETTY_FUNCTION__ << ": Error while openning" << device_path << "for UART communication.";
+        qCWarning(viscaWarning()) << "Error while openning" << device_path << "for UART communication.";
         return;
     }
 
@@ -28,7 +28,7 @@ UartCommunication::UartCommunication(const char* device_path)
     tcflush(m_descriptor, TCIFLUSH);
     tcsetattr(m_descriptor, TCSANOW, &options);
 
-    qCWarning(viscaInfo()) << __PRETTY_FUNCTION__ << ": UART communication initalized on port" << m_descriptor;
+    qCWarning(viscaInfo()) << "UART communication initalized on port" << m_descriptor;
 }
 
 UartCommunication::~UartCommunication()
@@ -40,7 +40,7 @@ bool UartCommunication::sendMessageArr(uint8_t *message, const uint8_t size)
 {
     if (m_descriptor == -1)
     {
-        qCWarning(viscaWarning()) << __PRETTY_FUNCTION__ << ":Error, port is closed!";
+        qCWarning(viscaWarning()) << "Error, port is closed!";
         return false;
     }
 
@@ -48,9 +48,9 @@ bool UartCommunication::sendMessageArr(uint8_t *message, const uint8_t size)
     if (sent_size != size)
     {
         if (sent_size == -1)
-            qCWarning(viscaWarning()) << __PRETTY_FUNCTION__ << ": Error, UART sending error!";
+            qCWarning(viscaWarning()) << "Error, UART sending error!";
         else
-            qCWarning(viscaWarning()) << __PRETTY_FUNCTION__ << ": Error, sent less bytes than requested!";
+            qCWarning(viscaWarning()) << "Error, sent less bytes than requested!";
 
         return false;
     }
@@ -62,7 +62,7 @@ bool UartCommunication::receiveMessage(uint8_t *data, int size, int waitMs)
 {
     if (m_descriptor == -1)
     {
-        qCWarning(viscaWarning()) << __PRETTY_FUNCTION__ << ": Error, port is closed";
+        qCWarning(viscaWarning()) << "Error, port is closed";
         return -1;
     }
 
@@ -77,9 +77,9 @@ bool UartCommunication::receiveMessage(uint8_t *data, int size, int waitMs)
 
     int read_count = read(m_descriptor, data, size);
 
-    if (read_count < 3)
+    if (read_count != size && read_count < 3)
     {
-        qCWarning(viscaWarning()) << __PRETTY_FUNCTION__ << ": Error, less than 3 bytes recieved!";
+        qCWarning(viscaWarning()) << "Error, less than 3 bytes recieved!";
         return false;
     }
 
