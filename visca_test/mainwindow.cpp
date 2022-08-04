@@ -12,30 +12,24 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
+    // Switch for larger testing...
+
     if(event->key() == Qt::Key_Plus)
     {
         visca->executeCommand(ViscaCommands::Zoom::TeleVariable(7), 400, "Zooming");
     }
-
-    if(event->key() == Qt::Key_Minus)
+    else if(event->key() == Qt::Key_Minus)
     {
         visca->executeCommand(ViscaCommands::Zoom::WideStandard(), 400, "Unzooming");
     }
-
-
-    if(event->key() == Qt::Key_Q)
+    else if(event->key() == Qt::Key_Enter)
     {
-        visca->executeCommand(ViscaCommands::Zoom::Direct(0x4000));
+        visca->executeCommand(ViscaCommands::Zoom::Direct(0x2000));
     }
 
     if(event->key() == Qt::Key_W)
     {
         visca->executeCommand(ViscaCommands::Exposure::Gain::Change(ViscaCommands::ChangeEnum::RESET), 400, "res");
-    }
-
-    if(event->key() == Qt::Key_R)
-    {
-        visca->executeCommand(ViscaCommands::Exposure::Gain::Change(ViscaCommands::ChangeEnum::UP), 400, "up");
     }
 
     if(event->key() == Qt::Key_T)
