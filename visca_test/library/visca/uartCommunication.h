@@ -43,7 +43,6 @@ public:
         return true;
     }
 
-    // TODO probably will be removed - I used it only for debug
     template<typename... types>
     bool sendMessage(uint8_t address, types... data)
     {
