@@ -21,7 +21,7 @@ Visca::Visca(const char* device_path) : m_uart(device_path)
 bool Visca::setAddress()
 {
     std::array<uint8_t, 4> reply;
-    if (!m_uart.sendMessageArr(addr::BROADCAST, ViscaCommands::Init::AddressSet()) || !m_uart.receiveMessage(reply, SHORT_WAIT_TIME_MS))
+    if (!m_uart.sendMessageArr(addr::BROADCAST, ViscaControlCommands::Init::AddressSet()) || !m_uart.receiveMessage(reply, SHORT_WAIT_TIME_MS))
     {
         qCWarning(viscaLog()) << "Failed to set address.";
         return false;
@@ -35,5 +35,5 @@ bool Visca::setAddress()
 
 bool Visca::clearIF()
 {
-    return executeCommand(ViscaCommands::Init::IfClear(), LONG_WAIT_TIME_MS, "Clearing command buffer");
+    return executeCommand(ViscaControlCommands::Init::IfClear(), LONG_WAIT_TIME_MS, "Clearing command buffer");
 }
