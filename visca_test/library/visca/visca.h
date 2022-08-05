@@ -14,11 +14,10 @@ class Visca
 public:
     Visca(const char* device_path);
 
-
     template <std::size_t replySize = 4, std::size_t size>
-    bool executeCommandChecked(const std::array<uint8_t, size>&& data, int waitTime = SHORT_WAIT_TIME_MS, const QString &logMessage = QString{})
+    bool executeCommand(const std::array<uint8_t, size>&& data, int waitTime = SHORT_WAIT_TIME_MS, const QString &logMessage = QString{})
     {
-        std::array<uint8_t, replySize> reply;
+        std::array<uint8_t, replySize> reply {};
         if (!m_uart.sendMessage(m_camAddr, data) || !m_uart.receiveMessage(reply, waitTime) || !checkReply(reply))
         {
             if (logMessage.length() > 0)
@@ -33,11 +32,20 @@ public:
         return true;
     }
 
-    template < std::size_t replySize, std::size_t size>
-    bool inquireCommand(const std::array<uint8_t, size>&& data, bool (*processReply)(std::array<uint8_t, replySize>) = &checkReply<replySize>, int waitTime = SHORT_WAIT_TIME_MS)
+    template <std::size_t replySize, std::size_t size, typename T>
+    T inquireCommand(const std::array<uint8_t, size>&& data, T (*processReply)(std::array<uint8_t, replySize>) = &checkReply<replySize>, int waitTime = SHORT_WAIT_TIME_MS)
     {
-        std::array<uint8_t, replySize> reply;
-        return !m_uart.sendMessage(m_camAddr, data) || !m_uart.receiveMessage(reply, waitTime) || !processReply(reply);
+        m_uart.sendMessage(m_camAddr, data);
+
+        std::array<uint8_t, replySize> reply {};
+        if (!m_uart.receiveMessage(reply, waitTime))
+        {
+            qCInfo(viscaLog()) << "Failed to inquire";
+            return {};
+        }
+
+        // TODO debug
+        return processReply(reply);
     }
 
 private:    
@@ -57,7 +65,7 @@ private:
 
         if ((reply[1] & 0xF0) == 0x60)
         {
-            printReplyError(reply[2]);
+            printReplyError((err) reply[2]);
             return false;
         }
 
@@ -75,7 +83,7 @@ private:
     static const int INIT_TRIES_COUNT = 10;
     static const int DEFAULT_USLEEP_WAIT = 50000;
 
-    static const int SHORT_WAIT_TIME_MS = 200; // TODO mby remake to BASE_WAIT_TIME
+    static const int SHORT_WAIT_TIME_MS = 400; // TODO mby remake to BASE_WAIT_TIME
     static const int LONG_WAIT_TIME_MS = 400;
 
     enum addr : uint8_t { BROADCAST = 0x88, CAM_BASE = 0x80};

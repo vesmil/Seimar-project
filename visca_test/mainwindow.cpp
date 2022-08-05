@@ -17,6 +17,9 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     //  visca->executeCommand(ViscaCommands::Zoom::TeleVariable(7), 400, "Zooming");
     //  visca->executeCommand(ViscaCommands::Zoom::WideStandard(), 400, "Unzooming");
     //  visca->executeCommand(ViscaCommands::Color::WhiteBalance::SetMode(ViscaCommands::Color::WhiteBalance::AUTO));
+    //
+    //  visca->inquireCommand<10>(ViscaCommands::Init::CAM_VersionInq(), ViscaCommands::Init::PrintVersionInfo);
+    //  visca->inquireCommand(ViscaCommands::Exposure::Irirs::GetValue(), ViscaCommands::Exposure::Irirs::ValueFromReply);
 
     // No visible changes
     //  visca->executeCommand(ViscaCommands::Exposure::Gain::Change(ViscaCommands::ChangeEnum::RESET), 400, "res");
@@ -25,22 +28,25 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 
     if(event->key() == Qt::Key_Q)
     {
-        visca->executeCommandChecked(ViscaCommands::Exposure::Gain::Direct(0));
+        visca->executeCommand(ViscaCommands::Zoom::setValue(0x2000));
+        qCInfo(viscaLog()) << visca->inquireCommand(ViscaCommands::Zoom::getValue(), ViscaCommands::Zoom::valueFromReply, 400);
     }
 
     if(event->key() == Qt::Key_W)
     {
-        visca->executeCommandChecked(ViscaCommands::Exposure::Gain::Direct(0x0C));
-    }
-
-    if(event->key() == Qt::Key_R)
-    {
-        visca->inquireCommand<10>(ViscaCommands::Init::CAM_VersionInq(), ViscaCommands::Init::PrintVersionInfo);
+        visca->executeCommand(ViscaCommands::Focus::setValue(0xF000));
+        qCInfo(viscaLog()) << visca->inquireCommand(ViscaCommands::Focus::getValue(), ViscaCommands::Focus::valueFromReply, 400);
     }
 
     if(event->key() == Qt::Key_E)
     {
-        //visca->executeCommand(ViscaCommands::);
+        visca->executeCommand(ViscaCommands::Focus::setValue(0x0000));
+        qCInfo(viscaLog()) << visca->inquireCommand(ViscaCommands::Focus::getValue(), ViscaCommands::Focus::valueFromReply, 400);
+    }
+
+    if(event->key() == Qt::Key_E)
+    {
+        visca->executeCommand(ViscaCommands::Focus::autoFocus(ViscaCommands::Focus::MANUAL));
     }
 
     if(event->key() == Qt::Key_T)

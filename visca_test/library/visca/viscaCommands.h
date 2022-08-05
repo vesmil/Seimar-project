@@ -14,17 +14,31 @@ namespace {
     // TODO - should be added notification for limit violation?
 
     //! \brief returns value if value is less than max, else returns max (for uint8_t)
-    static uint8_t ensureMaxU8(uint8_t value, uint8_t max) { return value > max? max : value; }
+    static constexpr uint8_t ensureMaxU8(uint8_t value, uint8_t max) { return value > max? max : value; }
 
     //! \brief returns value if within limits or return the limit
-    static uint8_t ensureConstratitsU8(uint8_t value, uint8_t min, uint8_t max) { return value > max? max : (value < min? min : value); }
+    static constexpr uint8_t ensureconstexprratitsU8(uint8_t value, uint8_t min, uint8_t max) { return value > max? max : (value < min? min : value); }
 
     //! \brief returns value if value is less than max, else returns max (for uint16_t)
-    static uint16_t ensureMaxU16(uint16_t value, uint16_t max) { return value > max? max : value; }
+    static constexpr uint16_t ensureMaxU16(uint16_t value, uint16_t max) { return value > max? max : value; }
 
     //! \brief used to split many bytes to half bytes - return least significant 4 bits from RShifting value by 4 * ordinal
     //! \example parseParam(0x1234, 1) will return 2
-    static uint8_t parseParam(uint16_t value, uint8_t reversedOrdinal) { return (value >> reversedOrdinal * 4) & 0x0F; }
+    static constexpr uint8_t parseParam(uint16_t value, uint8_t reversedOrdinal) { return (value >> reversedOrdinal * 4) & 0x0F; }
+
+    //! \brief Reverse of parseParam - combines multiple halfbytes into one numbers
+    template <typename T, typename... Ts>
+    static constexpr T reversePrase(T firstParam, Ts ... params)
+    {
+        T total = firstParam;
+
+        for(const auto p : {params...}) {
+            total = total << 4;
+            total += p;
+        }
+
+        return total;
+    }
 }
 
 namespace ViscaCommands
@@ -32,81 +46,81 @@ namespace ViscaCommands
     template <std::size_t size>
     using byteArray = std::array<uint8_t, size>;
 
-    enum CommandType : uint8_t { CONTROL = 0x01, INQUIRY = 0x09 };
+    enum CommandType : uint8_t { CTRL = 0x01, INQ = 0x09 };
     enum ChangeEnum  : uint8_t { RESET = 0x00, UP = 0x02, DOWN = 0x03 };
     enum State       : uint8_t { ON = 0x02, OFF = 0x03 };
 
     namespace Init
     {
-        static const byteArray<3> AddressSet() { return { 0x30, 0x01, 0xFF}; };
-        static const byteArray<4> IfClear()    { return { CONTROL, 0x00, 0x01, 0xFF}; };
+        static constexpr byteArray<3> addressSet() { return { 0x30, 0x01, 0xFF}; };
+        static constexpr byteArray<4> ifClear()    { return { CTRL, 0x00, 0x01, 0xFF}; };
 
-        static const byteArray<4> CAM_VersionInq() { return { INQUIRY, 0x00, 0x02, 0xFF}; };
-        static bool PrintVersionInfo(byteArray<10> reply)
+        static constexpr byteArray<4> getVersionInfo() { return { INQ, 0x00, 0x02, 0xFF}; };
+        static void printVersionInfo(byteArray<10> reply)
         {
-            qCInfo(viscaLog()) << "Vender ID" << hex << (((uint16_t) reply[2] << 8) + reply[3]);
-            qCInfo(viscaLog()) << "Model ID" << hex << (((uint16_t) reply[4] << 8) + reply[5]);
-            qCInfo(viscaLog()) << "ROM revison" << hex << (((uint16_t) reply[6] << 8) + reply[7]);
-            qCInfo(viscaLog()) << "Maximum socket #" << hex << (reply[8]);
-
-            return true;
+            qCInfo(viscaLog()) << "Vender ID:" << hex << (((uint16_t) reply[2] << 8) + reply[3]);
+            qCInfo(viscaLog()) << "Model ID:" << hex << (((uint16_t) reply[4] << 8) + reply[5]);
+            qCInfo(viscaLog()) << "ROM revison:" << hex << (((uint16_t) reply[6] << 8) + reply[7]);
+            qCInfo(viscaLog()) << "Maximum socket #:" << hex << (reply[8]);
         };
     };
 
     namespace Power
     {
-        static const byteArray<5> SetState(State state) { return {CONTROL, 0x04, 0x00, state, 0xFF}; };
-
-        static const byteArray<5> GetState()            { return {INQUIRY, 0x04, 0x00, 0xFF}; };
-        static State StateFromReply(byteArray<4> reply) { return (State) reply[2];} ;
+        static constexpr byteArray<5> setState(State state) { return {CTRL, 0x04, 0x00, state, 0xFF}; };
+        static constexpr byteArray<5> getState()            { return {INQ, 0x04, 0x00, 0xFF}; };
+        static State stateFromReply(byteArray<4> reply) { return (State) reply[2];} ;
     };
 
     namespace Exposure
     {
         enum Mode : uint8_t {FULL_AUTO = 0x00, MANUAL = 0x03, SHUTTER_PRI = 0x0A, IRIS_PRI = 0x0B, GAIN_PRI = 0x0E };
 
-        static const byteArray<5> SetMode(Mode mode)  { return { CONTROL, 0x04, 0x39, mode, 0xFF}; };
+        static constexpr byteArray<5> setMode(Mode mode)  { return { CTRL, 0x04, 0x39, mode, 0xFF}; };
 
-        static const byteArray<5> GetMode()           { return { INQUIRY, 0x04, 0x39, 0xFF}; };
-        static Mode ModeFromReply(byteArray<4> reply) { return (Mode) reply[2];} ;
+        static constexpr byteArray<5> getMode()           { return { INQ, 0x04, 0x39, 0xFF}; };
+        static Mode modeFromReply(byteArray<4> reply) { return (Mode) reply[2];} ;
 
         namespace Irirs
         {
-            static const byteArray<5> Change(ChangeEnum change) { return { CONTROL, 0x04, 0x0B, change, 0xFF}; };
+            static constexpr byteArray<5> change(ChangeEnum change) { return { CTRL, 0x04, 0x0B, change, 0xFF}; };
 
             //! \brief returns command packet for setting iris - value is in range 05 - 15
-            static const byteArray<8> SetValue(uint8_t value) { return { CONTROL, 0x04, 0x4B, 0x00, 0x00, parseParam(value, 1), parseParam(value, 0), 0xFF}; };
+            static constexpr byteArray<8> setValue(uint8_t value) { return { CTRL, 0x04, 0x4B, 0x00, 0x00, parseParam(value, 1), parseParam(value, 0), 0xFF}; };
 
-            static const byteArray<5> GetValue()              { return { INQUIRY, 0x04, 0x4B, 0xFF}; };
-            static uint8_t ValueFromReply(byteArray<4> reply) { return ( reply[4] << 4) + reply[5]; };  // TODO parsing into a function
+            static constexpr byteArray<5> getValue()              { return { INQ, 0x04, 0x4B, 0xFF}; };
+            static uint8_t valueFromReply(byteArray<7> reply) { return reversePrase(reply[4], reply[5]); };
         };
 
         namespace Gain
         {
-            static const byteArray<5> Change(ChangeEnum change) { return { CONTROL, 0x04, 0x0C, change, 0xFF}; };
+            static constexpr byteArray<5> change(ChangeEnum change) { return { CTRL, 0x04, 0x0C, change, 0xFF}; };
 
             //! \brief returns command packet for setting gain - value is in range 00 (–3dB) - 0C (33 dB)
-            static const byteArray<8> Direct(uint8_t value) { return { CONTROL, 0x04, 0x4C, 0x00, 0x00, 0, ensureMaxU8(value, 0x0C), 0xFF}; };
+            static constexpr byteArray<8> setValue(uint8_t value) { return { CTRL, 0x04, 0x4C, 0x00, 0x00, 0, ensureMaxU8(value, 0x0C), 0xFF}; };
+            static constexpr byteArray<5> getValue()              { return { INQ, 0x04, 0x4C, 0xFF}; };
+            static uint8_t valueFromReply(byteArray<7> reply) { return reversePrase(reply[4], reply[5]); };
 
             //! \brief returns command packet for setting gain limit - value is in range 4 (9dB) - 9 (24dB)
-            static const byteArray<5> Limit(uint8_t value) { return { CONTROL, 0x04, 0x2C, ensureConstratitsU8(value, 4, 9), 0xFF}; };
-            static const byteArray<5> LimitOff()           { return { CONTROL, 0x04, 0x2C, 0x0F, 0xFF}; };
+            static constexpr byteArray<5> limit(uint8_t value) { return { CTRL, 0x04, 0x2C, ensureconstexprratitsU8(value, 4, 9), 0xFF}; };
+            static constexpr byteArray<5> limitOff()           { return { CTRL, 0x04, 0x2C, 0x0F, 0xFF}; };
 
             //! \brief returns command packet for setting gain point
-            static const byteArray<5> Point(State state) { return { CONTROL, 0x05, 0x0C, state, 0xFF}; };
+            static constexpr byteArray<5> point(State state) { return { CTRL, 0x05, 0x0C, state, 0xFF}; };
 
             //! \brief returns command packet for setting gain point position - value is in range 01 (0dB) - 09 (24dB)
-            static const byteArray<6> PointPosition(uint8_t value) { return { CONTROL, 0x05, 0x4C, 0x00, ensureMaxU8(value, 0x09), 0xFF}; };
+            static constexpr byteArray<6> pointPosition(uint8_t value) { return { CTRL, 0x05, 0x4C, 0x00, ensureMaxU8(value, 0x09), 0xFF}; };
         };
 
         namespace Shutter
         {
-            static const byteArray<5> Change(ChangeEnum change) { return { CONTROL, 0x04, 0x0A, change, 0xFF}; };
+            static constexpr byteArray<5> change(ChangeEnum change) { return { CTRL, 0x04, 0x0A, change, 0xFF}; };
 
             //! \brief returns command packet for setting shutter - value is in range 0x01 - 0x15
-            static const byteArray<8> Set(uint8_t value) { return { CONTROL, 0x04, 0x4A, 0x00, 0x00, parseParam(value, 1), parseParam(value, 0), 0xFF}; };
-            static const byteArray<4> Get()              { return { INQUIRY, 0x04, 0x4A, 0xFF}; };
-            // TODO shutter from reply...
+            static constexpr byteArray<8> setValue(uint8_t value) { return { CTRL, 0x04, 0x4A, 0x00, 0x00, parseParam(value, 1), parseParam(value, 0), 0xFF}; };
+
+            static constexpr byteArray<4> getValue()              { return { INQ, 0x04, 0x4A, 0xFF}; };
+            static uint8_t valueFromReply(byteArray<7> reply) { return reversePrase(reply[4], reply[5]); };
         };
 
         // Max/min shutter, AE Speed, Exp Comp, Back Light, spot light, visibility enhancer, ir cut, low light basis brightness, nd filter
@@ -114,32 +128,32 @@ namespace ViscaCommands
 
     namespace Color
     {
-        static const byteArray<5> Speed(uint8_t value) { return {CONTROL, 0x04, 0x56, ensureConstratitsU8(value, 0x01, 0x59), 0xFF}; };
+        static constexpr byteArray<5> speed(uint8_t value) { return {CTRL, 0x04, 0x56, ensureconstexprratitsU8(value, 0x01, 0x59), 0xFF}; };
 
         namespace WhiteBalance
         {
             enum Mode : uint8_t {AUTO = 0, INDOOR = 1, OUTDOOR = 2, ONE_PUSH = 3, MANUAL = 5, OUTDOOR_AUTO = 6, SODIUM_LAMP_AUTO = 7, SODIUM_AUTO = 8 };
 
-            static const byteArray<5> SetMode(Mode mode) { return {0x01, 0x04, 0x35, mode, 0xFF}; };
+            static constexpr byteArray<5> setMode(Mode mode) { return {0x01, 0x04, 0x35, mode, 0xFF}; };
         };
 
         namespace RGain
         {
-            static const byteArray<5> Change(ChangeEnum change) { return { CONTROL, 0x04, 0x03, change, 0xFF}; };
+            static constexpr byteArray<5> change(ChangeEnum change) { return { CTRL, 0x04, 0x03, change, 0xFF}; };
 
             // Direct - 8x 01 04 43 00 00 0p 0p FF - pp: 00 (–128) - 80 (0) - FF (128)
         };
 
         namespace BGain
         {
-            static const byteArray<5> Change(ChangeEnum change) { return { CONTROL, 0x04, 0x04, change, 0xFF}; };
+            static constexpr byteArray<5> change(ChangeEnum change) { return { CTRL, 0x04, 0x04, change, 0xFF}; };
 
             // Direct - 8x 01 04 44 00 00 0p 0p FF - pp: 00 (–128) - 80 (0) - FF (128)
         };
 
         namespace Offset
         {
-            static const byteArray<7> Change(ChangeEnum change) { return { CONTROL, 0x7E, 0x01, 0x2E, 0x00, change, 0xFF}; };
+            static constexpr byteArray<7> change(ChangeEnum change) { return { CTRL, 0x7E, 0x01, 0x2E, 0x00, change, 0xFF}; };
 
             // Direct - 8x 01 7E 01 2E 01 0p FF - p: 0 (–7) - 7 (0) - E (+7)
         };
@@ -151,7 +165,7 @@ namespace ViscaCommands
     {
         namespace Level
         {
-            static const byteArray<5> Change(ChangeEnum change) { return { CONTROL, 0x04, 0x02, change, 0xFF}; };
+            static constexpr byteArray<5> change(ChangeEnum change) { return { CTRL, 0x04, 0x02, change, 0xFF}; };
 
             // Direct - 8x 01 04 42 00 00 0p 0p FF - pp: Aperture Gain 00 - 0F
         };
@@ -159,42 +173,27 @@ namespace ViscaCommands
         // Mode, bandwith, crispening, h/v balance, b/w balance, limit, highlightide tail, superlow
     };
 
-    namespace Knee
-    {
-        static const byteArray<6> SetState(State state) { return {CONTROL, 0x7E, 0x01, 0x6D, state, 0xFF}; };
-
-        // Mode         - 8x 01 7E 01 54 0p FF    - p: 0=Auto, 4=Manual
-        // Slope Direct - 8x 01 7E 01 6F 0p 0p FF - pp: Knee Slope 00 - 0E
-        // Point Direct - 8x 01 7E 01 6E 0p 0p FF - pp: Knee Point 00 - 0C
-    };
-
     namespace Gamma
     {
         enum Mode : uint8_t {STD = 0, STRAIGHT = 1, PATTERN = 2, MOVIE = 8, STILL = 9, CINE1 = 0xA, CINE2  = 0xB, CINE3 = 0xC, CINE4  = 0xE, ITU709  = 0xE};
-        static const byteArray<5> SetMode(Mode mode) { return {0x01, 0x04, 0x5B, mode, 0xFF}; };
+        static constexpr byteArray<5> setMode(Mode mode) { return {0x01, 0x04, 0x5B, mode, 0xFF}; };
 
         // Pattern           - 8x 01 05 5B 0p 0p 0p FF          - ppp: 001 - 200
         // Offset            - 8x 01 04 1E 00 00 00 0p 0q 0q FF - p: Offset polarity 0 (+), 1 (–) and qq: Offset width 00 - 40
 
-        static const byteArray<7> Level(uint8_t value) { return { CONTROL, 0x7E, 0x01, 0x71, 00, ensureMaxU8(value, 0x0E), 0xFF}; };
+        static constexpr byteArray<7> level(uint8_t value) { return { CTRL, 0x7E, 0x01, 0x71, 00, ensureMaxU8(value, 0x0E), 0xFF}; };
 
         // Black gamma level - 8x 01 7E 01 72 0p 0p FF          - pp: 00 - 0E
         // Black gamma range - 8x 01 05 5C 0p FF                - p: Correction range 0 (Low), 1 (Mid), 2 (High)
 
         struct BlackLevel
         {
-            // Reset  - 8x 01 7E 04 15 00 FF    - To return to 30 (0) value
-            // Up     - 8x 01 7E 04 15 02 FF
-            // Down   - 8x 01 7E 04 15 03 FF
-            // Direct - 8x 01 7E 04 45 0p 0p FF - pp:
-
             //! \brief returns command packet for chaning gamma black level - value is in range 0x00 (–48) - 0x60 (48)
-            static byteArray<7> Direct(uint16_t value)
+            static byteArray<7> direct(uint16_t value)
             {
                 uint16_t limitedValue = ensureMaxU16(value, 0x60);
-                return {CONTROL, 0x7E, 0x01, 0x72, parseParam(limitedValue, 1), parseParam(limitedValue, 0), 0xFF};
+                return {CTRL, 0x7E, 0x04, 0x45, parseParam(limitedValue, 1), parseParam(limitedValue, 0), 0xFF};
             };
-
         };
     };
 
@@ -202,55 +201,55 @@ namespace ViscaCommands
     // Flicker reduction mode - 8x 01 04 32 0p FF       - p:2=On, 3=Off
 
     //! \brief returns command packet for changing noise reduction - value is in range 01 (Weak) - 05 (Strong)
-    static const byteArray<5> FlickerReduction(State state) { return {CONTROL, 0x04, 0x32, state, 0xFF}; };
+    static constexpr byteArray<5> flickerReduction(State state) { return {CTRL, 0x04, 0x32, state, 0xFF}; };
 
     //! \brief returns command packet for changing noise reduction - value is in range 01 (Weak) - 05 (Strong)
-    static const byteArray<5> NoiseReduction(uint8_t value) { return {CONTROL, 0x04, 0x53, ensureMaxU8(value, 05), 0xFF}; }; // Missing 7F Advanced
-
-    // Noise reduction 2D NR/3D NR - ...
+    static constexpr byteArray<5> noiseReduction(uint8_t value) { return {CTRL, 0x04, 0x53, ensureMaxU8(value, 05), 0xFF}; };
+    static constexpr byteArray<5> vibrationCompensation(bool state) { return {CTRL, 0x04, 0x34, (uint8_t) (state ? 0x02 : 0x03), 0xFF}; };
 
     namespace Zoom
     {
-        static byteArray<5> Stop()         { return {0x01, 0x04, 0x07, 0x00,  0xFF}; };
-        static byteArray<5> TeleStandard() { return {0x01, 0x04, 0x07, 0x02,  0xFF}; };
-        static byteArray<5> WideStandard() { return {0x01, 0x04, 0x07, 0x03,  0xFF}; };
+        static byteArray<5> stop()         { return {CTRL, 0x04, 0x07, 0x00,  0xFF}; };
+        static byteArray<5> teleStandard() { return {CTRL, 0x04, 0x07, 0x02,  0xFF}; };
+        static byteArray<5> wideStandard() { return {CTRL, 0x04, 0x07, 0x03,  0xFF}; };
 
         //! \brief speed is in range 0 - 7 (from slowest to fastest)
-        static byteArray<5> TeleVariable(uint8_t speed) { return {0x01, 0x04, 0x07, (uint8_t) (0x20|(ensureMaxU8(speed, 7U))),  0xFF}; };
+        static byteArray<5> teleVariable(uint8_t speed) { return {CTRL, 0x04, 0x07, (uint8_t) (0x20|(ensureMaxU8(speed, 7U))),  0xFF}; };
         //! \brief speed is in range 0 - 7 (from slowest to fastest)
-        static byteArray<5> WideVariable(uint8_t speed) { return {0x01, 0x04, 0x07, (uint8_t) (0x30|(ensureMaxU8(speed, 7U))),  0xFF}; };
+        static byteArray<5> wideVariable(uint8_t speed) { return {CTRL, 0x04, 0x07, (uint8_t) (0x30|(ensureMaxU8(speed, 7U))),  0xFF}; };
 
         //! \brief value is in range 0x0 - 0x4000 (from wide to tele)
-        static byteArray<8> Direct(uint16_t value)
+        static byteArray<8> setValue(uint16_t value)
         {
             uint16_t limitedValue = ensureMaxU16(value, 0x4000);
-            return {0x01, 0x04, 0x47, parseParam(limitedValue, 3), parseParam(limitedValue, 2), parseParam(limitedValue, 1), parseParam(limitedValue, 0), 0xFF};
+            return {CTRL, 0x04, 0x47, parseParam(limitedValue, 3), parseParam(limitedValue, 2), parseParam(limitedValue, 1), parseParam(limitedValue, 0), 0xFF};
         };
 
-        // Clear image zoom - 8x 01 04 06 03 FF    - OFF
-        //                  - 8x 01 04 06 04 FF    - ON
-
-        // Teleconvert mode - 8x 01 7E 04 36 0p FF - p: 2=Double, 3=Off*1
+        static constexpr byteArray<4> getValue()              { return { INQ, 0x04, 0x47, 0xFF}; };
+        static uint8_t valueFromReply(byteArray<7> reply) { return reversePrase(reply[2], reply[3], reply[4], reply[5]); };
     };
 
     namespace Focus
     {
-        static const byteArray<5> AutoFocus(State state) { return {CONTROL, 0x04, 0x38, state, 0xFF}; };
+        enum FocusMode : uint8_t { AUTO=0x02, MANUAL=0x03, TOGGLE_AUTO=0x10 };
+        static constexpr byteArray<5> autoFocus(FocusMode focus) { return {CTRL, 0x04, 0x38, focus, 0xFF}; };
 
-        // Near ...
-        // Far ...
-        // Inf ...
-        // Direct ...
-    };
+        enum Distance : uint8_t { FAR=0x02, NEAR=0x03 };
+        static constexpr byteArray<5> setDistance(Distance focus) { return {CTRL, 0x04, 0x38, focus, 0xFF}; };
+        //! \brief returns command packet for setting distance with variable speed - speed is in range 0 - 7 (from slowest to fastest)
+        static constexpr byteArray<5> setDistanceVarSpeed(Distance focus, uint8_t spped) { return {CTRL, 0x04, 0x38, (uint8_t) (focus << 4 & spped), 0xFF}; };
 
-    namespace PanTilt
-    {
-        // ...
-    };
+        static constexpr byteArray<6> infinity() { return { CTRL, 0x04, 0x18, 0x02, 0xFF}; };
 
-    namespace Preset
-    {
-        // ...
+        //! \brief  returns command packet for setting focus distance - value is in range F000 (Near) - 0000 (Far)
+        static byteArray<8> setValue(uint16_t value)
+        {
+            uint16_t limitedValue = ensureMaxU16(value, 0xF000);
+            return {CTRL, 0x04, 0x48, parseParam(limitedValue, 3), parseParam(limitedValue, 2), parseParam(limitedValue, 1), parseParam(limitedValue, 0), 0xFF};
+        };
+
+        static constexpr byteArray<4> getValue()              { return { INQ, 0x04, 0x48, 0xFF}; };
+        static uint8_t valueFromReply(byteArray<7> reply) { return reversePrase(reply[2], reply[3], reply[4], reply[5]); };
     };
 
     namespace Hdmi
@@ -258,8 +257,8 @@ namespace ViscaCommands
         enum Format : uint8_t { _1920_1080_59_94 = 0x00, _1920_1080_29_97 = 0x02, /* TODO ... */ };
         enum Colorspace : uint8_t {YCBCR = 0, RGB = 1};
 
-        static const byteArray<7> SetFormat(Format format)             { return {0x01, 0x7E, 0x01, 0x1E, parseParam(format, 1), parseParam(format, 0), 0xFF}; };
-        static const byteArray<7> SetcolorSpace(Colorspace colorSpace) { return {0x01, 0x7E, 0x01, 0x03, 0x00, colorSpace, 0xFF}; };
+        static constexpr byteArray<7> setFormat(Format format)             { return {0x01, 0x7E, 0x01, 0x1E, parseParam(format, 1), parseParam(format, 0), 0xFF}; };
+        static constexpr byteArray<7> setcolorSpace(Colorspace colorSpace) { return {0x01, 0x7E, 0x01, 0x03, 0x00, colorSpace, 0xFF}; };
     };
 }
 
