@@ -12,28 +12,39 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
-    // Switch for larger testing...
+    // Tested
+    //  visca->executeCommand(ViscaCommands::Zoom::Direct(0x2000));
+    //  visca->executeCommand(ViscaCommands::Zoom::TeleVariable(7), 400, "Zooming");
+    //  visca->executeCommand(ViscaCommands::Zoom::WideStandard(), 400, "Unzooming");
+    //  visca->executeCommand(ViscaCommands::Color::WhiteBalance::SetMode(ViscaCommands::Color::WhiteBalance::AUTO));
 
-    if(event->key() == Qt::Key_Plus)
+    // No visible changes
+    //  visca->executeCommand(ViscaCommands::Exposure::Gain::Change(ViscaCommands::ChangeEnum::RESET), 400, "res");
+    //  visca->executeCommand(ViscaCommands::Exposure::Irirs::Change(ViscaCommands::UP), 1000, "up");
+
+
+    if(event->key() == Qt::Key_Q)
     {
-        visca->executeCommand(ViscaCommands::Zoom::TeleVariable(7), 400, "Zooming");
-    }
-    else if(event->key() == Qt::Key_Minus)
-    {
-        visca->executeCommand(ViscaCommands::Zoom::WideStandard(), 400, "Unzooming");
-    }
-    else if(event->key() == Qt::Key_Enter)
-    {
-        visca->executeCommand(ViscaCommands::Zoom::Direct(0x2000));
+        visca->executeCommandChecked(ViscaCommands::Exposure::Gain::Direct(0));
     }
 
     if(event->key() == Qt::Key_W)
     {
-        visca->executeCommand(ViscaCommands::Exposure::Gain::Change(ViscaCommands::ChangeEnum::RESET), 400, "res");
+        visca->executeCommandChecked(ViscaCommands::Exposure::Gain::Direct(0x0C));
+    }
+
+    if(event->key() == Qt::Key_R)
+    {
+        visca->inquireCommand<10>(ViscaCommands::Init::CAM_VersionInq(), ViscaCommands::Init::PrintVersionInfo);
+    }
+
+    if(event->key() == Qt::Key_E)
+    {
+        //visca->executeCommand(ViscaCommands::);
     }
 
     if(event->key() == Qt::Key_T)
     {
-        visca->executeCommand(ViscaCommands::Color::WhiteBalance::SetMode(ViscaCommands::Color::WhiteBalance::AUTO));
+        //visca->executeCommand(ViscaCommands::);
     }
 }

@@ -9,7 +9,8 @@
 #include "global/logCategories.h"
 
 /*!
- * \brief Class for UART communication - intended mainly for VISCA prtocol
+ * \brief Class for UART communication - intended mainly to be used by Visca class
+ * \note If used for different protocol it might require few changes
  */
 class UartCommunication
 {
@@ -17,8 +18,9 @@ public:
     UartCommunication(const char* device_path);
     ~UartCommunication();
 
+    //! \brief Sends array of bytes using (sys call) write to open UART port
     template<std::size_t size>
-    bool sendMessageArr(uint8_t addr, const std::array<uint8_t, size>& message)
+    bool sendMessage(uint8_t addr, const std::array<uint8_t, size>& message)
     {
         if (m_descriptor == -1)
         {
@@ -43,15 +45,20 @@ public:
         return true;
     }
 
+    //! \brief Used for debug to make sending messages simpler - Do not use for production!
+    //! \example To send i.e. AddressSet use it like sendMessage(0x88, 0x30, 0x01, 0xFF);
     template<typename... types>
+    [[deprecated("Use only for debug")]]
     bool sendMessage(uint8_t address, types... data)
     {
         const uint8_t size = sizeof...(data);
         std::array<uint8_t, size> message { static_cast<uint8_t>(data)...};
 
-        return sendMessageArr(address, message);
+        return sendMessage(address, message);
     }
 
+    //! \brief Reads UART response and writes it to array in param
+    //! \details while less than waitMS has passed it preidocally checks wheter the response is ready...
     template<std::size_t size>
     bool receiveMessage(std::array<uint8_t, size>& data, int waitMs)
     {

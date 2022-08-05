@@ -3,6 +3,8 @@
 
 #include <gst/gst.h>
 
+// TODO make inheritance more obvious...
+
 /*!
  * \brief Abstract Pipeline class with basic pipeline attributes
  */
