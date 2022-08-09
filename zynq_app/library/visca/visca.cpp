@@ -11,12 +11,10 @@ Visca::Visca(const char *device_path) : m_uart(device_path) {
             continue;
         }
 
-        // Clear command buffer
-        if (executeCommand(ViscaCommands::Init::ifClear(), LONG_WAIT_TIME_MS, "Clearing command buffer"))
+        if (executeCommand<3>(ViscaCommands::Init::ifClear(), LONG_WAIT_TIME_MS, "Clearing command buffer"))
             return;
 
-        qCWarning(viscaLog()) << "Failed to clear command buffer - init attempt:" << i + 1 << "out of"
-                              << INIT_TRIES_COUNT;
+        qCWarning(viscaLog()) << "Failed to clear command buffer - init attempt:" << i + 1 << "out of" << INIT_TRIES_COUNT;
         usleep(DEFAULT_USLEEP_WAIT);
     }
 
@@ -25,8 +23,7 @@ Visca::Visca(const char *device_path) : m_uart(device_path) {
 
 bool Visca::setAddress() {
     std::array<uint8_t, 4> reply;
-    if (!m_uart.sendMessage(addr::BROADCAST, ViscaCommands::Init::addressSet()) ||
-        !m_uart.receiveMessage(reply, SHORT_WAIT_TIME_MS)) {
+    if (!m_uart.sendMessage(addr::BROADCAST, ViscaCommands::Init::addressSet()) || !m_uart.receiveMessage(reply, SHORT_WAIT_TIME_MS)) {
         qCWarning(viscaLog()) << "Failed to set address.";
         return false;
     }

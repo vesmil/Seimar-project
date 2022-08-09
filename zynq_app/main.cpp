@@ -1,5 +1,5 @@
 ﻿#include <QCoreApplication>
-#include "gstreamer/gsFacade.h"
+#include "library/gstreamer/gsFacade.h"
 
 int main(int argc, char *argv[])
 {

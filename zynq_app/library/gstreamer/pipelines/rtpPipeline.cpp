@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <thread>
 #include "global/config.h"
-#include "gstreamer/gsWrapper.h"
+#include "library/gstreamer/gsWrapper.h"
 
 RtpPipeline::RtpPipeline()
 {

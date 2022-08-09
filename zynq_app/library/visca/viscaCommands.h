@@ -37,7 +37,7 @@ namespace {
     template <typename T, typename... Ts>
     static constexpr T reversePrase(T firstParam, Ts ... params)
     {
-        return (firstParam << 4 * sizeof...(params)) | reversePrase(params...);
+        return (firstParam << 4 * sizeof...(params)) | reversePrase<T>(params...);
     }
 }
 
@@ -69,7 +69,7 @@ namespace ViscaCommands
     {
         static constexpr byteArray<5> setState(State state) { return {CTRL, 0x04, 0x00, state, 0xFF}; }
         static constexpr byteArray<5> getState()            { return {INQ, 0x04, 0x00, 0xFF}; }
-        static State stateFromReply(byteArray<4> reply)     { return (State) reply[2];}
+        static State stateFromReply(byteArray<4> reply) { return (State) reply[2];}
     }
 
     namespace Exposure
@@ -85,7 +85,10 @@ namespace ViscaCommands
             static constexpr byteArray<5> change(ChangeEnum change) { return { CTRL, 0x04, 0x0B, change, 0xFF}; }
 
             //! \brief returns command packet for setting iris - value is in range 0x05 - 0x15
-            static constexpr byteArray<8> setValue(uint8_t value) { return { CTRL, 0x04, 0x4B, 0x00, 0x00, parseParam(value, 1), parseParam(value, 0), 0xFF}; }
+            static constexpr byteArray<8> setValue(uint8_t value) {
+                // TODO fixed value
+                return { CTRL, 0x04, 0x4B, 0x00, 0x00, parseParam(value, 1), parseParam(value, 0), 0xFF};
+            }
             static constexpr byteArray<5> getValue()              { return { INQ, 0x04, 0x4B, 0xFF}; }
             static uint8_t valueFromReply(byteArray<7> reply) { return reversePrase(reply[4], reply[5]); }
         }
@@ -245,7 +248,8 @@ namespace ViscaCommands
         }
 
         static constexpr byteArray<4> getValue() { return { INQ, 0x04, 0x47, 0xFF}; }
-        static uint8_t valueFromReply(byteArray<7> reply) { return reversePrase(reply[2], reply[3], reply[4], reply[5]); }
+        static uint16_t valueFromReply(byteArray<7> reply) {
+            return reversePrase<uint16_t>(reply[2], reply[3], reply[4], reply[5]); }
     }
 
     namespace Focus

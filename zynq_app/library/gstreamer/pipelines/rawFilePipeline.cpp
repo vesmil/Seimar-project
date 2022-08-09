@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 #include "global/config.h"
-#include "gstreamer/gsWrapper.h"
+#include "library/gstreamer/gsWrapper.h"
 
 RawFilePipeline::RawFilePipeline() : IntersrcPipeline()
 {

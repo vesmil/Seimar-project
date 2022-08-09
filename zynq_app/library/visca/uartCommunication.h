@@ -8,6 +8,8 @@
 #include "viscaCommands.h"
 #include "global/logCategories.h"
 
+#include <QString>
+
 /*!
  * \brief Class for UART communication - intended mainly to be used by Visca class
  * \note If used for different protocol it might require few changes
@@ -85,7 +87,23 @@ public:
             return false;
         }
 
+        // TODO remove this debug
+        {
+            QString test;
+            for (auto&& b : data)
+                test += QString::number(b, 16) + " ";
+
+            test.chop(1);
+            qCInfo(viscaLog()).noquote() << test;
+        }
+
         return true;
+    }
+
+    void ClearReplies()
+    {
+        int read_count = read(m_descriptor, THROWAWAY_BUFFER, BUFFER_SIZE);
+        qCInfo(viscaLog()).noquote() << "Throwing away" << read_count << "bytes";
     }
 
 private:
@@ -93,6 +111,9 @@ private:
 
     static const uint8_t TERMINATOR = 0xFF;
     static const int USECONDS_PER_CHECK = 10000;
+
+    static const std::size_t BUFFER_SIZE = 512;
+    uint8_t THROWAWAY_BUFFER[BUFFER_SIZE] {};
 };
 
 #endif // UARTCOMMUNICATION_H

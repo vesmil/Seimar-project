@@ -1,7 +1,7 @@
 #include "pipeline.h"
 
 #include <stdexcept>
-#include "gstreamer/gsWrapper.h"
+#include "library/gstreamer/gsWrapper.h"
 
 void Pipeline::start()
 {
