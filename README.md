@@ -64,12 +64,14 @@ Navíc se stále čeká na nosnou desku od ČVUT, která místo HDMI nabídne Di
         - [x] Příkazový řádek
         - [x] C++
         - [x] Klient
-- [ ] VISCA protokol
+- [x] VISCA protokol
     - [x] Setup dočasné kamery s HDMI na monitor a UART do desky
     - [x] Funguící protokol
         - [x] Odesílání a přijímání příkazů
         - [x] Adresa a command buffer
-    - [ ] Všechny potřebné příkazy
+    - [x] Všechny potřebné příkazy
+        - [x] Command
+        - [x] Inquiry
 - [ ] Enkódovací modul hotový (počkat či dočasně udělat softwarově)
 - [ ] Zobrazit stream na display port (note: HDMI na Trenz desce je problematický. je potřeba použít Zynq desku nebo počkat na ČVUT desku)
 - [ ] Zobrazit menu
