@@ -25,32 +25,52 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     //  visca->executeCommand(ViscaCommands::Exposure::Gain::Change(ViscaCommands::ChangeEnum::RESET), 400, "res");
     //  visca->executeCommand(ViscaCommands::Exposure::Irirs::Change(ViscaCommands::UP), 1000, "up");
 
-
-    if(event->key() == Qt::Key_Q)
+    switch(event->key())
     {
-        visca->executeCommand(ViscaCommands::Zoom::setValue(0x2000));
-        qCInfo(viscaLog()) << visca->inquireCommand(ViscaCommands::Zoom::getValue(), ViscaCommands::Zoom::valueFromReply, 400);
-    }
+        case Qt::Key_Q:
+            visca->executeCommand(ViscaCommands::Zoom::setValue(0x2000));
+            qCInfo(viscaLog()) << visca->inquireCommand(ViscaCommands::Zoom::getValue(), ViscaCommands::Zoom::valueFromReply, 400);
+            break;
 
-    if(event->key() == Qt::Key_W)
-    {
-        visca->executeCommand(ViscaCommands::Focus::setValue(0xF000));
-        qCInfo(viscaLog()) << visca->inquireCommand(ViscaCommands::Focus::getValue(), ViscaCommands::Focus::valueFromReply, 400);
-    }
+        case Qt::Key_W:
 
-    if(event->key() == Qt::Key_E)
-    {
-        visca->executeCommand(ViscaCommands::Focus::setValue(0x0000));
-        qCInfo(viscaLog()) << visca->inquireCommand(ViscaCommands::Focus::getValue(), ViscaCommands::Focus::valueFromReply, 400);
-    }
+            break;
 
-    if(event->key() == Qt::Key_E)
-    {
-        visca->executeCommand(ViscaCommands::Focus::autoFocus(ViscaCommands::Focus::MANUAL));
-    }
+        case Qt::Key_E:
+            break;
 
-    if(event->key() == Qt::Key_T)
-    {
-        //visca->executeCommand(ViscaCommands::);
+        case Qt::Key_R:
+            break;
+
+        case Qt::Key_T:
+            break;
+
+        case Qt::Key_Y:
+            break;
+
+        case Qt::Key_U:
+            break;
+
+        case Qt::Key_I:
+            break;
+
+        case Qt::Key_O:
+            break;
+
+        case Qt::Key_P:
+            break;
+
+        case Qt::Key_A:
+            break;
+
+        case Qt::Key_S:
+            break;
+
+        case Qt::Key_D:
+            break;
+
+        case Qt::Key_F:
+            break;
+
     }
 }
