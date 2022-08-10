@@ -9,9 +9,8 @@ SOURCES += \
         library/gstreamer/gsWrapper.cpp \
         library/gstreamer/pipelines/internalPipeline.cpp \
         library/gstreamer/pipelines/pipelineBase.cpp \
-    library/gstreamer/pipelines/pipelineFromInternSrc.cpp \
         library/gstreamer/pipelines/rawFilePipeline.cpp \
-        library/gstreamer/pipelines/rtpPipeline.cpp \
+    library/gstreamer/pipelines/rawRtpPipeline.cpp \
         library/visca/uartCommunication.cpp \
         library/visca/visca.cpp \
         main.cpp \
@@ -29,9 +28,8 @@ HEADERS += \
         library/gstreamer/gsWrapper.h \
         library/gstreamer/pipelines/internalPipeline.h \
         library/gstreamer/pipelines/pipelineBase.h \
-        library/gstreamer/pipelines/pipelineFromInternSrc.h \
         library/gstreamer/pipelines/rawFilePipeline.h \
-        library/gstreamer/pipelines/rtpPipeline.h \
+        library/gstreamer/pipelines/rawRtpPipeline.h \
         library/visca/uartCommunication.h \
         library/visca/visca.h \
         library/visca/viscaCommands.h

@@ -4,19 +4,27 @@
 #include "pipelineBase.h"
 
 /*!
- * \brief Complete pipeline transfaring data from vl42src to intervideosink
+ * \brief Singleton for transferring data from vl42src to intervideosink used by other pipelines (to allow spliting)
  */
 class InternalPipeline : public PipelineBase
 {
 public:
     static InternalPipeline& getInstance();
 
+    /*!
+     * \brief Return the name of the channel used for intervideosrc
+     * \detail The app uses intervideo pipeline to allow multiple pipeline from same source
+     */
+    static const gchar* getChannelName();
+
 private:
+    InternalPipeline();
+
+    static const gchar* m_intervideoChannelName;
+
     void setSource(const gchar *name);
     void setSink(const gchar *name);
     void completePipeline();
-
-    InternalPipeline();
 };
 
 #endif // INTERNALPIPELINE_H

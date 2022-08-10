@@ -4,10 +4,12 @@
 #include "global/logCategories.h"
 #include "global/config.h"
 
+const gchar* InternalPipeline::m_intervideoChannelName  = "interchannel";
+
 InternalPipeline::InternalPipeline() : PipelineBase()
 {
     setSource("v4l2source");
-    setCapsFilter("intercaps");
+    setDefaultCapsFilter("intercaps");
     setSink("intersink");
 
     completePipeline();
@@ -21,28 +23,30 @@ InternalPipeline &InternalPipeline::getInstance()
 
 void InternalPipeline::setSource(const gchar *name)
 {
-    m_videoSrc = GsWrapper::makeElement("v4l2src",name);
-    g_object_set(m_videoSrc,"device", glb::path::VIDEO_SRC.c_str(),"do-timestamp", TRUE, nullptr);
+    m_data.videoSrc = GsWrapper::makeElement("v4l2src",name);
+    g_object_set(m_data.videoSrc,"device", glb::path::VIDEO_SRC.c_str(),"do-timestamp", TRUE, nullptr);
 }
 
 void InternalPipeline::setSink(const gchar *name)
 {
-    m_sink = GsWrapper::makeElement("intervideosink",name);
-    g_object_set(m_sink,"channel", GsWrapper::getDefaultIntervidChanName(), nullptr);
+    m_data.sink = GsWrapper::makeElement("intervideosink",name);
+    g_object_set(m_data.sink, "channel", m_intervideoChannelName, nullptr);
 }
 
 void InternalPipeline::completePipeline()
 {
-    m_pipeline = gst_pipeline_new("interpipeline");
+    m_data.pipeline = gst_pipeline_new("interpipeline");
 
-    m_bus = gst_element_get_bus(m_pipeline);
-    gst_bus_add_signal_watch(m_bus);
+    m_data.bus = gst_element_get_bus(m_data.pipeline);
+    gst_bus_add_signal_watch(m_data.bus);
 
-    gst_bin_add_many(GST_BIN(m_pipeline), m_videoSrc, m_capsfilter, m_sink, nullptr);
+    gst_bin_add_many(GST_BIN(m_data.pipeline), m_data.videoSrc, m_data.capsFilter, m_data.sink, nullptr);
 
-    if (!gst_element_link_many(m_videoSrc, m_capsfilter, m_sink, nullptr))
-        qCWarning(gsLog()) << "Elements could not be linked.\n";
-    else
-        m_completed = true;
+    bool result = gst_element_link_many(m_data.videoSrc, m_data.capsFilter, m_data.sink, nullptr);
+    checkResult(result);
 }
 
+const gchar* InternalPipeline::getChannelName()
+{
+    return m_intervideoChannelName;
+}

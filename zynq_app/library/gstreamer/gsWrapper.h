@@ -5,25 +5,27 @@
 #include "pipelines/internalPipeline.h"
 
 /*!
- * \brief Wrapper adding default elements and improved debugging capabilities
+ * \brief Wrapper adding improved debugging capabilities and internal pipeline for splitting source
  */
 struct GsWrapper
 {
-    static void init(int debug = 0);
+    static void init();
     static void deinit();
 
-    static GstElement* makeElement(const gchar *factoryname, const gchar *name);
-
-    static const gchar* getDefaultIntervidChanName();
+    /*!
+     * \brief Standard GstElement creation with added logging
+     */
+    static GstElement* makeElement(const gchar *factoryName, const gchar *name);
 
 private:
     static void initIntervideoPipeline();
 
-    static const char* m_intervideoChannelName;
     static bool m_interpipelineInited;
 
     static const int WIDTH = 1024;
     static const int HEIGHT = 768;
+
+    static const int DEBUG_LEVEL = 3;
 };
 
 #endif // GSWRAPPER_H

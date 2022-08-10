@@ -7,12 +7,12 @@
 #include "pipelines/pipelineBase.h"
 
 /*!
- * \brief Facade design pattern simplifying usage of GStreamer and created pipelines
+ * \brief Class for simplifying usage of GStreamer and created pipelines (facade design pattern)
  */
 class GsFacade
 {
 public:
-    enum PipelineEnum : uint8_t { NONE = 0, RAW = 1, RTP = 2, DP = 4 };
+    enum PipelineEnum : uint8_t { NONE = 0, RAW_SAVE = 1, RAW_RTP = 2, DISP_PORT = 4 };
 
     GsFacade();
     ~GsFacade();
@@ -21,9 +21,9 @@ public:
     void stop(PipelineEnum pipeline);
 
 private:
-    PipelineBase* rtpPipe = nullptr;
-    PipelineBase* rawPipe = nullptr;
-    // ...
+    std::unique_ptr<PipelineBase> rtpPipe;
+    std::unique_ptr<PipelineBase> rawPipe;
+    std::unique_ptr<PipelineBase> hdmiPipe;
 };
 
 #endif // GSFACADE_H

@@ -1,12 +1,12 @@
 #ifndef RAWFILEPIPELINE_H
 #define RAWFILEPIPELINE_H
 
-#include "pipelineFromInternSrc.h"
+#include "pipelineBase.h"
 
 /*!
  * \brief Complete pipeline saving raw data from interpipelinesrc
  */
-class RawFilePipeline : public PipelineFromInternSrc
+class RawFilePipeline : public PipelineBase
 {
 public:
     RawFilePipeline();

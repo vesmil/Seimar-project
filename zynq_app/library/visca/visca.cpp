@@ -22,7 +22,7 @@ Visca::Visca(const char *device_path) : m_uart(device_path) {
 }
 
 bool Visca::setAddress() {
-    std::array<uint8_t, 4> reply;
+    std::array<uint8_t, 4> reply{};
     if (!m_uart.sendMessage(addr::BROADCAST, ViscaCommands::Init::addressSet()) || !m_uart.receiveMessage(reply, BASE_WAIT_TIME_MS)) {
         qCWarning(viscaLog()) << "Failed to set address.";
         return false;
@@ -30,7 +30,7 @@ bool Visca::setAddress() {
 
     m_camAddr = reply[2] - 1 + addr::CAM_BASE;
 
-    qCInfo(viscaLog()) << "Address set succesfull, returned device address:" << hex << reply[2] - 1;
+    qCInfo(viscaLog()) << "Address set succesfull, returned device address:" << Qt::hex << reply[2] - 1;
     return true;
 }
 
@@ -53,9 +53,6 @@ void Visca::printReplyError(err code) {
             break;
         case err::EXECUT:
             qCWarning(viscaLog()) << "Command not executable";
-            break;
-        default:
-            qCWarning(viscaLog()) << "Unknown error";
             break;
     }
 }

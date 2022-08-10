@@ -86,7 +86,6 @@ public:
         {
             if (ioctl(m_descriptor, FIONREAD) >= (int) size)
                 break;
-
             usleep(USECONDS_PER_CHECK);
         }
 

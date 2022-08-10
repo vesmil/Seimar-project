@@ -33,11 +33,24 @@ namespace {
         return param;
     }
 
-    //! \brief Reverse of parseParam - combines multiple half-bytes into one number
+    /*!
+     * \brief Reverse of parseParam - combines multiple half-bytes into one number
+     * \example reverseParse(0x0A, 0x04, 0x0B. 0x01) will return 0xA4B1
+     */
     template <typename TRet = uint8_t, typename T, typename... Ts>
     constexpr TRet reverseParse(T firstParam, Ts ... params)
     {
         return (firstParam << 4 * sizeof...(params)) | reverseParse<TRet>(params...);
+    }
+
+    /*!
+     * \brief Used to remap values from one range to another
+     */
+    template <typename TNew, typename TOld>
+    constexpr TNew mapToNewRange(TOld value, TOld oldMin, TOld oldMax, TNew newMin, TNew newMax)
+    {
+        // TODO this func is for later use...
+        return (value - oldMin) * (newMax - newMin) / (oldMax - oldMin) + newMin;
     }
 }
 
@@ -61,10 +74,10 @@ namespace ViscaCommands
         static constexpr byteArray<4> getVersionInfo() { return { INQ, 0x00, 0x02, 0xFF}; }
         static void printVersionInfo(byteArray<10> reply)
         {
-            qCInfo(viscaLog()) << "Vendor ID:" << hex << (((uint16_t) reply[2] << 8) + reply[3]);
-            qCInfo(viscaLog()) << "Model ID:" << hex << (((uint16_t) reply[4] << 8) + reply[5]);
-            qCInfo(viscaLog()) << "ROM revision:" << hex << (((uint16_t) reply[6] << 8) + reply[7]);
-            qCInfo(viscaLog()) << "Maximum socket #:" << hex << (reply[8]);
+            qCInfo(viscaLog()) << "Vendor ID:" << Qt::hex << (((uint16_t) reply[2] << 8) + reply[3]);
+            qCInfo(viscaLog()) << "Model ID:" << Qt::hex << (((uint16_t) reply[4] << 8) + reply[5]);
+            qCInfo(viscaLog()) << "ROM revision:" << Qt::hex << (((uint16_t) reply[6] << 8) + reply[7]);
+            qCInfo(viscaLog()) << "Maximum socket #:" << Qt::hex << (reply[8]);
         }
     }
 
@@ -103,7 +116,7 @@ namespace ViscaCommands
             //! \brief returns command packet for setting gain - value is in range 0x00 (–3dB) - 0x0C (33 dB)
             static constexpr byteArray<8> setValue(uint8_t value) { return { CTRL, 0x04, 0x4C, 0x00, 0x00, 0, ensureMaxU8(value, 0x0C), 0xFF}; }
             static constexpr byteArray<4> getValue()              { return { INQ, 0x04, 0x4C, 0xFF}; }
-            static uint8_t valueFromReply(byteArray<7> reply) { return reverseParse(reply[4], reply[5]); } // TODO might add mapping to dB
+            static uint8_t valueFromReply(byteArray<7> reply) { return reverseParse(reply[4], reply[5]); }
 
             //! \brief returns command packet for setting gain limit - value is in range 0x04 (9dB) - 0x09 (24dB)
             static constexpr byteArray<5> limit(uint8_t value) { return {CTRL, 0x04, 0x2C,

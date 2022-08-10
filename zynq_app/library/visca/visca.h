@@ -110,7 +110,7 @@ private:
 
         Result res = checkMessageBytes(reply);
 
-        // ERROR doesn't have default length
+        // Check correct terminating symbol (ERROR doesn't have default length)
         if (res != ERROR && reply[TReplySize - 1] != 0xFF)
         {
             qCWarning(viscaLog()) << "Messages out of sync! Throwing away unread bytes.";

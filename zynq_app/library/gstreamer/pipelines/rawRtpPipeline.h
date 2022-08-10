@@ -1,16 +1,16 @@
-#ifndef RTPPIPELINE_H
-#define RTPPIPELINE_H
+#ifndef RAWRTPPIPELINE_H
+#define RAWRTPPIPELINE_H
 
-#include "pipelineFromInternSrc.h"
+#include "pipelineBase.h"
 
 /*!
  * \brief Complete pipeline sending data from interpipelinesrc to IP address in config.h using RTP
  */
-class RtpPipeline : public PipelineFromInternSrc
+class RawRtpPipeline : public PipelineBase
 {
 public:
-    RtpPipeline();
-    ~RtpPipeline();
+    RawRtpPipeline();
+    ~RawRtpPipeline();
 
 private:
     GstElement *m_rtpvrawpay;
@@ -20,4 +20,4 @@ private:
     void completePipeline();
 };
 
-#endif // RTPPIPELINE_H
+#endif // RAWRTPPIPELINE_H

@@ -9,8 +9,8 @@
 class PipelineBase
 {
 public:
-    void start();
-    void stop();
+    void start() const;
+    void stop() const;
 
     ~PipelineBase();
 
@@ -21,11 +21,19 @@ public:
 protected:
     PipelineBase() = default;
 
-    void setCapsFilter(const gchar *name);
+    void setDefaultCapsFilter(const gchar *name);
+    void setSrcFromInternalPipeline(const gchar *name);
+    void checkResult(bool linkingResult);
 
-    GstElement *m_videoSrc, *m_capsfilter, *m_sink, *m_pipeline;
-    GstCaps *m_videoCaps;
-    GstBus *m_bus;
+    struct
+    {
+        GstElement *videoSrc, *capsFilter, *sink, *pipeline;
+        GstCaps *videoCaps;
+        GstBus *bus;
+    } m_data;
+
+    static const int WIDTH = 1024;
+    static const int HEIGHT = 768;
 
     bool m_completed;
 };

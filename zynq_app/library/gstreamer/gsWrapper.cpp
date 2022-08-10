@@ -1,20 +1,21 @@
 #include "gsWrapper.h"
 
-#include <stdexcept>
 #include <string>
+
+#include "global/logCategories.h"
 #include "global/config.h"
 
-const char* GsWrapper::m_intervideoChannelName = "interchannel";
 bool GsWrapper::m_interpipelineInited = false;
 
-void GsWrapper::init(int debug)
+void GsWrapper::init()
 {
     gst_init(nullptr, nullptr);
 
-    if (debug > 0) {
+    if (DEBUG_LEVEL > 0) {
         gst_debug_set_active(TRUE);
         gst_debug_set_default_threshold(GST_LEVEL_FIXME);
     }
+
     initIntervideoPipeline();
 }
 
@@ -29,17 +30,9 @@ void GsWrapper::initIntervideoPipeline()
     m_interpipelineInited = true;
 }
 
-GstElement* GsWrapper::makeElement(const gchar *factoryname, const gchar *name)
+GstElement* GsWrapper::makeElement(const gchar *factoryName, const gchar *name)
 {
-    using namespace std::literals;
-
-    GstElement *res = gst_element_factory_make(factoryname, name);
-    if (!res)
-        throw std::runtime_error("Can't instantiate element "s + name + " of type " + factoryname + ")");
+    GstElement *res = gst_element_factory_make(factoryName, name);
+    qCWarning(gsLog()) << "Element" << name << "of type" << factoryName << (res? "created successfully\n" : "could not be created.\n");
     return res;
-}
-
-const gchar* GsWrapper::getDefaultIntervidChanName()
-{
-    return m_intervideoChannelName;
 }

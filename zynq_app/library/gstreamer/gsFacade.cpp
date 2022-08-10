@@ -13,37 +13,41 @@ GsFacade::GsFacade()
 
 GsFacade::~GsFacade()
 {
-    delete rawPipe;
-    delete rtpPipe;
-
     GsWrapper::deinit();
 }
 
 void GsFacade::initAndStart(PipelineEnum pipelineEnum)
 {
-    if (pipelineEnum & RAW)
+    if (pipelineEnum & RAW_SAVE)
     {
         qCWarning(gsLog()) << "Initializing and starting storage of RAW stream";
-        rawPipe = new RawFilePipeline();
+        rawPipe = std::make_unique<RawFilePipeline>();
         rawPipe->start();
     }
 
-    if (pipelineEnum & RTP)
+    if (pipelineEnum & RAW_RTP)
     {
-        qCWarning(gsLog()) << "Initializing and starting RTP stream";
-        rtpPipe = new RtpPipeline();
+        qCWarning(gsLog()) << "Initializing and starting stream of RAW data over RTP";
+        rtpPipe =  std::make_unique<RtpPipeline>();
+        rtpPipe->start();
+    }
+
+    if (pipelineEnum & DISP_PORT)
+    {
+        qCWarning(gsLog()) << "Initializing and starting Display port stream - not done yet";
+        // rtpPipe =  std::make_unique<RtpPipeline>();
         rtpPipe->start();
     }
 }
 
 void GsFacade::stop(PipelineEnum pipelineEnum)
 {
-    if (pipelineEnum & RAW && rawPipe)
+    if (pipelineEnum & RAW_SAVE && rawPipe)
     {
         rawPipe ->stop();
     }
 
-    if (pipelineEnum & RTP && rtpPipe)
+    if (pipelineEnum & RAW_RTP && rtpPipe)
     {
         rtpPipe ->stop();
     }
