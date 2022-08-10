@@ -2,7 +2,7 @@
 #define VISCACOMMANDS_H
 
 #include <array>
-#include <stdint.h>
+#include <cstdint>
 #include <string>
 
 #include "global/logCategories.h"
@@ -11,36 +11,39 @@
 //  ...but it would unnecessarily increase the complexity and would be slower
 
 namespace {
-    // TODO - should be added notification for limit violation?
-
     //! \brief returns value if value is less than max, else returns max (for uint8_t)
-    static constexpr uint8_t ensureMaxU8(uint8_t value, uint8_t max) { return value > max? max : value; }
+    constexpr uint8_t ensureMaxU8(uint8_t value, uint8_t max) { return value > max? max : value; }
 
     //! \brief returns value if within limits or return the limit
-    static constexpr uint8_t ensureconstexprratitsU8(uint8_t value, uint8_t min, uint8_t max) { return value > max? max : (value < min? min : value); }
+    constexpr uint8_t ensureConstrainsU8(uint8_t value, uint8_t min, uint8_t max) { return value > max ? max : (value < min ? min : value); }
 
     //! \brief returns value if value is less than max, else returns max (for uint16_t)
-    static constexpr uint16_t ensureMaxU16(uint16_t value, uint16_t max) { return value > max? max : value; }
+    constexpr uint16_t ensureMaxU16(uint16_t value, uint16_t max) { return value > max? max : value; }
 
-    //! \brief used to split many bytes to half bytes - return least significant 4 bits from RShifting value by 4 * ordinal
-    //! \example parseParam(0x1234, 1) will return 2
-    static constexpr uint8_t parseParam(uint16_t value, uint8_t reversedOrdinal) { return (value >> reversedOrdinal * 4) & 0x0F; }
+    /*!
+     * \brief used to split many bytes to half bytes - return least significant 4 bits from RShifting value by 4 * ordinal
+     * \example parseParam(0x1234, 1) will return 2
+     */
+    constexpr uint8_t parseParam(uint16_t value, uint8_t reversedOrdinal) { return (value >> reversedOrdinal * 4) & 0x0F; }
 
-    //! \brief Stopping condition for next recursive function
-    template <typename T>
-    static constexpr T reversePrase(T param)
+    //! \brief Stopping condition for the template recursive function below
+    template <typename TRet, typename T>
+    constexpr TRet reverseParse(T param)
     {
         return param;
     }
 
-    //! \brief Reverse of parseParam - combines multiple half-bytes into one numbers
-    template <typename T, typename... Ts>
-    static constexpr T reversePrase(T firstParam, Ts ... params)
+    //! \brief Reverse of parseParam - combines multiple half-bytes into one number
+    template <typename TRet = uint8_t, typename T, typename... Ts>
+    constexpr TRet reverseParse(T firstParam, Ts ... params)
     {
-        return (firstParam << 4 * sizeof...(params)) | reversePrase<T>(params...);
+        return (firstParam << 4 * sizeof...(params)) | reverseParse<TRet>(params...);
     }
 }
 
+/*!
+ * \brief Namespace containing all necessary Visca commands with configurable parameters
+ */
 namespace ViscaCommands
 {
     template <std::size_t size>
@@ -68,7 +71,7 @@ namespace ViscaCommands
     namespace Power
     {
         static constexpr byteArray<5> setState(State state) { return {CTRL, 0x04, 0x00, state, 0xFF}; }
-        static constexpr byteArray<5> getState()            { return {INQ, 0x04, 0x00, 0xFF}; }
+        static constexpr byteArray<4> getState()            { return {INQ, 0x04, 0x00, 0xFF}; }
         static State stateFromReply(byteArray<4> reply) { return (State) reply[2];}
     }
 
@@ -77,7 +80,7 @@ namespace ViscaCommands
         enum Mode : uint8_t {FULL_AUTO = 0x00, MANUAL = 0x03, SHUTTER_PRI = 0x0A, IRIS_PRI = 0x0B, GAIN_PRI = 0x0E };
 
         static constexpr byteArray<5> setMode(Mode mode)  { return { CTRL, 0x04, 0x39, mode, 0xFF}; }
-        static constexpr byteArray<5> getMode()           { return { INQ, 0x04, 0x39, 0xFF}; }
+        static constexpr byteArray<4> getMode()           { return { INQ, 0x04, 0x39, 0xFF}; }
         static Mode modeFromReply(byteArray<4> reply) { return (Mode) reply[2];}
 
         namespace Iris
@@ -86,11 +89,11 @@ namespace ViscaCommands
 
             //! \brief returns command packet for setting iris - value is in range 0x05 - 0x15
             static constexpr byteArray<8> setValue(uint8_t value) {
-                // TODO fixed value
-                return { CTRL, 0x04, 0x4B, 0x00, 0x00, parseParam(value, 1), parseParam(value, 0), 0xFF};
+                uint8_t fixedValue = ensureConstrainsU8(value, 0x05, 0x15);
+                return { CTRL, 0x04, 0x4B, 0x00, 0x00, parseParam(fixedValue, 1), parseParam(fixedValue, 0), 0xFF};
             }
-            static constexpr byteArray<5> getValue()              { return { INQ, 0x04, 0x4B, 0xFF}; }
-            static uint8_t valueFromReply(byteArray<7> reply) { return reversePrase(reply[4], reply[5]); }
+            static constexpr byteArray<4> getValue()              { return { INQ, 0x04, 0x4B, 0xFF}; }
+            static uint8_t valueFromReply(byteArray<7> reply) { return reverseParse(reply[4], reply[5]); }
         }
 
         namespace Gain
@@ -99,11 +102,12 @@ namespace ViscaCommands
 
             //! \brief returns command packet for setting gain - value is in range 0x00 (–3dB) - 0x0C (33 dB)
             static constexpr byteArray<8> setValue(uint8_t value) { return { CTRL, 0x04, 0x4C, 0x00, 0x00, 0, ensureMaxU8(value, 0x0C), 0xFF}; }
-            static constexpr byteArray<5> getValue()              { return { INQ, 0x04, 0x4C, 0xFF}; }
-            static uint8_t valueFromReply(byteArray<7> reply) { return reversePrase(reply[4], reply[5]); } // TODO might add mapping to dB
+            static constexpr byteArray<4> getValue()              { return { INQ, 0x04, 0x4C, 0xFF}; }
+            static uint8_t valueFromReply(byteArray<7> reply) { return reverseParse(reply[4], reply[5]); } // TODO might add mapping to dB
 
             //! \brief returns command packet for setting gain limit - value is in range 0x04 (9dB) - 0x09 (24dB)
-            static constexpr byteArray<5> limit(uint8_t value) { return { CTRL, 0x04, 0x2C, ensureconstexprratitsU8(value, 4, 9), 0xFF}; }
+            static constexpr byteArray<5> limit(uint8_t value) { return {CTRL, 0x04, 0x2C,
+                                                                         ensureConstrainsU8(value, 4, 9), 0xFF}; }
             static constexpr byteArray<5> limitOff()           { return { CTRL, 0x04, 0x2C, 0x0F, 0xFF}; }
 
             //! \brief returns command packet for setting gain point
@@ -120,7 +124,7 @@ namespace ViscaCommands
             //! \brief returns command packet for setting shutter - value is in range 0x01 - 0x15
             static constexpr byteArray<8> setValue(uint8_t value) { return { CTRL, 0x04, 0x4A, 0x00, 0x00, parseParam(value, 1), parseParam(value, 0), 0xFF}; }
             static constexpr byteArray<4> getValue()              { return { INQ, 0x04, 0x4A, 0xFF}; }
-            static uint8_t valueFromReply(byteArray<7> reply) { return reversePrase(reply[4], reply[5]); }
+            static uint8_t valueFromReply(byteArray<7> reply) { return reverseParse(reply[4], reply[5]); }
         }
 
         namespace Compensation
@@ -149,7 +153,7 @@ namespace ViscaCommands
          * \param brightnessCompensation is defined by enum : 0 (Very dark), 1 (Dark),2 (Standard), 3 (Bright)
          * \param compensationLevel is defined by enum : 0 (Low), 1 (Mid), 2 (High)
          */
-        static constexpr byteArray<12> setVisiblityEnhancer(uint8_t effectLevel, BrightnessEnum brightnessCompensation, CompensationEnum compensationLevel)
+        static constexpr byteArray<12> setVisibilityEnhancer(uint8_t effectLevel, BrightnessEnum brightnessCompensation, CompensationEnum compensationLevel)
         { return { CTRL, 0x04, 0x2D, 0x00, ensureMaxU8(effectLevel, 0x6), brightnessCompensation, compensationLevel, 0x00, 0x00, 0x00, 0x00 ,0xFF}; }
     }
 
@@ -160,7 +164,6 @@ namespace ViscaCommands
         namespace WhiteBalance
         {
             enum Mode : uint8_t {AUTO = 0, INDOOR = 1, OUTDOOR = 2, ONE_PUSH = 3, MANUAL = 5, OUTDOOR_AUTO = 6, SODIUM_LAMP_AUTO = 7, SODIUM_AUTO = 8 };
-
             static constexpr byteArray<5> setMode(Mode mode) { return {0x01, 0x04, 0x35, mode, 0xFF}; }
         }
 
@@ -243,13 +246,13 @@ namespace ViscaCommands
         //! \brief value is in range 0x00 - 0x4000 (from wide to tele)
         static byteArray<8> setValue(uint16_t value)
         {
-            uint16_t limitedValue = ensureMaxU16(value, 0x4000);
-            return {CTRL, 0x04, 0x47, parseParam(limitedValue, 3), parseParam(limitedValue, 2), parseParam(limitedValue, 1), parseParam(limitedValue, 0), 0xFF};
+            uint16_t fixedValue = ensureMaxU16(value, 0x4000);
+            return {CTRL, 0x04, 0x47, parseParam(fixedValue, 3), parseParam(fixedValue, 2), parseParam(fixedValue, 1), parseParam(fixedValue, 0), 0xFF};
         }
 
         static constexpr byteArray<4> getValue() { return { INQ, 0x04, 0x47, 0xFF}; }
         static uint16_t valueFromReply(byteArray<7> reply) {
-            return reversePrase<uint16_t>(reply[2], reply[3], reply[4], reply[5]); }
+            return reverseParse<uint16_t>(reply[2], reply[3], reply[4], reply[5]); }
     }
 
     namespace Focus
@@ -260,9 +263,10 @@ namespace ViscaCommands
         enum Distance : uint8_t { FAR=0x02, NEAR=0x03 };
         static constexpr byteArray<5> setDistance(Distance focus) { return {CTRL, 0x04, 0x38, focus, 0xFF}; }
         //! \brief returns command packet for setting distance with variable speed - speed is in range 0x00 - 0x07 (from slowest to fastest)
-        static constexpr byteArray<5> setDistanceVarSpeed(Distance focus, uint8_t spped) { return {CTRL, 0x04, 0x38, (uint8_t) (focus << 4 & spped), 0xFF}; }
+        static constexpr byteArray<5> setDistanceVarSpeed(Distance focus, uint8_t speed)
+        { return {CTRL, 0x04, 0x38, (uint8_t) (focus << 4 & speed), 0xFF}; }
 
-        static constexpr byteArray<6> infinity() { return { CTRL, 0x04, 0x18, 0x02, 0xFF}; }
+        static constexpr byteArray<5> infinity() { return { CTRL, 0x04, 0x18, 0x02, 0xFF}; }
 
         //! \brief  returns command packet for setting focus distance - value is in range F000 (Near) - 0000 (Far)
         static byteArray<8> setValue(uint16_t value)
@@ -271,8 +275,8 @@ namespace ViscaCommands
             return {CTRL, 0x04, 0x48, parseParam(limitedValue, 3), parseParam(limitedValue, 2), parseParam(limitedValue, 1), parseParam(limitedValue, 0), 0xFF};
         }
 
-        static constexpr byteArray<4> getValue()              { return { INQ, 0x04, 0x48, 0xFF}; }
-        static uint8_t valueFromReply(byteArray<7> reply) { return reversePrase(reply[2], reply[3], reply[4], reply[5]); }
+        static constexpr byteArray<4> getValue() { return { INQ, 0x04, 0x48, 0xFF}; }
+        static uint8_t valueFromReply(byteArray<7> reply) { return reverseParse<uint16_t>(reply[2], reply[3], reply[4], reply[5]); }
     }
 
     namespace Hdmi
@@ -281,7 +285,7 @@ namespace ViscaCommands
         enum Colorspace : uint8_t {YCBCR = 0, RGB = 1};
 
         static constexpr byteArray<7> setFormat(Format format)             { return {0x01, 0x7E, 0x01, 0x1E, parseParam(format, 1), parseParam(format, 0), 0xFF}; }
-        static constexpr byteArray<7> setcolorSpace(Colorspace colorSpace) { return {0x01, 0x7E, 0x01, 0x03, 0x00, colorSpace, 0xFF}; }
+        static constexpr byteArray<7> setColorspace(Colorspace colorSpace) { return {0x01, 0x7E, 0x01, 0x03, 0x00, colorSpace, 0xFF}; }
     }
 
     static constexpr byteArray<5> horizontalFlip(State state) { return {CTRL, 0x04, 0x61, state, 0xFF}; }

@@ -1,22 +1,32 @@
 #ifndef VISCA_H
 #define VISCA_H
 
-#include "library/visca/uartCommunication.h"
+#include "uartCommunication.h"
 #include "global/logCategories.h"
-
-#include <algorithm>
 
 /*!
  * \brief Class with basic VISCA commands - facade on UartCommunication class
  */
 class Visca {
 public:
-    Visca(const char *device_path);
+    /*!
+     * \brief Initilize all necessary components for VISCA communication
+     * \param portName - name of serial port (path to device)
+     */
+    explicit Visca(const char *device_path);
 
-    // TODO write documentaion
-    template<std::size_t replySize = 3, std::size_t size>
-    bool executeCommand(const std::array <uint8_t, size> &&data,
-                        int waitTime = SHORT_WAIT_TIME_MS,
+    /*!
+     * \brief Send VISCA command to camera
+     * @tparam TReplySize - expected size of reply, usually 3 bytes (default value)
+     * @tparam size - size of command (usually auto deduced)
+     * @param data - command to send (best to generate them from ViscaCommands.h)
+     * @param waitTime - time to wait for reply (in milliseconds)
+     * @param logMessage - name of executed command for logging purposes
+     * @return
+     */
+    template<std::size_t TReplySize = 3, std::size_t TSize>
+    bool executeCommand(const std::array <uint8_t, TSize> &&data,
+                        int waitTime = BASE_WAIT_TIME_MS,
                         QString &&logMessage = QString{})
     {
         if (logMessage.length() != 0)
@@ -28,22 +38,33 @@ public:
             return false;
         }
 
-        if (!checkReply<replySize>(waitTime, logMessage))
+        if (!checkReply<TReplySize>(waitTime, logMessage))
             return false;
 
         qCInfo(viscaLog()).noquote() << "Command executed" << logMessage;
+
         return true;
     }
 
-    // TODO write documentaion
-    template<std::size_t replySize, std::size_t size, typename TFuncRet>
-    TFuncRet inquireCommand(const std::array <uint8_t, size> &&data,
-                            TFuncRet (*processReplyFunc)(std::array <uint8_t, replySize>) = &checkMessageBytes<replySize>,
-                            int waitTime = SHORT_WAIT_TIME_MS)
+    /*!
+     * \brief Send VISCA inquiry command (request camera to send some information)
+     * @tparam TReplySize - expected TSize of reply - auto deduced
+     * @tparam TSize - TSize of command - auto deduced
+     * @tparam TFuncRet - return type of processing function - auto deduced
+     * @param data - command to send (best to generate them from ViscaCommands.h)
+     * @param processReplyFunc - function to process reply
+     * @param waitTime - time to wait for reply (in milliseconds)
+     * @return what processing function returns
+     * @example inquireCommand(ViscaCommands::Zoom::getValue(), ViscaCommands::Zoom::valueFromReply);
+     */
+    template<std::size_t TReplySize, std::size_t TSize, typename TFuncRet>
+    TFuncRet inquireCommand(const std::array <uint8_t, TSize> &&data,
+                            TFuncRet (*processReplyFunc)(std::array <uint8_t, TReplySize>) = &checkMessageBytes < TReplySize >,
+                            int waitTime = BASE_WAIT_TIME_MS)
     {
         m_uart.sendMessage(m_camAddr, data);
 
-        std::array <uint8_t, replySize> reply{};
+        std::array <uint8_t, TReplySize> reply{};
 
         if (!m_uart.receiveMessage(reply, waitTime))
             qCWarning(viscaLog()) << "Failed to inquire";
@@ -60,19 +81,26 @@ private:
     static const int INIT_TRIES_COUNT = 10;
     static const int DEFAULT_USLEEP_WAIT = 50000;
 
-    static const int SHORT_WAIT_TIME_MS = 400; // TODO mby remake to BASE_WAIT_TIME
-    static const int LONG_WAIT_TIME_MS = 600;
+    static const int BASE_WAIT_TIME_MS = 200;
 
     enum addr : uint8_t {BROADCAST = 0x88, CAM_BASE = 0x80};
 
+    /*!
+     * \brief Initialize camera address
+     */
     bool setAddress();
 
-    bool clearIF();
-
-    template<std::size_t replySize>
+    /*!
+     * \brief Check reply from camera - if acknowledged, executed, error...
+     * @tparam TReplySize - expected size of reply, usually 3 bytes (default value)
+     * @param waitTime - time to wait for reply (in milliseconds)
+     * @param logMessage - name of executed command for logging purposes
+     * @return true if reply is valid, false otherwise
+     */
+    template<std::size_t TReplySize>
     bool checkReply(int waitTime, QString &logMessage)
     {
-        std::array <uint8_t, replySize> reply{};
+        std::array <uint8_t, TReplySize> reply{};
 
         if (!m_uart.receiveMessage(reply, waitTime))
         {
@@ -82,10 +110,10 @@ private:
 
         Result res = checkMessageBytes(reply);
 
-        // ERROR is 4B long, so I Have to throw away one byte later
-        if (res != ERROR && reply[replySize - 1] != 0xFF)
+        // ERROR doesn't have default length
+        if (res != ERROR && reply[TReplySize - 1] != 0xFF)
         {
-            qCWarning(viscaLog()) << "Messages out of sync! Throwing away buffer.";
+            qCWarning(viscaLog()) << "Messages out of sync! Throwing away unread bytes.";
             m_uart.ClearReplies();
             return false;
         }
@@ -95,15 +123,14 @@ private:
             case SHORT:
                 qCWarning(viscaLog()).noquote() << "Response is too short" << logMessage;
                 return false;
-
             case ERROR:
             {
                 qCWarning(viscaLog()).noquote() << "Error" << logMessage;
+                // Throwing away one byte (ERROR is one byte longer)
                 std::array<uint8_t, 1> resp = {};
                 m_uart.receiveMessage(resp, 400);
                 return false;
             }
-
             case ACKED:
                 qCInfo(viscaLog()).noquote() << "Command acknowledged" << logMessage;
                 if (!m_uart.receiveMessage(reply, waitTime))
@@ -112,18 +139,22 @@ private:
                     return false;
                 }
                 break;
-
-            case EXECUTED:
-                break;
-
             case Visca::UNKNOWN:
                 qCWarning(viscaLog()).noquote() << "Unkown response" << logMessage;
                 return false;
+            case EXECUTED:
+                break;
         }
 
         return true;
     }
 
+    /*!
+     * \brief Check what type of reply is it - short, error, acked, executed, unknown
+     * @tparam TReplySize - expected size of reply, usually 3 bytes (default value)
+     * @param reply - array of bytes to check
+     * @return result of checking
+     */
     template<std::size_t size = 3>
     static Result checkMessageBytes(std::array <uint8_t, size> &reply)
     {
@@ -150,7 +181,9 @@ private:
 
     enum err : uint8_t {LENGTH = 0x01, SYNTAX = 0x02, BUFULL = 0x03, CANCEL = 0x04, SOCKET = 0x05, EXECUT = 0x41};
 
-    ///! \brief used as complemenatry function for checkReply
+    /*!
+     * \brief Print error message from camera based on error code
+     */
     static void printReplyError(err code);
 };
 

@@ -25,7 +25,7 @@ void GsWrapper::deinit()
 
 void GsWrapper::initIntervideoPipeline()
 {
-    IntersinkPipeline::getInstance().start();
+    InternalPipeline::getInstance().start();
     m_interpipelineInited = true;
 }
 
@@ -43,14 +43,3 @@ const gchar* GsWrapper::getDefaultIntervidChanName()
 {
     return m_intervideoChannelName;
 }
-
-GstCaps* GsWrapper::makeDefualtCaps()
-{
-    return gst_caps_new_simple("video/x-raw",
-                "format", G_TYPE_STRING, "RGB",
-                "framerate", GST_TYPE_FRACTION, 60, 1,
-                "pixel-aspect-ratio", GST_TYPE_FRACTION, 1, 1,
-                "width", G_TYPE_INT, glb::dim::WIDTH,
-                "height", G_TYPE_INT, glb::dim::HEIGHT, NULL);
-}
-

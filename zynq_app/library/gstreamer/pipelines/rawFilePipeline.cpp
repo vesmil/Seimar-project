@@ -1,10 +1,10 @@
 #include "rawFilePipeline.h"
 
-#include <stdexcept>
 #include "global/config.h"
+#include "global/logCategories.h"
 #include "library/gstreamer/gsWrapper.h"
 
-RawFilePipeline::RawFilePipeline() : IntersrcPipeline()
+RawFilePipeline::RawFilePipeline() : PipelineFromInternSrc()
 {
     setSource("rawsource");
     setCapsFilter("rawcaps");
@@ -15,7 +15,7 @@ RawFilePipeline::RawFilePipeline() : IntersrcPipeline()
 void RawFilePipeline::setFilesink()
 {
     m_sink = GsWrapper::makeElement("filesink", "filesink");
-    g_object_set(m_sink, "location", glb::path::VIDEO_OUT.c_str(), NULL);
+    g_object_set(m_sink, "location", glb::path::VIDEO_OUT.c_str(), nullptr);
 }
 
 void RawFilePipeline::completePipeline()
@@ -25,12 +25,12 @@ void RawFilePipeline::completePipeline()
     m_bus = gst_element_get_bus(m_pipeline);
     gst_bus_add_signal_watch(m_bus);
 
-    gst_bin_add_many(GST_BIN(m_pipeline), m_videoSrc, m_capsfilter, m_sink, NULL);
+    gst_bin_add_many(GST_BIN(m_pipeline), m_videoSrc, m_capsfilter, m_sink, nullptr);
 
-    if (!gst_element_link_many(m_videoSrc, m_capsfilter, m_sink, NULL))
-        throw std::runtime_error("Elements could not be linked.\n");
-
-    m_completed = true;
+    if (!gst_element_link_many(m_videoSrc, m_capsfilter, m_sink, nullptr))
+        qCWarning(gsLog()) << "Elements could not be linked.\n";
+    else
+        m_completed = true;
 }
 
 RawFilePipeline::~RawFilePipeline()

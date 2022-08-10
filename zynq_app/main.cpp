@@ -1,18 +1,21 @@
 ﻿#include <QCoreApplication>
+
 #include "library/gstreamer/gsFacade.h"
+#include "library/visca/visca.h"
 
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
     // Setup gstreamer pipelines from cam
-    GsFacade gsFacade;
+    GsFacade gsFacade{};
     gsFacade.initAndStart(GsFacade::RTP); // | GsFacade::RAW | ...
 
-    // Setup Visca protocol
-    // TODO
+    // Setup Vi\sca protocol
+    Visca visca("...");
 
     // Create UI
+    // TODO
 
     return a.exec();
 }

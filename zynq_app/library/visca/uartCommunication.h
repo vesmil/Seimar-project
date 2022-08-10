@@ -17,10 +17,14 @@
 class UartCommunication
 {
 public:
-    UartCommunication(const char* device_path);
+    explicit UartCommunication(const char* device_path);
     ~UartCommunication();
 
-    //! \brief Sends array of bytes using (sys call) write to open UART port
+    /*!
+     * \brief Sends array of bytes using (sys call) write to open UART port
+     * \param data - array of bytes to send
+     * \return true if sending was successful, false otherwise
+     */
     template<std::size_t size>
     bool sendMessage(uint8_t addr, const std::array<uint8_t, size>& message)
     {
@@ -47,8 +51,10 @@ public:
         return true;
     }
 
-    //! \brief Used for debug to make sending messages simpler - Do not use for production!
-    //! \example To send i.e. AddressSet use it like sendMessage(0x88, 0x30, 0x01, 0xFF);
+    /*!
+     * \brief Used for debug to make sending messages simpler - Do not use for production!
+     * \example To send i.e. AddressSet use it like sendMessage(0x88, 0x30, 0x01, 0xFF);
+     */
     template<typename... types>
     [[deprecated("Use only for debug")]]
     bool sendMessage(uint8_t address, types... data)
@@ -59,8 +65,12 @@ public:
         return sendMessage(address, message);
     }
 
-    //! \brief Reads UART response and writes it to array in param
-    //! \details while less than waitMS has passed it preidocally checks wheter the response is ready...
+    /*!
+     * \brief Reads UART response and writes it to array
+     * \param data - array to write response to
+     * \return true if reading was successful, false otherwise
+     * \details while less than waitMS has passed it periodically checks whether the response is ready...
+     */
     template<std::size_t size>
     bool receiveMessage(std::array<uint8_t, size>& data, int waitMs)
     {
@@ -100,6 +110,9 @@ public:
         return true;
     }
 
+    /*!
+     * \brief Reads UART response and writes them to throwaway array - used if out of sync with messages
+     */
     void ClearReplies()
     {
         int read_count = read(m_descriptor, THROWAWAY_BUFFER, BUFFER_SIZE);

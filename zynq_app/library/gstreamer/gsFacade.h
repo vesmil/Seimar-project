@@ -4,7 +4,7 @@
 #include <vector>
 #include <memory>
 
-#include "pipelines/abstract/pipeline.h"
+#include "pipelines/pipelineBase.h"
 
 /*!
  * \brief Facade design pattern simplifying usage of GStreamer and created pipelines
@@ -12,7 +12,7 @@
 class GsFacade
 {
 public:
-    enum PipelineEnum { NONE = 0, RAW = 1, RTP = 2, DP = 4 };
+    enum PipelineEnum : uint8_t { NONE = 0, RAW = 1, RTP = 2, DP = 4 };
 
     GsFacade();
     ~GsFacade();
@@ -21,14 +21,9 @@ public:
     void stop(PipelineEnum pipeline);
 
 private:
-    Pipeline* rtpPipe = nullptr;
-    Pipeline* rawPipe = nullptr;
+    PipelineBase* rtpPipe = nullptr;
+    PipelineBase* rawPipe = nullptr;
     // ...
 };
-
-inline enum GsFacade::PipelineEnum operator|(GsFacade::PipelineEnum a, GsFacade::PipelineEnum b)
-{
-    return static_cast<GsFacade::PipelineEnum>(static_cast<int>(a) | static_cast<int>(b));
-}
 
 #endif // GSFACADE_H

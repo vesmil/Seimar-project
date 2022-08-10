@@ -1,15 +1,15 @@
 #ifndef INTERSINKPIPELINE_H
 #define INTERSINKPIPELINE_H
 
-#include "pipeline.h"
+#include "pipelineBase.h"
 
 /*!
  * \brief Pipeline which uses data from intervideosrc
  */
-class IntersrcPipeline : public Pipeline
+class PipelineFromInternSrc : public PipelineBase
 {
 protected:
-    IntersrcPipeline() = default;
+    PipelineFromInternSrc() = default;
 
     void setSource(const gchar *name);
 };

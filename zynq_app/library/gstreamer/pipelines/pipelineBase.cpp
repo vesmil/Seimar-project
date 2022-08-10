@@ -1,23 +1,26 @@
-#include "pipeline.h"
+#include "pipelineBase.h"
 
-#include <stdexcept>
 #include "library/gstreamer/gsWrapper.h"
+#include "global/logCategories.h"
 
-void Pipeline::start()
+void PipelineBase::start()
 {
     if (!m_completed)
-        throw std::runtime_error("Pipeline started before completion.\n");
+    {
+        qCWarning(gsLog()) << "Couldn't start pipeline because it was not completed.";
+        return;
+    }
 
     gst_element_set_state (m_pipeline, GST_STATE_PLAYING);
 }
 
-void Pipeline::stop()
+void PipelineBase::stop()
 {
     gst_element_change_state(m_pipeline, GST_STATE_CHANGE_PLAYING_TO_PAUSED);
     gst_element_change_state(m_pipeline, GST_STATE_CHANGE_PAUSED_TO_READY);
 }
 
-Pipeline::~Pipeline()
+PipelineBase::~PipelineBase()
 {
     if (m_bus)
     {
@@ -39,9 +42,15 @@ Pipeline::~Pipeline()
     }
 }
 
-void Pipeline::setCapsFilter(const gchar* name)
+void PipelineBase::setCapsFilter(const gchar* name)
 {
-    m_videoCaps = GsWrapper::makeDefualtCaps();
+    // TODO move away
+    m_videoCaps = gst_caps_new_simple("video/x-raw",
+                                      "format", G_TYPE_STRING, "RGB",
+                                      "framerate", GST_TYPE_FRACTION, 60, 1,
+                                      "pixel-aspect-ratio", GST_TYPE_FRACTION, 1, 1,
+                                      "width", G_TYPE_INT, 1024,
+                                      "height", G_TYPE_INT, 768, NULL);
 
     m_capsfilter = GsWrapper::makeElement("capsfilter", name);
     g_object_set(m_capsfilter, "caps", m_videoCaps, NULL);

@@ -13,7 +13,7 @@ UartCommunication::UartCommunication(const char* device_path)
         return;
     }
 
-    struct termios options;
+    struct termios options{};
 
     tcgetattr(m_descriptor, &options);
     options.c_cflag = B9600 | CS8 | CLOCAL | CREAD;

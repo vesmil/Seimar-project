@@ -2,7 +2,9 @@
 
 #include "pipelines/rtpPipeline.h"
 #include "pipelines/rawFilePipeline.h"
+
 #include "gsWrapper.h"
+#include "global/logCategories.h"
 
 GsFacade::GsFacade()
 {
@@ -21,12 +23,14 @@ void GsFacade::initAndStart(PipelineEnum pipelineEnum)
 {
     if (pipelineEnum & RAW)
     {
+        qCWarning(gsLog()) << "Initializing and starting storage of RAW stream";
         rawPipe = new RawFilePipeline();
         rawPipe->start();
     }
 
     if (pipelineEnum & RTP)
     {
+        qCWarning(gsLog()) << "Initializing and starting RTP stream";
         rtpPipe = new RtpPipeline();
         rtpPipe->start();
     }

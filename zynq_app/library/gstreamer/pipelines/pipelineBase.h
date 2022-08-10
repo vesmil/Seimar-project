@@ -1,29 +1,25 @@
-#ifndef PIPELINE_H
-#define PIPELINE_H
+#ifndef PIPELINEBASE_H
+#define PIPELINEBASE_H
 
 #include <gst/gst.h>
-
-// TODO make inheritance more obvious...
 
 /*!
  * \brief Abstract Pipeline class with basic pipeline attributes
  */
-class Pipeline
+class PipelineBase
 {
 public:
     void start();
     void stop();
 
-    ~Pipeline();
+    ~PipelineBase();
 
     // Disable copy constructors for all pipelines (pipeline subclasses)
-    Pipeline(const Pipeline&) = delete;
-    Pipeline& operator =(const Pipeline&) = delete;
+    PipelineBase(const PipelineBase&) = delete;
+    PipelineBase& operator =(const PipelineBase&) = delete;
 
 protected:
-    // Only subclassses can construct pipeline
-    //  - it's missing key elements which needs to be added
-    Pipeline() = default;
+    PipelineBase() = default;
 
     void setCapsFilter(const gchar *name);
 
@@ -34,4 +30,4 @@ protected:
     bool m_completed;
 };
 
-#endif // PIPELINE_H
+#endif // PIPELINEBASE_H

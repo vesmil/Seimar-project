@@ -4,6 +4,6 @@
 #include <QLoggingCategory>
 
 Q_DECLARE_LOGGING_CATEGORY(viscaLog);
-Q_DECLARE_LOGGING_CATEGORY(gsLog);
+Q_DECLARE_LOGGING_CATEGORY(gstreamerLog);
 
 #endif // GLOGCATEGORIES_H
