@@ -1,7 +1,8 @@
 #include "gsFacade.h"
 
-#include "pipelines/rtpPipeline.h"
+#include "pipelines/rawRtpPipeline.h"
 #include "pipelines/rawFilePipeline.h"
+#include "pipelines/rawDisplayPipeline.h"
 
 #include "gsWrapper.h"
 #include "global/logCategories.h"
@@ -28,15 +29,15 @@ void GsFacade::initAndStart(PipelineEnum pipelineEnum)
     if (pipelineEnum & RAW_RTP)
     {
         qCWarning(gsLog()) << "Initializing and starting stream of RAW data over RTP";
-        rtpPipe =  std::make_unique<RtpPipeline>();
+        rtpPipe =  std::make_unique<RawRtpPipeline>();
         rtpPipe->start();
     }
 
-    if (pipelineEnum & DISP_PORT)
+    if (pipelineEnum & RAW_DISPLAY)
     {
         qCWarning(gsLog()) << "Initializing and starting Display port stream - not done yet";
-        // rtpPipe =  std::make_unique<RtpPipeline>();
-        rtpPipe->start();
+        displayPipe =  std::make_unique<RawDisplayPipeline>();
+        displayPipe->start();
     }
 }
 
@@ -50,5 +51,10 @@ void GsFacade::stop(PipelineEnum pipelineEnum)
     if (pipelineEnum & RAW_RTP && rtpPipe)
     {
         rtpPipe ->stop();
+    }
+
+    if (pipelineEnum & RAW_DISPLAY && displayPipe)
+    {
+        displayPipe ->stop();
     }
 }

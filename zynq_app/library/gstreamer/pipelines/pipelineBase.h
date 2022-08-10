@@ -24,18 +24,19 @@ protected:
     void setDefaultCapsFilter(const gchar *name);
     void setSrcFromInternalPipeline(const gchar *name);
     void checkResult(bool linkingResult);
+    void completePipeline(const gchar *name);
 
     struct
     {
-        GstElement *videoSrc, *capsFilter, *sink, *pipeline;
-        GstCaps *videoCaps;
-        GstBus *bus;
+        GstElement *videoSrc = nullptr, *capsFilter = nullptr, *sink = nullptr, *pipeline = nullptr;
+        GstCaps *videoCaps = nullptr;
+        GstBus *bus = nullptr;
     } m_data;
 
     static const int WIDTH = 1024;
     static const int HEIGHT = 768;
 
-    bool m_completed;
+    bool m_completed = false;
 };
 
 #endif // PIPELINEBASE_H

@@ -1,19 +1,23 @@
+QT += widgets core gui
+
 CONFIG += c++17
 
 CONFIG += link_pkgconfig
 PKGCONFIG += gstreamer-1.0 gstreamer-video-1.0
 
 SOURCES += \
-        global/logCategories.cpp \
-        library/gstreamer/gsFacade.cpp \
-        library/gstreamer/gsWrapper.cpp \
-        library/gstreamer/pipelines/internalPipeline.cpp \
-        library/gstreamer/pipelines/pipelineBase.cpp \
-        library/gstreamer/pipelines/rawFilePipeline.cpp \
+    global/logCategories.cpp \
+    graphic/mainWindow.cpp \
+    library/gstreamer/gsFacade.cpp \
+    library/gstreamer/gsWrapper.cpp \
+    library/gstreamer/pipelines/internalPipeline.cpp \
+    library/gstreamer/pipelines/pipelineBase.cpp \
+    library/gstreamer/pipelines/rawDisplayPipeline.cpp \
+    library/gstreamer/pipelines/rawFilePipeline.cpp \
     library/gstreamer/pipelines/rawRtpPipeline.cpp \
-        library/visca/uartCommunication.cpp \
-        library/visca/visca.cpp \
-        main.cpp \
+    library/visca/uartCommunication.cpp \
+    library/visca/visca.cpp \
+    main.cpp \
 
 
 # Default rules for deployment.
@@ -24,10 +28,12 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
         global/config.h \
         global/logCategories.h \
+        graphic/mainWindow.h \
         library/gstreamer/gsFacade.h \
         library/gstreamer/gsWrapper.h \
         library/gstreamer/pipelines/internalPipeline.h \
         library/gstreamer/pipelines/pipelineBase.h \
+        library/gstreamer/pipelines/rawDisplayPipeline.h \
         library/gstreamer/pipelines/rawFilePipeline.h \
         library/gstreamer/pipelines/rawRtpPipeline.h \
         library/visca/uartCommunication.h \

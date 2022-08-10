@@ -4,7 +4,7 @@
 #include "pipelineBase.h"
 
 /*!
- * \brief Complete pipeline sending data from interpipelinesrc to IP address in config.h using RTP
+ * \brief Complete pipeline - sending data from interpipelinesrc to IP address in config.h using RTP
  */
 class RawRtpPipeline : public PipelineBase
 {
@@ -13,7 +13,10 @@ public:
     ~RawRtpPipeline();
 
 private:
-    GstElement *m_rtpvrawpay;
+    struct
+    {
+        GstElement *rtpvrawpay = nullptr;
+    } m_rtp_data;
 
     void setRtpPayload();
     void setUdpsink();

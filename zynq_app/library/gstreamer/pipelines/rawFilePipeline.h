@@ -4,7 +4,7 @@
 #include "pipelineBase.h"
 
 /*!
- * \brief Complete pipeline saving raw data from interpipelinesrc
+ * \brief Complete pipeline - saving raw data from interpipelinesrc
  */
 class RawFilePipeline : public PipelineBase
 {
@@ -14,7 +14,6 @@ public:
 
 private:
     void setFilesink();
-    void completePipeline();
 };
 
 #endif // RAWFILEPIPELINE_H

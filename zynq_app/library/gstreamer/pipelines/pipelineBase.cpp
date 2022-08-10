@@ -1,6 +1,6 @@
 #include "pipelineBase.h"
 
-#include "library/gstreamer/gsWrapper.h"
+#include "../gsWrapper.h"
 #include "global/logCategories.h"
 
 void PipelineBase::start() const
@@ -63,8 +63,21 @@ void PipelineBase::setSrcFromInternalPipeline(const gchar *name)
 
 void PipelineBase::checkResult(bool linkingResult)
 {
-    if (linkingResult)
+    if (!linkingResult)
         qCWarning(gsLog()) << "Elements could not be linked.\n";
     else
         m_completed = true;
+}
+
+void PipelineBase::completePipeline(const gchar *name)
+{
+    m_data.pipeline = gst_pipeline_new(name);
+
+    m_data.bus = gst_element_get_bus(m_data.pipeline);
+    gst_bus_add_signal_watch(m_data.bus);
+
+    gst_bin_add_many(GST_BIN(m_data.pipeline), m_data.videoSrc, m_data.capsFilter, m_data.sink, nullptr);
+
+    bool result = gst_element_link_many(m_data.videoSrc, m_data.capsFilter, m_data.sink, nullptr);
+    checkResult(result);
 }

@@ -33,6 +33,6 @@ void GsWrapper::initIntervideoPipeline()
 GstElement* GsWrapper::makeElement(const gchar *factoryName, const gchar *name)
 {
     GstElement *res = gst_element_factory_make(factoryName, name);
-    qCWarning(gsLog()) << "Element" << name << "of type" << factoryName << (res? "created successfully\n" : "could not be created.\n");
+    qCWarning(gsLog()) << "Element" << name << "of type" << factoryName << (res? "created successfully" : "could not be created.");
     return res;
 }

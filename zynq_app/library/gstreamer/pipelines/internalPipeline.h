@@ -4,7 +4,7 @@
 #include "pipelineBase.h"
 
 /*!
- * \brief Singleton for transferring data from vl42src to intervideosink used by other pipelines (to allow spliting)
+ * \brief Singleton pipeline for transferring data from vl42src to intervideosink used by other pipelines (to allow spliting)
  */
 class InternalPipeline : public PipelineBase
 {
