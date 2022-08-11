@@ -29,7 +29,7 @@ protected:
 
     struct
     {
-        GstElement *videoSrc = nullptr, *capsFilter = nullptr, *queue = nullptr, *sink = nullptr, *pipeline = nullptr;
+        GstElement *videoSrc = nullptr, *capsFilter = nullptr, *sink = nullptr, *pipeline = nullptr;
         GstCaps *videoCaps = nullptr;
         GstBus *bus = nullptr;
     } m_data;
