@@ -11,7 +11,6 @@ InternalPipeline::InternalPipeline() : PipelineBase()
     setSource("v4l2source");
     setDefaultCapsFilter("intercaps");
     setSink("intersink");
-
     completePipeline();
 }
 

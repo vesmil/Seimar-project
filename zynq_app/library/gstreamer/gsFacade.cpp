@@ -21,21 +21,21 @@ void GsFacade::initAndStart(PipelineEnum pipelineEnum)
 {
     if (pipelineEnum & RAW_SAVE)
     {
-        qCWarning(gsLog()) << "Initializing and starting storage of RAW stream";
+        qCInfo(gsLog()) << "Initializing and starting storage of RAW stream";
         rawPipe = std::make_unique<RawFilePipeline>();
         rawPipe->start();
     }
 
     if (pipelineEnum & RAW_RTP)
     {
-        qCWarning(gsLog()) << "Initializing and starting stream of RAW data over RTP";
+        qCInfo(gsLog()) << "Initializing and starting stream of RAW data over RTP";
         rtpPipe =  std::make_unique<RawRtpPipeline>();
         rtpPipe->start();
     }
 
     if (pipelineEnum & RAW_DISPLAY)
     {
-        qCWarning(gsLog()) << "Initializing and starting Display port stream - not done yet";
+        qCInfo(gsLog()) << "Initializing and starting Display port stream";
         displayPipe =  std::make_unique<RawDisplayPipeline>();
         displayPipe->start();
     }

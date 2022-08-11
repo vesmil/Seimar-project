@@ -1,7 +1,9 @@
 #include "mainWindow.h"
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow{parent}
-{
+#include <QPushButton>
+#include <QVBoxLayout>
+
+MainWindow::MainWindow(QWidget *parent) : QMainWindow{parent}
+{    
 
 }

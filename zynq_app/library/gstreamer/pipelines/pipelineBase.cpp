@@ -43,12 +43,16 @@ PipelineBase::~PipelineBase()
 
 void PipelineBase::setDefaultCapsFilter(const gchar* name)
 {
+    /* TODO put back
     m_data.videoCaps = gst_caps_new_simple("video/x-raw",
                                       "format", G_TYPE_STRING, "RGB",
                                       "framerate", GST_TYPE_FRACTION, 60, 1,
                                       "pixel-aspect-ratio", GST_TYPE_FRACTION, 1, 1,
                                       "width", G_TYPE_INT, WIDTH,
                                       "height", G_TYPE_INT, HEIGHT, NULL);
+    */
+
+    m_data.videoCaps = gst_caps_new_any();
 
     m_data.capsFilter = GsWrapper::makeElement("capsfilter", name);
     g_object_set(m_data.capsFilter, "caps", m_data.videoCaps, NULL);
@@ -64,7 +68,7 @@ void PipelineBase::setSrcFromInternalPipeline(const gchar *name)
 void PipelineBase::checkResult(bool linkingResult)
 {
     if (!linkingResult)
-        qCWarning(gsLog()) << "Elements could not be linked.\n";
+        qCWarning(gsLog()) << "Elements could not be linked.";
     else
         m_completed = true;
 }

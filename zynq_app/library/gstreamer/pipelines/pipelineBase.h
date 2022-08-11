@@ -23,12 +23,13 @@ protected:
 
     void setDefaultCapsFilter(const gchar *name);
     void setSrcFromInternalPipeline(const gchar *name);
+
     void checkResult(bool linkingResult);
     void completePipeline(const gchar *name);
 
     struct
     {
-        GstElement *videoSrc = nullptr, *capsFilter = nullptr, *sink = nullptr, *pipeline = nullptr;
+        GstElement *videoSrc = nullptr, *capsFilter = nullptr, *queue = nullptr, *sink = nullptr, *pipeline = nullptr;
         GstCaps *videoCaps = nullptr;
         GstBus *bus = nullptr;
     } m_data;
