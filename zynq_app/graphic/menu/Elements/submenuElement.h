@@ -6,11 +6,17 @@
 #include <vector>
 #include <memory>
 
-struct SubmenuElement : public ElementBase
+/*!
+ * \brief Menu element from which next menu will be opened
+ */
+struct SubmenuElement
 {
-    SubmenuElement();
+    SubmenuElement(QString text, ElementBase *parent);
 
-    std::vector<std::shared_ptr<ElementBase>> elementList;
+    void execute();
+
+    ElementBase* parent;
+    std::vector<std::unique_ptr<ElementBase>> elementList;
 };
 
 #endif // SUBMENUELEMENT_H

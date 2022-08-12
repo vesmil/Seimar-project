@@ -5,13 +5,10 @@
 
 struct ElementBase
 {
-    ElementBase(QString text /* ... */ );
-
+    ElementBase(QString text);
     virtual void execute() = 0;
 
-    QString text; // TODO add getter setter
-    bool hidden; // as not allowed and displayed with grey font
-    ElementBase *parent;
+    QString text;
 };
 
 #endif // ELEMENTBASE_H

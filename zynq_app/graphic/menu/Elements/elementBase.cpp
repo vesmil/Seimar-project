@@ -1,6 +1,6 @@
 #include "elementBase.h"
 
-ElementBase::ElementBase()
+ElementBase::ElementBase(QString text) : text(text)
 {
 
 }

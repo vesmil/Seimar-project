@@ -3,33 +3,28 @@
 
 #include <QKeyEvent>
 #include <QObject>
+#include <QPushButton>
 
 #include "Elements/elementBase.h"
 #include "Elements/submenuElement.h"
+#include "menuDisplay.h"
 
+/*!
+ * \brief Logic behind menu - holding the structure and processing inputs
+ */
 class Menu
 {
 public:
-    Menu();
+    Menu(QWidget *parent = nullptr);
 
 private:
-    // To store the structure
-    SubmenuElement* root;  // mby shared pointers...
-
-    // To get the element list which will be displayed
-    SubmenuElement* currentSubmenu;
-
-    // To execute action and highlight selected
-    elementBase* selectedElement;  // mby just index
-
-    void keyPressEvent(QKeyEvent *event);
+    std::unique_ptr<SubmenuElement> root;
 
     void open();
-    void close();
+    void keyPressEvent(QKeyEvent *event);
 
-    void display(); // display all elements in list of current submenu
-
-    // ...
+    MenuDisplay display;
+    bool menuActive;
 };
 
 #endif // MENU_H

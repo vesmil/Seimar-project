@@ -6,20 +6,25 @@
 
 #include "Elements/submenuElement.h"
 
-// Holds all the buttons, sets text, shows/hides
-class menuDisplay
+/*!
+ * \brief Stores the menu QButtons - showing/hiding, seting texts
+ */
+class MenuDisplay : public QWidget
 {
+    Q_OBJECT
+
 public:
-    menuDisplay();
+    MenuDisplay(QWidget* parent = nullptr);
+    ~MenuDisplay() = default;
 
     void show();
     void hide();
 
+    SubmenuElement *currentSubmenu; // TODO ...
 private:
-    std::vector<QPushButton> buttons;
+    std::vector<std::unique_ptr<QPushButton>> buttons;
 
-    SubmenuElement* currentSubmenu;
-    ElementBase* selectedElement;  // mby just index
+    ElementBase *selectedElement;
 };
 
 #endif // MENUDISPLAY_H

@@ -1,6 +1,6 @@
 #include "menu.h"
 
-Menu::Menu()
+Menu::Menu(QWidget* parent) : display(parent)
 {
     // Generate all menu levels?
 }
@@ -8,21 +8,29 @@ Menu::Menu()
 
 void Menu::keyPressEvent(QKeyEvent *event)
 {
-    if (event->type() == QEvent::KeyPress)
+    if (menuActive && event->type() == QEvent::KeyPress)
     {
         switch (event->key())
         {
-            // (>) call action on selectedElement
-            // (ʌ,v) change selectedElement
-            // (<) goBack or exit
+            case Qt::Key_Left:
+                // (>) call action on selectedElement
+                break;
+            case Qt::Key_Right:
+                // (<) goBack or exit
+                break;
+            case Qt::Key_Up:
+                // (ʌ,v) change selectedElement
+                break;
+            case Qt::Key_Down:
+                break;
         }
     }
 }
 
 void Menu::open()
 {
-    // will put root to current submenu in display...
-    // will switch on the key press handler
-    // will call show on menu display
+    menuActive = true;
+    // display.currentSubmenu = root.get();
+    // display.show();
 }
 
