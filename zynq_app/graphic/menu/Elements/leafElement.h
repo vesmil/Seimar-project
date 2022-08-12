@@ -1,13 +1,15 @@
 #ifndef LEAFELEMENT_H
 #define LEAFELEMENT_H
 
-#include "menuElementBase.h"
+#include "elementBase.h"
 
 // Should I nead leafElemnt from which ViscaElement, SetValueElement, GeneralElement will inherit
-class LeafElement : MenuElementBase
+
+struct LeafElement : ElementBase
 {
-public:
     LeafElement();
+
+    void execute() override;
 };
 
 #endif // LEAFELEMENT_H

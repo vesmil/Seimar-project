@@ -2,12 +2,9 @@
 
 Menu::Menu()
 {
+    // Generate all menu levels?
 }
 
-void Menu::display()
-{
-    // iterate all elements in list and create button for them
-}
 
 void Menu::keyPressEvent(QKeyEvent *event)
 {
@@ -24,11 +21,8 @@ void Menu::keyPressEvent(QKeyEvent *event)
 
 void Menu::open()
 {
-    currentSubmenu = root;
-    display();
+    // will put root to current submenu in display...
+    // will switch on the key press handler
+    // will call show on menu display
 }
 
-void Menu::close()
-{
-    //
-}

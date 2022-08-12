@@ -4,8 +4,8 @@
 #include <QKeyEvent>
 #include <QObject>
 
-#include "Elements/menuElementBase.h"
-#include "Elements/submenu.h"
+#include "Elements/elementBase.h"
+#include "Elements/submenuElement.h"
 
 class Menu
 {
@@ -13,9 +13,14 @@ public:
     Menu();
 
 private:
-    Submenu* root;  // mby shared pointers...
-    Submenu* currentSubmenu;
-    MenuElementBase* selectedElement;  // mby just index
+    // To store the structure
+    SubmenuElement* root;  // mby shared pointers...
+
+    // To get the element list which will be displayed
+    SubmenuElement* currentSubmenu;
+
+    // To execute action and highlight selected
+    elementBase* selectedElement;  // mby just index
 
     void keyPressEvent(QKeyEvent *event);
 
