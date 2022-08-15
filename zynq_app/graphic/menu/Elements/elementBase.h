@@ -2,13 +2,17 @@
 #define ELEMENTBASE_H
 
 #include <QString>
+#include <QWidget>
 
 /*!
  * \brief Base for items in menu
  */
-struct ElementBase
+class ElementBase : public QWidget
 {
-    ElementBase(QString text);
+    Q_OBJECT
+
+public:
+    ElementBase(QString text) : text(text) {};
 
     // Cant be pure virtual because of ctor
     void execute() {};

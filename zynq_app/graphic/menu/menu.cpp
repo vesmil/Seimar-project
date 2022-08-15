@@ -1,9 +1,21 @@
 #include "menu.h"
 #include "global/logCategories.h"
 
-Menu::Menu(QWidget* parent) : display(parent)
+#include <QVBoxLayout>
+
+Menu::Menu(QWidget* parent) : QWidget(parent), root(std::make_unique<SubmenuElement>(QString{}))
 {
-    // Generate all menu levels?
+    QVBoxLayout* layout = new QVBoxLayout();
+
+    layout->setAlignment(Qt::AlignTop);
+
+    // Create and hide empty buttons
+    for (int i = 0; i < 10; i++)
+    {
+        root->elementList.emplace_back<>();
+    }
+
+    open();
 }
 
 
@@ -11,19 +23,19 @@ void Menu::keyPressEvent(QKeyEvent *event)
 {
     switch (event->key())
     {
-        case Qt::Key_Left:
+        case Qt::Key_A:
             qCInfo(uiLog()) << "left";
-
-            // close();
+            close();
             break;
-        case Qt::Key_E:
-            open();
+
+        case Qt::Key_D:
+            show();
             qCInfo(uiLog()) << "r";
+            break;
 
-            break;
         case Qt::Key_Up:
-            // (ʌ,v) change selectedElement
             break;
+
         case Qt::Key_Down:
             break;
     }
@@ -32,13 +44,12 @@ void Menu::keyPressEvent(QKeyEvent *event)
 void Menu::open()
 {
     menuActive = true;
-    display.currentSubmenu = root.get();
-    display.show();
+    currentSubmenu = root.get();
+
+    // Draw all widgets in current submenu
 }
 
 void Menu::close()
 {
     menuActive = false;
-    display.hide();
 }
-

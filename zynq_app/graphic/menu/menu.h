@@ -7,13 +7,14 @@
 
 #include "Elements/elementBase.h"
 #include "Elements/submenuElement.h"
-#include "menuDisplay.h"
 
 /*!
  * \brief Logic behind menu - holding the structure and processing inputs
  */
-class Menu
+class Menu  : public QWidget
 {
+    Q_OBJECT
+
 public:
     Menu(QWidget *parent = nullptr);
 
@@ -23,7 +24,9 @@ private:
     void open();
     void close();
 
-    MenuDisplay display;
+    SubmenuElement *currentSubmenu;
+    ElementBase *selectedElement;
+
     std::unique_ptr<SubmenuElement> root;
 
     bool menuActive;

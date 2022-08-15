@@ -2,10 +2,14 @@
 
 SubmenuElement::SubmenuElement(QString text, ElementBase *parent) : ElementBase(text), parent(parent)
 {
-    // TODO solve the vtable problem...
 }
 
 SubmenuElement::~SubmenuElement()
+{
+
+}
+
+void SubmenuElement::execute()
 {
 
 }

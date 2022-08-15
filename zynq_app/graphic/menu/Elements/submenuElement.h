@@ -11,13 +11,13 @@
  */
 struct SubmenuElement : public ElementBase
 {
-    SubmenuElement(QString text, ElementBase *parent);
+    SubmenuElement(QString text, ElementBase *parent = nullptr);
     ~SubmenuElement();
 
     void execute();
 
     ElementBase* parent;
-    std::vector<std::unique_ptr<ElementBase>> elementList;
+    std::vector<std::unique_ptr<ElementBase>> elementList{};
 };
 
 #endif // SUBMENUELEMENT_H

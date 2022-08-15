@@ -49,7 +49,6 @@ namespace {
     template <typename TNew, typename TOld>
     constexpr TNew mapToNewRange(TOld value, TOld oldMin, TOld oldMax, TNew newMin, TNew newMax)
     {
-        // TODO this func is for later use...
         return (value - oldMin) * (newMax - newMin) / (oldMax - oldMin) + newMin;
     }
 }
@@ -294,7 +293,10 @@ namespace ViscaCommands
 
     namespace Hdmi
     {
-        enum Format : uint8_t { _1920_1080_59_94 = 0x00, _1920_1080_29_97 = 0x02, _1920_1080_59_94_i = 0x03, _1280_720_59_94 = 0x04, _1920_1080_50 = 0x08, _1920_1080_25 = 0x0A, _1920_1080_50_i = 0x0B, _1280_720_50 = 0x0C, _640_480_59_94 = 0x18, _3840_2160_29_97 = 0x22, _3840_2160_25 = 0x26, _1920_1080_23_98 = 0x28, _3840_2160_23_98 = 0x2A };
+        enum Format : uint8_t { _1920_1080_59_94 = 0x00, _1920_1080_29_97 = 0x02, _1920_1080_59_94_i = 0x03, _1280_720_59_94 = 0x04,
+                                _1920_1080_50 = 0x08, _1920_1080_25 = 0x0A, _1920_1080_50_i = 0x0B, _1280_720_50 = 0x0C, _640_480_59_94 = 0x18,
+                                _3840_2160_29_97 = 0x22, _3840_2160_25 = 0x26, _1920_1080_23_98 = 0x28, _3840_2160_23_98 = 0x2A };
+
         enum Colorspace : uint8_t {YCBCR = 0, RGB = 1};
 
         static constexpr byteArray<7> setFormat(Format format)             { return {0x01, 0x7E, 0x01, 0x1E, parseParam(format, 1), parseParam(format, 0), 0xFF}; }

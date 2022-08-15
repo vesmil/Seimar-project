@@ -96,7 +96,7 @@ public:
             return false;
         }
 
-        // TODO remove this debug
+        /* Print recieved message...
         {
             QString test;
             for (auto&& b : data)
@@ -105,6 +105,7 @@ public:
             test.chop(1);
             qCInfo(viscaLog()).noquote() << test;
         }
+        */
 
         return true;
     }

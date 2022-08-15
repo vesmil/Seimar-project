@@ -1,16 +1,16 @@
 #ifndef VALUESETELEMENT_H
 #define VALUESETELEMENT_H
 
-
+template <typename T>
 class ValueSetElement
 {
 public:
     ValueSetElement();
 
-    // execute override
+    void execute() {}; // open popup I guess
 
 private:
-    // template pointer to element
+    T* value;
 };
 
 #endif // VALUESETELEMENT_H

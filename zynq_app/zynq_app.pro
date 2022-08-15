@@ -9,10 +9,8 @@ SOURCES += \
     global/logCategories.cpp \
     graphic/mainWindow.cpp \
     graphic/menu/Elements/submenuElement.cpp \
-    graphic/menu/Elements/valueSetElement.cpp \
     graphic/menu/Elements/viscaCommandElement.cpp \
     graphic/menu/menu.cpp \
-    graphic/menu/menuDisplay.cpp \
     library/gstreamer/gsFacade.cpp \
     library/gstreamer/gsWrapper.cpp \
     library/gstreamer/pipelines/internalPipeline.cpp \
@@ -39,7 +37,6 @@ HEADERS += \
         graphic/menu/Elements/valueSetElement.h \
         graphic/menu/Elements/viscaCommandElement.h \
         graphic/menu/menu.h \
-        graphic/menu/menuDisplay.h \
         library/gstreamer/gsFacade.h \
         library/gstreamer/gsWrapper.h \
         library/gstreamer/pipelines/internalPipeline.h \

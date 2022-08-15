@@ -7,7 +7,8 @@ class ViscaCommandElement
 public:
     ViscaCommandElement();
 
-    // shared pointer to VISCA
+    // pointer to VISCA
+    // pointer to command packet
 };
 
 #endif // VISCACOMMANDELEMENT_H

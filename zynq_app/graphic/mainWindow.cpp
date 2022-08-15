@@ -6,7 +6,7 @@
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), menu(this)
 {
-
+    setCentralWidget(&menu);
 }
 
 
