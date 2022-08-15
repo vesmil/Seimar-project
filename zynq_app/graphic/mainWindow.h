@@ -20,6 +20,6 @@ private slots:
 private:
     void keyPressEvent(QKeyEvent *event);
 
-    Menu menu{this};
+    Menu menu;
 };
 #endif // MAINWINDOW_H

@@ -9,9 +9,10 @@
 /*!
  * \brief Menu element from which next menu will be opened
  */
-struct SubmenuElement
+struct SubmenuElement : public ElementBase
 {
     SubmenuElement(QString text, ElementBase *parent);
+    ~SubmenuElement();
 
     void execute();
 

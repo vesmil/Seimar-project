@@ -21,6 +21,7 @@ public:
     void hide();
 
     SubmenuElement *currentSubmenu; // TODO ...
+
 private:
     std::vector<std::unique_ptr<QPushButton>> buttons;
 

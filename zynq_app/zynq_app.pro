@@ -8,8 +8,6 @@ PKGCONFIG += gstreamer-1.0 gstreamer-video-1.0
 SOURCES += \
     global/logCategories.cpp \
     graphic/mainWindow.cpp \
-    graphic/menu/Elements/elementBase.cpp \
-    graphic/menu/Elements/lambdaElement.cpp \
     graphic/menu/Elements/submenuElement.cpp \
     graphic/menu/Elements/valueSetElement.cpp \
     graphic/menu/Elements/viscaCommandElement.cpp \
@@ -37,7 +35,6 @@ HEADERS += \
         global/logCategories.h \
         graphic/mainWindow.h \
         graphic/menu/Elements/elementBase.h \
-        graphic/menu/Elements/lambdaElement.h \
         graphic/menu/Elements/submenuElement.h \
         graphic/menu/Elements/valueSetElement.h \
         graphic/menu/Elements/viscaCommandElement.h \

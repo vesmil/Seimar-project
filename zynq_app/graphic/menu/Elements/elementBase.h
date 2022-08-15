@@ -3,12 +3,17 @@
 
 #include <QString>
 
+/*!
+ * \brief Base for items in menu
+ */
 struct ElementBase
 {
     ElementBase(QString text);
-    virtual void execute() = 0;
 
-    QString text;
+    // Cant be pure virtual because of ctor
+    void execute() {};
+
+    QString text{};
 };
 
 #endif // ELEMENTBASE_H

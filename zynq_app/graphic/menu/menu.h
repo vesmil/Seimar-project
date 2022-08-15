@@ -17,13 +17,15 @@ class Menu
 public:
     Menu(QWidget *parent = nullptr);
 
-private:
-    std::unique_ptr<SubmenuElement> root;
-
-    void open();
     void keyPressEvent(QKeyEvent *event);
 
+private:
+    void open();
+    void close();
+
     MenuDisplay display;
+    std::unique_ptr<SubmenuElement> root;
+
     bool menuActive;
 };
 

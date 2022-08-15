@@ -1,16 +1,17 @@
 #include "mainWindow.h"
-#include "QPainter"
-#include <QPixmap>
 #include <QKeyEvent>
+#include <QVBoxLayout>
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
+#include "global/logCategories.h"
+
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), menu(this)
 {
 
 }
 
 
 
-void MainWindow::keyPressEvent(QKeyEvent *)
+void MainWindow::keyPressEvent(QKeyEvent *event)
 {
-
+    menu.keyPressEvent(event);
 }

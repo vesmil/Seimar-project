@@ -6,6 +6,8 @@ class ViscaCommandElement
 {
 public:
     ViscaCommandElement();
+
+    // shared pointer to VISCA
 };
 
 #endif // VISCACOMMANDELEMENT_H
