@@ -24,8 +24,8 @@ int main(int argc, char *argv[])
     // Visca visca(glb::path::CAMERA_UART.c_str());
 
     // Create UI
-    MainWindow window;
-    window.show();
+    Menu menu;
+    menu.show();
 
     return a.exec();
 }

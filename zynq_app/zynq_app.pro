@@ -10,6 +10,7 @@ SOURCES += \
     graphic/mainWindow.cpp \
     graphic/menu/Elements/popupElement.cpp \
     graphic/menu/Elements/submenuElement.cpp \
+    graphic/menu/Elements/valueElement.cpp \
     graphic/menu/menu.cpp \
     library/gstreamer/gsFacade.cpp \
     library/gstreamer/gsWrapper.cpp \
@@ -35,6 +36,7 @@ HEADERS += \
         graphic/menu/Elements/elementBase.h \
         graphic/menu/Elements/popupElement.h \
         graphic/menu/Elements/submenuElement.h \
+        graphic/menu/Elements/valueElement.h \
         graphic/menu/menu.h \
         library/gstreamer/gsFacade.h \
         library/gstreamer/gsWrapper.h \

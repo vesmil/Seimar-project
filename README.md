@@ -51,13 +51,15 @@ V současné chvíli nejsou ještě hotové dvě hardwarové věci - převodník
 
 Navíc se stále čeká na nosnou desku od ČVUT, která místo HDMI nabídne DisplayPort. HDMI u aktuální desky totiž nevysílá žádný obraz a pouze je k němu přístup z hradlového pole. V nejhorším případě mám ale k dispozici desku na které DisplayPort je a s úpravou prostředí by šla využít.
 
-*Edit:* U ČVUTí desky se ukázal být problém SSD disk, demonstrace tedy bude pravděpodobně nutná na ZCU104
+*Edit: U ČVUTí desky se ukázal být problém SSD disk a bude pravděpodobně potřebovat předělat, demonstrace tedy bude nejspíše nutná na ZCU104.*
 
 ### TODO
 
-- [x] Specifikace
-- [x] Prázdný QT projekt
-- [x] Setup kompilace
+- [x] Setup
+    - [x] Specifikace
+    - [x] Prázdný QT projekt
+    - [x] Setup kompilace a zynq zařízení
+
 - [x] GStreamer
     - [x] RAW ukldání na SD kartu
         - [x] Příkazový řádek
@@ -74,7 +76,6 @@ Navíc se stále čeká na nosnou desku od ČVUT, která místo HDMI nabídne Di
     - [x] Všechny potřebné příkazy
         - [x] Command
         - [x] Inquiry
-- [ ] Enkódovací modul hotový (počkat či dočasně udělat softwarově)
 - [ ] Zobrazit stream na display port (note: HDMI na Trenz desce je problematický. je potřeba použít Zynq desku nebo počkat na ČVUT desku)
     - [x] KMS sink
     - [ ] Jako součást UI (možná nebude potřeba)
@@ -86,10 +87,8 @@ Navíc se stále čeká na nosnou desku od ČVUT, která místo HDMI nabídne Di
   - [ ] Vyplnit menu
       - [ ] Práce se streamem - ukládání, atd.
       - [ ] Komunikace s kamerou
-- [ ] Bonusy:
-  - [ ] Komunikace s deskou pomocí ethernetu
-  - [ ] Zobrazení jiné kamery než s viditelným světlem
-  - [ ] ...
+- [ ] Upravit výsledek pro finální použití
+- [ ] Bonusy...
 
 ---
 

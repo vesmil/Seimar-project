@@ -10,7 +10,9 @@ class ElementBase : public QWidget
 public:
     ElementBase(QWidget* parent) : QWidget(parent) {};
 
-    void execute() {};
+    // should be pure virtual but I need ElemnetBase to have constructor... mby
+    void execute();
+    void onChange();
 };
 
 #endif // ELEMENTBASE_H

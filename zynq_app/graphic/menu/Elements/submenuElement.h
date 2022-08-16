@@ -12,8 +12,6 @@
  */
 class SubmenuElement : public ElementBase
 {
-    Q_OBJECT
-
 public:
     SubmenuElement(QString text, SubmenuElement *parentMenu, QWidget *parent = nullptr);
     ~SubmenuElement();
@@ -23,7 +21,7 @@ public:
     QPushButton* button;
 
     SubmenuElement* parentMenu;
-    std::vector<std::unique_ptr<QWidget>> elementList{};
+    std::vector<std::unique_ptr<ElementBase>> elementList{};
 };
 
 #endif // SUBMENUELEMENT_H
