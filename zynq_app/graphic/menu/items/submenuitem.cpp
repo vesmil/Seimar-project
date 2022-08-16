@@ -1,32 +1,29 @@
-#include "submenuElement.h"
+#include "submenuitem.h"
 
 #include <QHBoxLayout>
 #include "../menu.h"
 
 #include "global/logCategories.h"
 
-SubmenuElement::SubmenuElement(QString text, SubmenuElement *parentMenu, QWidget *parent)
-    : ElementBase(parent), parentMenu(parentMenu)
+SubmenuItem::SubmenuItem(QString text, SubmenuItem *parentMenu, QWidget *parent)
+    : ItemBase(parent), parentMenu(parentMenu)
 {
+    // TODO do I really need a whole layout for one button?
     QHBoxLayout* layout = new QHBoxLayout(this);
     layout->setMargin(0);
     layout->setSpacing(0);
 
-    button = new QPushButton(this);
+    button = new Button();
     button->setText(text);
     button->setVisible(true);
 
-    // TODO solve not using mouse...
-    connect(button, &QPushButton::released, this, &SubmenuElement::execute);
+    // TODO I dont need that as it won't be a button
+    // connect(button, &QPushButton::released, this, &SubmenuItem::execute);
 
     layout->addWidget(button);
 }
 
-SubmenuElement::~SubmenuElement()
-{
-}
-
-void SubmenuElement::execute()
+void SubmenuItem::execute()
 {
     qCInfo(uiLog()) << "execute";
     Menu::setSubmenu(this);

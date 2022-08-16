@@ -8,9 +8,10 @@ PKGCONFIG += gstreamer-1.0 gstreamer-video-1.0
 SOURCES += \
     global/logCategories.cpp \
     graphic/mainWindow.cpp \
-    graphic/menu/Elements/popupElement.cpp \
-    graphic/menu/Elements/submenuElement.cpp \
-    graphic/menu/Elements/valueElement.cpp \
+    graphic/menu/items/displayElements/button.cpp \
+    graphic/menu/items/popupItem.cpp \
+    graphic/menu/items/submenuitem.cpp \
+    graphic/menu/items/valueItem.cpp \
     graphic/menu/menu.cpp \
     library/gstreamer/gsFacade.cpp \
     library/gstreamer/gsWrapper.cpp \
@@ -33,10 +34,11 @@ HEADERS += \
         global/config.h \
         global/logCategories.h \
         graphic/mainWindow.h \
-        graphic/menu/Elements/elementBase.h \
-        graphic/menu/Elements/popupElement.h \
-        graphic/menu/Elements/submenuElement.h \
-        graphic/menu/Elements/valueElement.h \
+        graphic/menu/items/displayElements/button.h \
+        graphic/menu/items/itemBase.h \
+        graphic/menu/items/popupItem.h \
+        graphic/menu/items/submenuitem.h \
+        graphic/menu/items/valueItem.h \
         graphic/menu/menu.h \
         library/gstreamer/gsFacade.h \
         library/gstreamer/gsWrapper.h \

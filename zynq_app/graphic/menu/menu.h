@@ -6,34 +6,35 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
-#include "Elements/elementBase.h"
-#include "Elements/submenuElement.h"
+#include "items/itemBase.h"
+#include "items/submenuitem.h"
 
 /*!
  * \brief
  */
 
+// TODO remake completely as a singleton
 class Menu  : public QWidget
 {
     Q_OBJECT
 
 public:
-    // TODO remake as singleton
-
     Menu(QWidget *parent = nullptr);
 
     void keyPressEvent(QKeyEvent *event);
-    static void setSubmenu(SubmenuElement* submenu);
+    static void setSubmenu(SubmenuItem* submenu);
 
 private:
     void open();
     void close();
 
-    static QVBoxLayout* layout;
-    static SubmenuElement *currentSubmenu;
-    static ElementBase *selectedElement;
+    static QVBoxLayout *layout;
+    static SubmenuItem *currentSubmenu;
 
-    std::unique_ptr<SubmenuElement> root;
+    // ItemBase *firstElement;
+    static int currentElement;
+
+    std::unique_ptr<SubmenuItem> root;
 
     bool menuActive;
 };
