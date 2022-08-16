@@ -9,7 +9,7 @@
 #include "Elements/submenuElement.h"
 
 /*!
- * \brief Logic behind menu - holding the structure and processing inputs
+ * \brief ...
  */
 class Menu  : public QWidget
 {
@@ -25,9 +25,10 @@ private:
     void close();
 
     SubmenuElement *currentSubmenu;
+    std::unique_ptr<SubmenuElement> root;
+
     ElementBase *selectedElement;
 
-    std::unique_ptr<SubmenuElement> root;
 
     bool menuActive;
 };

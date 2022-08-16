@@ -9,8 +9,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), menu(this)
     setCentralWidget(&menu);
 }
 
-
-
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
     menu.keyPressEvent(event);

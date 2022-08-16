@@ -1,23 +1,29 @@
 #ifndef SUBMENUELEMENT_H
 #define SUBMENUELEMENT_H
 
-#include "elementBase.h"
-
 #include <vector>
 #include <memory>
+#include <qpushbutton.h>
+
+#include "elementBase.h"
 
 /*!
  * \brief Menu element from which next menu will be opened
  */
-struct SubmenuElement : public ElementBase
+class SubmenuElement : public ElementBase
 {
-    SubmenuElement(QString text, ElementBase *parent = nullptr);
+    Q_OBJECT
+
+public:
+    SubmenuElement(QString text, SubmenuElement *parentMenu, QWidget *parent = nullptr);
     ~SubmenuElement();
 
     void execute();
 
-    ElementBase* parent;
-    std::vector<std::unique_ptr<ElementBase>> elementList{};
+    QPushButton* button;
+
+    SubmenuElement* parentMenu;
+    std::vector<std::unique_ptr<QWidget>> elementList{};
 };
 
 #endif // SUBMENUELEMENT_H

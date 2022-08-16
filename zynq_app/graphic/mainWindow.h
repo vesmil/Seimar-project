@@ -5,8 +5,6 @@
 
 #include "menu/menu.h"
 
-// Not sure if gonna be used or menu will go straight to the mixer...
-
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
