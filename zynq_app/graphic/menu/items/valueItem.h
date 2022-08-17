@@ -2,17 +2,19 @@
 #define VALUEITEM_H
 
 #include "itemBase.h"
-#include "displayElements/button.h"
-#include "displayElements/valueSetter.h"
+
+#include <QLabel>
 
 class ValueItem : public ItemBase
 {
 public:
     ValueItem(QWidget* parent);
 
+    void execute() override;
+
 private:
-    Button *button;
-    valueSetter *setter; // TODO connect
+    QLabel *text;
+    QLabel *value;
 };
 
 #endif // VALUEITEM_H

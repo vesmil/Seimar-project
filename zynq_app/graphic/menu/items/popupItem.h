@@ -8,7 +8,7 @@ class PopupItem : public ItemBase
 public:
     PopupItem(QWidget* parent);
 
-    void execute();
+    void execute() override;
 };
 
 #endif // POPUPITEM_H

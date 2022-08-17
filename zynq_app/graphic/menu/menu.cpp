@@ -2,25 +2,30 @@
 #include "global/logCategories.h"
 #include "items/valueItem.h"
 
-SubmenuItem *Menu::currentSubmenu = nullptr;
-QVBoxLayout *Menu::layout = nullptr;
-std::size_t Menu::currentElement = 0;
+SubmenuItem *Menu::m_currentSubmenu = nullptr;
+QVBoxLayout *Menu::m_layout = nullptr;
+std::unique_ptr<SubmenuItem> Menu::m_root = nullptr;
+
+Menu::Mode Menu::m_currentMode = INACTIVE;
+
+std::size_t Menu::m_currentElement = 0;
+std::stack<std::size_t> Menu::m_indexstack{};
+
 
 Menu::Menu(QWidget* parent) : QWidget(parent)
 {
     m_root = std::make_unique<SubmenuItem>(QString{}, m_root.get(), this);
     m_root->setVisible(false);
 
-    layout = new QVBoxLayout(this);
-    layout->setAlignment(Qt::AlignTop);
+    m_layout = new QVBoxLayout(this);
+    m_layout->setAlignment(Qt::AlignTop);
 
     // TODO Where to build the menu? - also this is obvs just temp
-    // new class or just a method?
 
     for (int i = 0; i < 5; i++)
     {
         m_root->elementList.emplace_back(std::make_unique<SubmenuItem>(QString::number(i), m_root.get(), this));
-        layout->addWidget(m_root->elementList[i].get());
+        m_layout->addWidget(m_root->elementList[i].get());
         m_root->elementList[i]->setVisible(false);
 
         for (int j = 0; j < 6; j++)
@@ -45,8 +50,9 @@ void Menu::keyPressEvent(QKeyEvent *event)
     {
     case INACTIVE:
         if (event->key() == Qt::Key_Right)
+        {
             open();
-
+        }
         break;
 
     case ACTIVE:
@@ -54,7 +60,7 @@ void Menu::keyPressEvent(QKeyEvent *event)
         break;
 
     case EXEC:
-        // TODO forward the controls
+        // m_currentSubmenu->elementList[m_currentElement]->keyPressEvent(event);
         break;
     }
 }
@@ -64,38 +70,50 @@ void Menu::menuNav(QKeyEvent *event)
     switch (event->key())
     {
     case Qt::Key_Left:
-        if (currentSubmenu->parentMenu != nullptr)
-        {
-            // TODO remember index
-            setSubmenu(currentSubmenu->parentMenu, 0);
+        m_currentSubmenu->elementList[m_currentElement]->setStyleSheet("background-color:transparent;");
 
+        if (m_currentSubmenu->parentMenu != nullptr)
+        {
+            std::size_t index = m_indexstack.top();
+            m_indexstack.pop();
+
+            setSubmenu(m_currentSubmenu->parentMenu, index);
         }
         else
+        {
             close();
+        }
 
         break;
 
     case Qt::Key_Right:
         // TODO find somewhere and better way to change color on hover
-        currentSubmenu->elementList[currentElement]->setStyleSheet("background-color:transparent;");
-        currentSubmenu->elementList[currentElement]->execute();
+        m_indexstack.push(m_currentElement);
+
+        m_currentSubmenu->elementList[m_currentElement]->setStyleSheet("background-color:transparent;");
+
+        m_currentSubmenu->elementList[m_currentElement]->execute();
 
         // TODO Well what happens on valueItem? - Settings moved to item bool
 
         break;
 
     case Qt::Key_Up:
-        currentSubmenu->elementList[currentElement]->setStyleSheet("background-color:transparent;");
-        currentElement = currentElement == 0? currentSubmenu->elementList.size() : currentElement;
-        --currentElement;
-        currentSubmenu->elementList[currentElement]->setStyleSheet("background-color:grey;");
+        m_currentSubmenu->elementList[m_currentElement]->setStyleSheet("background-color:transparent;");
+
+        m_currentElement = m_currentElement == 0? m_currentSubmenu->elementList.size() : m_currentElement;
+        --m_currentElement;
+
+        m_currentSubmenu->elementList[m_currentElement]->setStyleSheet("background-color:lightgrey;");
 
         break;
 
     case Qt::Key_Down:
-        currentSubmenu->elementList[currentElement]->setStyleSheet("background-color:transparent;");
-        ++currentElement %= currentSubmenu->elementList.size();
-        currentSubmenu->elementList[currentElement]->setStyleSheet("background-color:grey;");
+        m_currentSubmenu->elementList[m_currentElement]->setStyleSheet("background-color:transparent;");
+
+        ++m_currentElement %= m_currentSubmenu->elementList.size();
+
+        m_currentSubmenu->elementList[m_currentElement]->setStyleSheet("background-color:lightgrey;");
 
         break;
     }
@@ -103,25 +121,25 @@ void Menu::menuNav(QKeyEvent *event)
 
 void Menu::setSubmenu(SubmenuItem *submenu, std::size_t index)
 {
-    if (currentSubmenu != nullptr)
+    if (m_currentSubmenu != nullptr)
     {
-        for (auto &&item : currentSubmenu->elementList)
+        for (auto &&item : m_currentSubmenu->elementList)
         {
             item->setVisible(false);
-            layout->removeWidget(item.get());
+            m_layout->removeWidget(item.get());
         }
     }
 
-    currentSubmenu = submenu;
+    m_currentSubmenu = submenu;
 
-    for (auto &&item : currentSubmenu->elementList)
+    for (auto &&item : m_currentSubmenu->elementList)
     {
         item->setVisible(true);
-        layout->addWidget(item.get());
+        m_layout->addWidget(item.get());
     }
 
-    currentElement = index;
-    currentSubmenu->elementList[currentElement]->setStyleSheet("background-color:grey;");
+    m_currentElement = index;
+    m_currentSubmenu->elementList[m_currentElement]->setStyleSheet("background-color:lightgrey;");
 }
 
 void Menu::open()
@@ -134,7 +152,7 @@ void Menu::close()
 {
     m_currentMode = INACTIVE;
 
-    for (auto &&item : currentSubmenu->elementList)
+    for (auto &&item : m_currentSubmenu->elementList)
     {
         item->setVisible(false);
     }

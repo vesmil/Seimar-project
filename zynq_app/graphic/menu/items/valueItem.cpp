@@ -1,20 +1,22 @@
 #include "valueItem.h"
 
 #include <QHBoxLayout>
+#include "../itemlayout.h"
 
 ValueItem::ValueItem(QWidget* parent) : ItemBase(parent)
 {
-    // TODO do I really need a whole layout for one button? - I guess inheritance would be better
+    ItemLayout* layout = new ItemLayout(this);
 
-    QHBoxLayout* layout = new QHBoxLayout(this);
-    layout->setMargin(0);
-    layout->setSpacing(0);
+    text = new QLabel();
+    text->setText("..."); // TODO
+    layout->addWidget(text);
 
-    button = new Button();
-    button->setText("...");
-    button->setVisible(true);
-    layout->addWidget(button);
+    value = new QLabel();
+    value->setText("0"); // TODO
+    layout->addWidget(value);
+}
 
-    setter = new valueSetter();
-    layout->addWidget(setter);
+void ValueItem::execute()
+{
+    // TODO set menu to EXEC mode - to get all the input
 }

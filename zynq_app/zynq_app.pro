@@ -7,8 +7,7 @@ PKGCONFIG += gstreamer-1.0 gstreamer-video-1.0
 
 SOURCES += \
     global/logCategories.cpp \
-    graphic/menu/items/displayElements/button.cpp \
-    graphic/menu/items/displayElements/valueSetter.cpp \
+    graphic/menu/itemlayout.cpp \
     graphic/menu/items/popupItem.cpp \
     graphic/menu/items/submenuitem.cpp \
     graphic/menu/items/valueItem.cpp \
@@ -33,8 +32,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
         global/config.h \
         global/logCategories.h \
-        graphic/menu/items/displayElements/button.h \
-        graphic/menu/items/displayElements/valueSetter.h \
+        graphic/menu/itemlayout.h \
         graphic/menu/items/itemBase.h \
         graphic/menu/items/popupItem.h \
         graphic/menu/items/submenuitem.h \

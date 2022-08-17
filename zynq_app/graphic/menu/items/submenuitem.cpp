@@ -8,19 +8,16 @@
 SubmenuItem::SubmenuItem(QString text, SubmenuItem *parentMenu, QWidget *parent)
     : ItemBase(parent), parentMenu(parentMenu)
 {
-    // TODO do I really need a whole layout for one button?
     QHBoxLayout* layout = new QHBoxLayout(this);
+
     layout->setMargin(0);
     layout->setSpacing(0);
 
-    button = new Button();
-    button->setText(text);
-    button->setVisible(true);
+    m_text = new QLabel();
+    m_text->setText(text);
+    m_text->setVisible(true);
 
-    // TODO I dont need that as it won't be a button
-    // connect(button, &QPushButton::released, this, &SubmenuItem::execute);
-
-    layout->addWidget(button);
+    layout->addWidget(m_text);
 }
 
 void SubmenuItem::execute()

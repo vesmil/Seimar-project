@@ -5,6 +5,7 @@
 #include <QObject>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <stack>
 
 #include "items/itemBase.h"
 #include "items/submenuitem.h"
@@ -22,20 +23,26 @@ public:
     Menu(QWidget *parent = nullptr);
 
     void keyPressEvent(QKeyEvent *event);
+
+    enum Mode { INACTIVE, ACTIVE, EXEC };
+    static void setMode(Mode mode);
     static void setSubmenu(SubmenuItem* submenu, std::size_t index = 0);
 
 private:
     void open();
     void close();
 
-    enum Mode { INACTIVE, ACTIVE, EXEC } m_currentMode;
+    void menuNav(QKeyEvent *event);
 
-    static QVBoxLayout *layout;
-    static SubmenuItem *currentSubmenu;
+    static QVBoxLayout *m_layout;
 
-    static std::size_t currentElement;
+    static Mode m_currentMode;
+    static SubmenuItem *m_currentSubmenu;
+    static std::size_t m_currentElement;
 
-    std::unique_ptr<SubmenuItem> m_root;
+    static std::unique_ptr<SubmenuItem> m_root;
+
+    static std::stack<std::size_t> m_indexstack; // Is this a good solution to remember prev index in menu?
 };
 
 #endif // MENU_H
