@@ -8,9 +8,7 @@
 
 #include "itemBase.h"
 
-/*!
- * \brief Menu element from which next menu will be opened
- */
+//! \brief Menu element from which next menu will be opened
 class SubmenuItem : public ItemBase
 {
 public:

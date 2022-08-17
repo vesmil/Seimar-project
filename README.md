@@ -59,7 +59,6 @@ Navíc se stále čeká na nosnou desku od ČVUT, která místo HDMI nabídne Di
     - [x] Specifikace
     - [x] Prázdný QT projekt
     - [x] Setup kompilace a zynq zařízení
-
 - [x] GStreamer
     - [x] RAW ukldání na SD kartu
         - [x] Příkazový řádek

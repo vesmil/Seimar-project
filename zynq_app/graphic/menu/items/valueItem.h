@@ -5,6 +5,7 @@
 
 #include <QLabel>
 
+//! \brief Item which after confirmation will offer access to setting some value
 class ValueItem : public ItemBase
 {
 public:
