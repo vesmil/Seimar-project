@@ -6,7 +6,7 @@ SubmenuItem *Menu::m_currentSubmenu = nullptr;
 QVBoxLayout *Menu::m_layout = nullptr;
 std::unique_ptr<SubmenuItem> Menu::m_root = nullptr;
 
-Menu::Mode Menu::m_currentMode = INACTIVE;
+Menu::ControlMode Menu::m_currentMode = INACTIVE;
 
 std::size_t Menu::m_currentElement = 0;
 std::stack<std::size_t> Menu::m_indexstack{};

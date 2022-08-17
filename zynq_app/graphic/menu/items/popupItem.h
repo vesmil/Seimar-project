@@ -3,6 +3,7 @@
 
 #include "itemBase.h"
 
+//! \brief Item which will open a new window upon confirmation
 class PopupItem : public ItemBase
 {
 public:

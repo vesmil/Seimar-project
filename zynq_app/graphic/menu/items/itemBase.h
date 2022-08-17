@@ -3,6 +3,7 @@
 
 #include <QWidget>
 
+//! \brief Base class for all items displayed in menu
 class ItemBase : public QWidget
 {
     Q_OBJECT
