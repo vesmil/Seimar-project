@@ -2,6 +2,8 @@
 #define VALUEITEM_H
 
 #include "itemBase.h"
+#include "displayElements/button.h"
+#include "displayElements/valueSetter.h"
 
 class ValueItem : public ItemBase
 {
@@ -9,8 +11,8 @@ public:
     ValueItem(QWidget* parent);
 
 private:
-    // text part - button I guess
-    // value part - text, arrows, slider, ... (will have custom class I guess)
+    Button *button;
+    valueSetter *setter; // TODO connect
 };
 
 #endif // VALUEITEM_H

@@ -1,35 +1,38 @@
-#include "menu.h"
+﻿#include "menu.h"
 #include "global/logCategories.h"
+#include "items/valueItem.h"
 
 SubmenuItem *Menu::currentSubmenu = nullptr;
 QVBoxLayout *Menu::layout = nullptr;
-int Menu::currentElement = 0;
+std::size_t Menu::currentElement = 0;
 
 Menu::Menu(QWidget* parent) : QWidget(parent)
 {
-    root = std::make_unique<SubmenuItem>(QString{}, root.get(), this);
-    root->setVisible(false);
+    m_root = std::make_unique<SubmenuItem>(QString{}, m_root.get(), this);
+    m_root->setVisible(false);
 
     layout = new QVBoxLayout(this);
     layout->setAlignment(Qt::AlignTop);
 
     // TODO Where to build the menu? - also this is obvs just temp
+    // new class or just a method?
+
     for (int i = 0; i < 5; i++)
     {
-        root->elementList.emplace_back(std::make_unique<SubmenuItem>(QString::number(i), root.get(), this));
-        layout->addWidget(root->elementList[i].get());
-        root->elementList[i]->setVisible(false);
+        m_root->elementList.emplace_back(std::make_unique<SubmenuItem>(QString::number(i), m_root.get(), this));
+        layout->addWidget(m_root->elementList[i].get());
+        m_root->elementList[i]->setVisible(false);
 
         for (int j = 0; j < 6; j++)
         {
-            SubmenuItem* casted = static_cast<SubmenuItem*>((root->elementList[i]).get());
+            SubmenuItem* casted = static_cast<SubmenuItem*>((m_root->elementList[i]).get());
             casted->elementList.emplace_back(std::make_unique<SubmenuItem>(QString::number(i) + QString('a' + j), casted, this));
             casted->elementList[j]->setVisible(false);
 
             for (int k = 0; k < 10; k++)
             {
                 SubmenuItem* casted2 = static_cast<SubmenuItem*>((casted->elementList[j]).get());
-                casted2->elementList.emplace_back(std::make_unique<SubmenuItem>(QString::number(i) + QString('a' + j) + QString::number(k), casted, this));
+                casted2->elementList.emplace_back(std::make_unique<ValueItem>(this /*QString::number(i) + QString('a' + j) + QString::number(k), casted, this*/));
                 casted2->elementList[k]->setVisible(false);
             }
         }
@@ -38,50 +41,75 @@ Menu::Menu(QWidget* parent) : QWidget(parent)
 
 void Menu::keyPressEvent(QKeyEvent *event)
 {
-    if (!menuActive)
+    switch (m_currentMode)
     {
+    case INACTIVE:
         if (event->key() == Qt::Key_Right)
             open();
 
-        return;
-    }
+        break;
 
-    switch (event->key())
-    {
-        case Qt::Key_Left:
-            if (currentSubmenu->parentMenu != nullptr)
-                setSubmenu(currentSubmenu->parentMenu);
-            else
-                close();
+    case ACTIVE:
+        menuNav(event);
+        break;
 
-            break;
-
-        case Qt::Key_Right:
-            currentSubmenu->elementList[currentElement]->execute();
-            break;
-
-        case Qt::Key_Up:
-            currentElement -= 1;
-            currentElement %= currentSubmenu->elementList.size();
-
-            // selectedElement->onChange();
-            break;
-
-        case Qt::Key_Down:
-            currentElement += 1;
-            currentElement %= currentSubmenu->elementList.size();
-
-            // selectedElement->onChange();
-            break;
+    case EXEC:
+        // TODO forward the controls
+        break;
     }
 }
 
-void Menu::setSubmenu(SubmenuItem *submenu)
+void Menu::menuNav(QKeyEvent *event)
 {
-    for (auto &&item : currentSubmenu->elementList)
+    switch (event->key())
     {
-        item->setVisible(false);
-        layout->removeWidget(item.get());
+    case Qt::Key_Left:
+        if (currentSubmenu->parentMenu != nullptr)
+        {
+            // TODO remember index
+            setSubmenu(currentSubmenu->parentMenu, 0);
+
+        }
+        else
+            close();
+
+        break;
+
+    case Qt::Key_Right:
+        // TODO find somewhere and better way to change color on hover
+        currentSubmenu->elementList[currentElement]->setStyleSheet("background-color:transparent;");
+        currentSubmenu->elementList[currentElement]->execute();
+
+        // TODO Well what happens on valueItem? - Settings moved to item bool
+
+        break;
+
+    case Qt::Key_Up:
+        currentSubmenu->elementList[currentElement]->setStyleSheet("background-color:transparent;");
+        currentElement = currentElement == 0? currentSubmenu->elementList.size() : currentElement;
+        --currentElement;
+        currentSubmenu->elementList[currentElement]->setStyleSheet("background-color:grey;");
+
+        break;
+
+    case Qt::Key_Down:
+        currentSubmenu->elementList[currentElement]->setStyleSheet("background-color:transparent;");
+        ++currentElement %= currentSubmenu->elementList.size();
+        currentSubmenu->elementList[currentElement]->setStyleSheet("background-color:grey;");
+
+        break;
+    }
+}
+
+void Menu::setSubmenu(SubmenuItem *submenu, std::size_t index)
+{
+    if (currentSubmenu != nullptr)
+    {
+        for (auto &&item : currentSubmenu->elementList)
+        {
+            item->setVisible(false);
+            layout->removeWidget(item.get());
+        }
     }
 
     currentSubmenu = submenu;
@@ -91,24 +119,21 @@ void Menu::setSubmenu(SubmenuItem *submenu)
         item->setVisible(true);
         layout->addWidget(item.get());
     }
+
+    currentElement = index;
+    currentSubmenu->elementList[currentElement]->setStyleSheet("background-color:grey;");
 }
 
 void Menu::open()
 {
-    menuActive = true;
-    currentSubmenu = root.get();
-
-    for (auto &&item : currentSubmenu->elementList)
-    {
-        item->setVisible(true);
-    }
+    m_currentMode = ACTIVE;
+    setSubmenu(m_root.get());
 }
 
 void Menu::close()
 {
-    menuActive = false;
+    m_currentMode = INACTIVE;
 
-    // TODO Why segfault
     for (auto &&item : currentSubmenu->elementList)
     {
         item->setVisible(false);

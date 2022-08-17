@@ -22,21 +22,20 @@ public:
     Menu(QWidget *parent = nullptr);
 
     void keyPressEvent(QKeyEvent *event);
-    static void setSubmenu(SubmenuItem* submenu);
+    static void setSubmenu(SubmenuItem* submenu, std::size_t index = 0);
 
 private:
     void open();
     void close();
 
+    enum Mode { INACTIVE, ACTIVE, EXEC } m_currentMode;
+
     static QVBoxLayout *layout;
     static SubmenuItem *currentSubmenu;
 
-    // ItemBase *firstElement;
-    static int currentElement;
+    static std::size_t currentElement;
 
-    std::unique_ptr<SubmenuItem> root;
-
-    bool menuActive;
+    std::unique_ptr<SubmenuItem> m_root;
 };
 
 #endif // MENU_H
