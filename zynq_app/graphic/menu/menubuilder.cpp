@@ -1,4 +1,4 @@
-#include "menuBuilder.h"
+#include "menubuilder.h"
 
 void MenuBuilder::buildRoot(SubmenuItem* root, QWidget* parent)
 {
@@ -23,4 +23,7 @@ void MenuBuilder::buildRoot(SubmenuItem* root, QWidget* parent)
             }
         }
     }
+
+    root->itemList.emplace_back(std::make_unique<PopupItem>(parent));
+    root->itemList[5]->setVisible(false);
 }

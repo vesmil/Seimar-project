@@ -6,7 +6,7 @@
 #include <qpushbutton.h>
 #include <QLabel>
 
-#include "itemBase.h"
+#include "itembase.h"
 
 //! \brief Menu element from which next menu will be opened
 class SubmenuItem : public ItemBase

@@ -1,5 +1,5 @@
-#include "rawDisplayPipeline.h"
-#include "../gsWrapper.h"
+#include "rawdisplaypipeline.h"
+#include "../gswrapper.h"
 
 RawDisplayPipeline::RawDisplayPipeline()
 {

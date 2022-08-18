@@ -1,7 +1,7 @@
 #ifndef INTERNALPIPELINE_H
 #define INTERNALPIPELINE_H
 
-#include "pipelineBase.h"
+#include "pipelinebase.h"
 
 /*!
  * \brief Singleton pipeline for transferring data from vl42src to intervideosink used by other pipelines (to allow spliting)

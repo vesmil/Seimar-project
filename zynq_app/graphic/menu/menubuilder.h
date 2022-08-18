@@ -3,6 +3,7 @@
 
 #include "items/submenuitem.h"
 #include "items/valueItem.h"
+#include "items/popupitem.h"
 
 class MenuBuilder
 {

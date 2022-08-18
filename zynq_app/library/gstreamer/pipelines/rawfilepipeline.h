@@ -1,7 +1,7 @@
 #ifndef RAWFILEPIPELINE_H
 #define RAWFILEPIPELINE_H
 
-#include "pipelineBase.h"
+#include "pipelinebase.h"
 
 /*!
  * \brief Complete pipeline - saving raw data from interpipelinesrc

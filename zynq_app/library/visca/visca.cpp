@@ -1,7 +1,7 @@
 #include "visca.h"
 #include <unistd.h>
 
-#include "global/logCategories.h"
+#include "global/logcategories.h"
 #include "viscaCommands.h"
 
 Visca::Visca(const char *device_path) : m_uart(device_path)

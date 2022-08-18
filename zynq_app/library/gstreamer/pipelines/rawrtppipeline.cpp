@@ -1,8 +1,8 @@
-#include "rawRtpPipeline.h"
+#include "rawrtppipeline.h"
 
 #include "global/config.h"
 
-#include "../gsWrapper.h"
+#include "../gswrapper.h"
 
 RawRtpPipeline::RawRtpPipeline() : PipelineBase()
 {

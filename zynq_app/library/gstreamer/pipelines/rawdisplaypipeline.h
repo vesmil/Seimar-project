@@ -1,7 +1,7 @@
 #ifndef RAWDISPLAYPIPELINE_H
 #define RAWDISPLAYPIPELINE_H
 
-#include "pipelineBase.h"
+#include "pipelinebase.h"
 
 /*!
  * \brief Complete pipeline - displaying raw data

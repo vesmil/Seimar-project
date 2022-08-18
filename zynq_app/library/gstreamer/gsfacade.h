@@ -4,7 +4,7 @@
 #include <vector>
 #include <memory>
 
-#include "pipelines/pipelineBase.h"
+#include "pipelines/pipelinebase.h"
 
 /*!
  * \brief Class for simplifying usage of GStreamer and created pipelines (facade design pattern)

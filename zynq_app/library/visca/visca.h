@@ -1,8 +1,8 @@
 #ifndef VISCA_H
 #define VISCA_H
 
-#include "uartCommunication.h"
-#include "global/logCategories.h"
+#include "uartcommunication.h"
+#include "global/logcategories.h"
 
 /*!
  * \brief Class with basic VISCA commands - facade on UartCommunication class

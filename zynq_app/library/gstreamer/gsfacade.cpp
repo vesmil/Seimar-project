@@ -1,11 +1,11 @@
-#include "gsFacade.h"
+#include "gsfacade.h"
 
-#include "pipelines/rawRtpPipeline.h"
-#include "pipelines/rawFilePipeline.h"
-#include "pipelines/rawDisplayPipeline.h"
+#include "pipelines/rawrtppipeline.h"
+#include "pipelines/rawfilepipeline.h"
+#include "pipelines/rawdisplaypipeline.h"
 
-#include "gsWrapper.h"
-#include "global/logCategories.h"
+#include "gswrapper.h"
+#include "global/logcategories.h"
 
 GsFacade::GsFacade()
 {

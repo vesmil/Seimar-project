@@ -1,4 +1,4 @@
-﻿#include "uartCommunication.h"
+﻿#include "uartcommunication.h"
 
 #include <termios.h>
 #include <fcntl.h>

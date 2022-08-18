@@ -1,8 +1,8 @@
-#include "gsWrapper.h"
+#include "gswrapper.h"
 
 #include <string>
 
-#include "global/logCategories.h"
+#include "global/logcategories.h"
 #include "global/config.h"
 
 bool GsWrapper::m_interpipelineInited = false;

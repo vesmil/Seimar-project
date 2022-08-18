@@ -1,9 +1,9 @@
 ﻿#include "menu.h"
-#include "global/logCategories.h"
+#include "global/logcategories.h"
 #include "items/valueItem.h"
 
-#include "global/logCategories.h"
-#include "menuBuilder.h"
+#include "global/logcategories.h"
+#include "menubuilder.h"
 
 Menu& Menu::getInstance()
 {
@@ -48,7 +48,7 @@ void Menu::startExec()
     m_currentMode = EXEC;
 }
 
-void Menu::conmpleteExec()
+void Menu::completeExec()
 {
     m_currentMode = ACTIVE;
 

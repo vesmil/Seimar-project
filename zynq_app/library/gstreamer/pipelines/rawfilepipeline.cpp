@@ -1,9 +1,9 @@
-#include "rawFilePipeline.h"
+#include "rawfilepipeline.h"
 
 #include "global/config.h"
-#include "global/logCategories.h"
+#include "global/logcategories.h"
 
-#include "../gsWrapper.h"
+#include "../gswrapper.h"
 
 RawFilePipeline::RawFilePipeline() : PipelineBase()
 {

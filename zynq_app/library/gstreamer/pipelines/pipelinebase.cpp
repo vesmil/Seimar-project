@@ -1,7 +1,7 @@
-#include "pipelineBase.h"
+#include "pipelinebase.h"
 
-#include "../gsWrapper.h"
-#include "global/logCategories.h"
+#include "../gswrapper.h"
+#include "global/logcategories.h"
 
 void PipelineBase::start() const
 {

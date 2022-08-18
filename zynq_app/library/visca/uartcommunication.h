@@ -6,7 +6,7 @@
 #include <sys/ioctl.h>
 
 #include "viscaCommands.h"
-#include "global/logCategories.h"
+#include "global/logcategories.h"
 
 #include <QString>
 

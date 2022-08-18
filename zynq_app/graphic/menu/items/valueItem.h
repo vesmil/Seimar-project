@@ -1,7 +1,7 @@
 #ifndef VALUEITEM_H
 #define VALUEITEM_H
 
-#include "itemBase.h"
+#include "itembase.h"
 
 #include "graphic/menu/itemlayout.h"
 #include "graphic/menu/menu.h"
@@ -40,11 +40,11 @@ public:
         case Qt::Key_Left:
             valueRef = tempSave;
             valueLabel.setText(QString::number(valueRef));
-            Menu::getInstance().conmpleteExec();
+            Menu::getInstance().completeExec();
             break;
 
         case Qt::Key_Right:
-            Menu::getInstance().conmpleteExec();
+            Menu::getInstance().completeExec();
             break;
 
         case Qt::Key_Up:

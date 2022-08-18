@@ -1,6 +1,6 @@
 ﻿#include <QApplication>
 
-#include "library/gstreamer/gsFacade.h"
+#include "library/gstreamer/gsfacade.h"
 #include "library/visca/visca.h"
 #include "global/config.h"
 #include "graphic/mainWindow.h"

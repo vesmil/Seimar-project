@@ -3,12 +3,13 @@
 #include <QHBoxLayout>
 #include "../menu.h"
 
-#include "global/logCategories.h"
+#include "global/logcategories.h"
+#include <graphic/menu/itemlayout.h>
 
 SubmenuItem::SubmenuItem(QString text, SubmenuItem *parentMenu, QWidget *parent)
     : ItemBase(parent), parentMenu(parentMenu)
 {
-    QHBoxLayout* layout = new QHBoxLayout(this);
+    ItemLayout* layout = new ItemLayout(this);
 
     layout->setMargin(0);
     layout->setSpacing(0);
@@ -22,8 +23,5 @@ SubmenuItem::SubmenuItem(QString text, SubmenuItem *parentMenu, QWidget *parent)
 
 void SubmenuItem::execute()
 {
-    qCInfo(uiLog()) << "execute";
     Menu::getInstance().setSubmenu(this);
 }
-
-// execute will set the current menu in display as this submenu

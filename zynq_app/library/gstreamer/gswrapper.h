@@ -2,7 +2,7 @@
 #define GSWRAPPER_H
 
 #include <gst/gst.h>
-#include "pipelines/internalPipeline.h"
+#include "pipelines/internalpipeline.h"
 
 /*!
  * \brief Wrapper adding improved debugging capabilities and internal pipeline for splitting source
