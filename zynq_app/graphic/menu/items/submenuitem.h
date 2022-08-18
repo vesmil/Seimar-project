@@ -16,11 +16,10 @@ public:
 
     void execute() override;
 
-    // TODO it wont be a button but an UI element
     QLabel* m_text;
 
     SubmenuItem* parentMenu;
-    std::vector<std::unique_ptr<ItemBase>> elementList{};
+    std::vector<std::unique_ptr<ItemBase>> itemList{};
 };
 
 #endif // SUBMENUITEM_H

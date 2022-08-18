@@ -8,14 +8,18 @@ class ItemBase : public QWidget
 {
     Q_OBJECT
 public:
-    ItemBase(QWidget* parent) : QWidget(parent) {};
+    ItemBase(QWidget* parent);
 
-    // should be pure virtual but I need ElemnetBase to have constructor
-    virtual void execute() {}
-    virtual void onChange() {}
+    // should be pure virtual but I need ElemnetBase to have constructor...
+    virtual void execute();
 
-    // void keyPress(QKeyEvent*) {}
-    // TODO I probably need smth on leave and keyPress
+    virtual void select();
+    virtual void deselect();
+
+    virtual void control(QKeyEvent* event);
+
+protected:
+    using BaseClass = ItemBase;
 };
 
 #endif // ITEMBASE_H

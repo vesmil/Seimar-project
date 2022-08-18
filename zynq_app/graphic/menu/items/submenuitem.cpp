@@ -23,7 +23,7 @@ SubmenuItem::SubmenuItem(QString text, SubmenuItem *parentMenu, QWidget *parent)
 void SubmenuItem::execute()
 {
     qCInfo(uiLog()) << "execute";
-    Menu::setSubmenu(this);
+    Menu::getInstance().setSubmenu(this);
 }
 
 // execute will set the current menu in display as this submenu
