@@ -33,7 +33,7 @@ private:
     void open();
     void close();
 
-    void menuNav(QKeyEvent *event);
+    static void menuNav(QKeyEvent *event);
 
     //! \brief Layout used to store all menu butons (they are added and removed)
     QVBoxLayout *m_layout = nullptr;
