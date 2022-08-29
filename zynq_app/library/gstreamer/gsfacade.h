@@ -20,10 +20,21 @@ public:
     void initAndStart(PipelineEnum pipeline);
     void stop(PipelineEnum pipeline);
 
+    static void initIntervideoPipeline();
+
+    /*!
+     * \brief Standard GstElement creation with added logging
+     */
+    static GstElement* makeElement(const gchar *factoryName, const gchar *name);
+
 private:
     std::unique_ptr<PipelineBase> rtpPipe;
     std::unique_ptr<PipelineBase> rawPipe;
     std::unique_ptr<PipelineBase> displayPipe;
+
+    static bool m_interpipelineInited;
+
+    static const int DEBUG_LEVEL = 3;
 };
 
 inline GsFacade::PipelineEnum operator|(GsFacade::PipelineEnum a, GsFacade::PipelineEnum b)

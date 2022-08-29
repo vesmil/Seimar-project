@@ -1,5 +1,6 @@
 #include "rawdisplaypipeline.h"
-#include "../gswrapper.h"
+
+#include "library/gstreamer/gsfacade.h"
 
 RawDisplayPipeline::RawDisplayPipeline()
 {
@@ -14,7 +15,7 @@ void RawDisplayPipeline::setKmssink()
     // m_data.sink = GsWrapper::makeElement("kmssink", "kmssink");
     // g_object_set(m_data.sink, "fullscreen-overlay", 1, nullptr);
 
-    m_data.sink = GsWrapper::makeElement("autovideosink", "display-autovideosink");
+    m_data.sink = GsFacade::makeElement("autovideosink", "display-autovideosink");
 }
 
 RawDisplayPipeline::~RawDisplayPipeline()

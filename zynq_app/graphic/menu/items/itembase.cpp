@@ -3,7 +3,7 @@
 
 ItemBase::ItemBase(QWidget* parent) : QWidget(parent)
 {
-
+    setVisible(false);
 }
 
 void ItemBase::execute()

@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
     // Visca visca(glb::path::CAMERA_UART.c_str());
 
     // Create UI
-    Menu &menu = Menu::getInstance();
+    Menu &menu = Menu::getInstance(); // TODO should have access to VISCA, ?GStreamer?
     menu.show();
 
     return a.exec();

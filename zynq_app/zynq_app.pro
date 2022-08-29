@@ -15,7 +15,6 @@ SOURCES += \
     graphic/menu/menubuilder.cpp \
     library/application/settings.cpp \
     library/gstreamer/gsfacade.cpp \
-    library/gstreamer/gswrapper.cpp \
     library/gstreamer/pipelines/internalpipeline.cpp \
     library/gstreamer/pipelines/pipelinebase.cpp \
     library/gstreamer/pipelines/rawdisplaypipeline.cpp \
@@ -43,7 +42,6 @@ HEADERS += \
         graphic/menu/menubuilder.h \
         library/application/settings.h \
         library/gstreamer/gsfacade.h \
-        library/gstreamer/gswrapper.h \
         library/gstreamer/pipelines/internalpipeline.h \
         library/gstreamer/pipelines/pipelinebase.h \
         library/gstreamer/pipelines/rawdisplaypipeline.h \

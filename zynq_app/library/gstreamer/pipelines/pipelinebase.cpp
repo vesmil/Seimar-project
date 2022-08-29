@@ -1,7 +1,8 @@
 #include "pipelinebase.h"
 
-#include "../gswrapper.h"
+#include "library/gstreamer/gsfacade.h"
 #include "global/logcategories.h"
+#include "library/gstreamer/pipelines/internalpipeline.h"
 
 void PipelineBase::start() const
 {
@@ -54,23 +55,15 @@ void PipelineBase::setDefaultCapsFilter(const gchar* name)
 
     m_data.videoCaps = gst_caps_new_any();
 
-    m_data.capsFilter = GsWrapper::makeElement("capsfilter", name);
+    m_data.capsFilter = GsFacade::makeElement("capsfilter", name);
     g_object_set(m_data.capsFilter, "caps", m_data.videoCaps, NULL);
     gst_caps_unref(m_data.videoCaps);
 }
 
 void PipelineBase::setSrcFromInternalPipeline(const gchar *name)
 {
-    m_data.videoSrc = GsWrapper::makeElement("intervideosrc", name);
+    m_data.videoSrc = GsFacade::makeElement("intervideosrc", name);
     g_object_set(m_data.videoSrc, "channel", InternalPipeline::getChannelName(), nullptr);
-}
-
-void PipelineBase::checkResult(bool linkingResult)
-{
-    if (!linkingResult)
-        qCWarning(gsLog()) << "Elements could not be linked.";
-    else
-        m_completed = true;
 }
 
 void PipelineBase::completePipeline(const gchar *name)
@@ -80,8 +73,5 @@ void PipelineBase::completePipeline(const gchar *name)
     m_data.bus = gst_element_get_bus(m_data.pipeline);
     gst_bus_add_signal_watch(m_data.bus);
 
-    gst_bin_add_many(GST_BIN(m_data.pipeline), m_data.videoSrc, m_data.capsFilter, m_data.sink, nullptr);
-
-    bool result = gst_element_link_many(m_data.videoSrc, m_data.capsFilter, m_data.sink, nullptr);
-    checkResult(result);
+    addAndLink(m_data.pipeline, m_data.videoSrc, m_data.capsFilter, m_data.sink);
 }

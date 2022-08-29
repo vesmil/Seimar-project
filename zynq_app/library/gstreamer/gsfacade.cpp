@@ -1,20 +1,30 @@
 #include "gsfacade.h"
 
-#include "pipelines/rawrtppipeline.h"
-#include "pipelines/rawfilepipeline.h"
-#include "pipelines/rawdisplaypipeline.h"
+#include "library/gstreamer/pipelines/rawrtppipeline.h"
+#include "library/gstreamer/pipelines/rawfilepipeline.h"
+#include "library/gstreamer/pipelines/rawdisplaypipeline.h"
+#include "library/gstreamer/pipelines/internalpipeline.h"
 
-#include "gswrapper.h"
 #include "global/logcategories.h"
+
+bool GsFacade::m_interpipelineInited = false;
 
 GsFacade::GsFacade()
 {
-    GsWrapper::init();
+    gst_init(nullptr, nullptr);
+
+    if (DEBUG_LEVEL > 0) {
+        gst_debug_set_active(TRUE);
+        gst_debug_set_default_threshold(GST_LEVEL_FIXME);
+    }
+
+    InternalPipeline::getInstance().start();
+    m_interpipelineInited = true;
 }
 
 GsFacade::~GsFacade()
 {
-    GsWrapper::deinit();
+    gst_deinit();
 }
 
 void GsFacade::initAndStart(PipelineEnum pipelineEnum)
@@ -58,3 +68,11 @@ void GsFacade::stop(PipelineEnum pipelineEnum)
         displayPipe ->stop();
     }
 }
+
+GstElement* GsFacade::makeElement(const gchar* factoryName, const gchar* name)
+{
+    GstElement *res = gst_element_factory_make(factoryName, name);
+    qCWarning(gsLog()) << "Element" << name << "of type" << factoryName << (res? "created successfully" : "could not be created.");
+    return res;
+}
+

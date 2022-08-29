@@ -3,6 +3,8 @@
 
 #include <gst/gst.h>
 
+#include "global/logcategories.h"
+
 /*!
  * \brief Abstract Pipeline class with basic pipeline attributes
  */
@@ -24,7 +26,18 @@ protected:
     void setDefaultCapsFilter(const gchar *name);
     void setSrcFromInternalPipeline(const gchar *name);
 
-    void checkResult(bool linkingResult);
+    template <typename T, typename ...TElems >
+    void addAndLink(T pipeline, TElems ... elements)
+    {
+        // TODO add null check
+        gst_bin_add_many(GST_BIN(pipeline), elements ..., nullptr);
+
+        if (!gst_element_link_many(elements ..., nullptr))
+            qCWarning(gsLog()) << "Elements could not be linked.";
+        else
+            m_completed = true;
+    }
+
     void completePipeline(const gchar *name);
 
     struct
