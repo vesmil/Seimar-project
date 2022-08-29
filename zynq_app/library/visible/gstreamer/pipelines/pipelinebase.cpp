@@ -1,8 +1,8 @@
 #include "pipelinebase.h"
 
-#include "library/gstreamer/gsfacade.h"
 #include "global/logcategories.h"
-#include "library/gstreamer/pipelines/internalpipeline.h"
+#include "library/visible/gstreamer/gsfacade.h"
+#include "library/visible/gstreamer/pipelines/internalpipeline.h"
 
 void PipelineBase::start() const
 {

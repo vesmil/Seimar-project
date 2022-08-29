@@ -7,21 +7,20 @@ PKGCONFIG += gstreamer-1.0 gstreamer-video-1.0
 
 SOURCES += \
     global/logcategories.cpp \
-    graphic/menu/itemlayout.cpp \
     graphic/menu/items/itembase.cpp \
     graphic/menu/items/popupitem.cpp \
     graphic/menu/items/submenuitem.cpp \
     graphic/menu/menu.cpp \
     graphic/menu/menubuilder.cpp \
     library/application/settings.cpp \
-    library/gstreamer/gsfacade.cpp \
-    library/gstreamer/pipelines/internalpipeline.cpp \
-    library/gstreamer/pipelines/pipelinebase.cpp \
-    library/gstreamer/pipelines/rawdisplaypipeline.cpp \
-    library/gstreamer/pipelines/rawfilepipeline.cpp \
-    library/gstreamer/pipelines/rawrtppipeline.cpp \
-    library/visca/uartcommunication.cpp \
-    library/visca/visca.cpp \
+    library/visible/gstreamer/gsfacade.cpp \
+    library/visible/gstreamer/pipelines/internalpipeline.cpp \
+    library/visible/gstreamer/pipelines/pipelinebase.cpp \
+    library/visible/gstreamer/pipelines/rawdisplaypipeline.cpp \
+    library/visible/gstreamer/pipelines/rawfilepipeline.cpp \
+    library/visible/gstreamer/pipelines/rawrtppipeline.cpp \
+    library/visible/visca/uartcommunication.cpp \
+    library/visible/visca/visca.cpp \
     main.cpp \
 
 
@@ -33,7 +32,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
         global/config.h \
         global/logcategories.h \
-        graphic/menu/itemlayout.h \
         graphic/menu/items/itembase.h \
         graphic/menu/items/popupitem.h \
         graphic/menu/items/submenuitem.h \
@@ -41,15 +39,15 @@ HEADERS += \
         graphic/menu/menu.h \
         graphic/menu/menubuilder.h \
         library/application/settings.h \
-        library/gstreamer/gsfacade.h \
-        library/gstreamer/pipelines/internalpipeline.h \
-        library/gstreamer/pipelines/pipelinebase.h \
-        library/gstreamer/pipelines/rawdisplaypipeline.h \
-        library/gstreamer/pipelines/rawfilepipeline.h \
-        library/gstreamer/pipelines/rawrtppipeline.h \
-        library/visca/uartcommunication.h \
-        library/visca/visca.h \
-        library/visca/viscaCommands.h
+        library/visible/gstreamer/gsfacade.h \
+        library/visible/gstreamer/pipelines/internalpipeline.h \
+        library/visible/gstreamer/pipelines/pipelinebase.h \
+        library/visible/gstreamer/pipelines/rawdisplaypipeline.h \
+        library/visible/gstreamer/pipelines/rawfilepipeline.h \
+        library/visible/gstreamer/pipelines/rawrtppipeline.h \
+        library/visible/visca/uartcommunication.h \
+        library/visible/visca/visca.h \
+        library/visible/visca/viscaCommands.h
 
 FORMS +=
 

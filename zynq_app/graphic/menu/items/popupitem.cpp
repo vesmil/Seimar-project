@@ -1,8 +1,6 @@
 #include "popupitem.h"
 
 #include <QLabel>
-
-#include <graphic/menu/itemlayout.h>
 #include <graphic/menu/menu.h>
 
 PopupItem::PopupItem(QWidget* parent) : ItemBase(parent)

@@ -1,9 +1,9 @@
 #include "gsfacade.h"
 
-#include "library/gstreamer/pipelines/rawrtppipeline.h"
-#include "library/gstreamer/pipelines/rawfilepipeline.h"
-#include "library/gstreamer/pipelines/rawdisplaypipeline.h"
-#include "library/gstreamer/pipelines/internalpipeline.h"
+#include "library/visible/gstreamer/pipelines/rawrtppipeline.h"
+#include "library/visible/gstreamer/pipelines/rawfilepipeline.h"
+#include "library/visible/gstreamer/pipelines/rawdisplaypipeline.h"
+#include "library/visible/gstreamer/pipelines/internalpipeline.h"
 
 #include "global/logcategories.h"
 

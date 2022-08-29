@@ -1,9 +1,8 @@
 #ifndef POPUPITEM_H
 #define POPUPITEM_H
 
-#include "itembase.h"
-
 #include <QKeyEvent>
+#include "itembase.h"
 
 //! \brief Item which will open a new window upon confirmation
 class PopupItem : public ItemBase

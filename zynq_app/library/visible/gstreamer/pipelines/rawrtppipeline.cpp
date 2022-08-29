@@ -1,7 +1,7 @@
 #include "rawrtppipeline.h"
 
 #include "global/config.h"
-#include "library/gstreamer/gsfacade.h"
+#include "library/visible/gstreamer/gsfacade.h"
 
 RawRtpPipeline::RawRtpPipeline() : PipelineBase()
 {

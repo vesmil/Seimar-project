@@ -1,6 +1,6 @@
 #include "internalpipeline.h"
 
-#include "library/gstreamer/gsfacade.h"
+#include "library/visible/gstreamer/gsfacade.h"
 #include "global/logcategories.h"
 #include "global/config.h"
 

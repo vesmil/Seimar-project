@@ -3,7 +3,7 @@
 #include "global/config.h"
 #include "global/logcategories.h"
 
-#include "library/gstreamer/gsfacade.h"
+#include "library/visible/gstreamer/gsfacade.h"
 
 RawFilePipeline::RawFilePipeline() : PipelineBase()
 {

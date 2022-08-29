@@ -1,10 +1,7 @@
 #include "submenuitem.h"
 
-#include <QHBoxLayout>
-#include "../menu.h"
-
+#include "graphic/menu/menu.h"
 #include "global/logcategories.h"
-#include <graphic/menu/itemlayout.h>
 
 SubmenuItem::SubmenuItem(QString text, SubmenuItem *parentMenu, QWidget *parent)
     : ItemBase(parent), parentMenu(parentMenu)

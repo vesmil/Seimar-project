@@ -1,6 +1,7 @@
 #ifndef ITEMBASE_H
 #define ITEMBASE_H
 
+#include <QHBoxLayout>
 #include <QWidget>
 
 //! \brief Base class for all items displayed in menu
@@ -20,6 +21,18 @@ public:
 
 protected:
     using BaseClass = ItemBase;
+};
+
+class ItemLayout : public QHBoxLayout
+{
+    Q_OBJECT
+
+public:
+    ItemLayout(QWidget *parent) : QHBoxLayout(parent)
+    {
+        setMargin(0);
+        setSpacing(5);
+    }
 };
 
 #endif // ITEMBASE_H

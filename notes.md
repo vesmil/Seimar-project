@@ -85,6 +85,8 @@ Zatím nebylo nutné. V praxi se bude používat hardwarový čip zvaný video m
 
 Jelikož mnou navrhnutá struktura menu bude pravděpodobně využita i v jiných produktech, rozhodl jsem se pro více rigidní návrh. Ten stojí na třídě `Menu`, která je zároveň `QWidget`, která si stromovitě drží celou strukturu menu přes kořenový element, který reprezentuje sumbenu.
 
+V podstatě se v případě jednotlivých položek menu jedná o návrhový vzor kompozit - buď je to list a tedy položka, která něco vykonává a nebo jen další submenu.
+
 ...
 
 ```mermaid

@@ -1,6 +1,6 @@
 #include "rawdisplaypipeline.h"
 
-#include "library/gstreamer/gsfacade.h"
+#include "library/visible/gstreamer/gsfacade.h"
 
 RawDisplayPipeline::RawDisplayPipeline()
 {

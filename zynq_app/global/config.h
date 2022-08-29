@@ -5,8 +5,6 @@
 #include <string>
 #include <gst/gst.h>
 
-// This header file is mostly for variables that could change pretty easily and later will be somewhere else
-
 namespace glb
 {
     namespace path

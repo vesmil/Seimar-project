@@ -1,12 +1,10 @@
 #ifndef VALUEITEM_H
 #define VALUEITEM_H
 
-#include "itembase.h"
-
-#include "graphic/menu/itemlayout.h"
-#include "graphic/menu/menu.h"
-
 #include <QLabel>
+
+#include "graphic/menu/items/itembase.h"
+#include "graphic/menu/menu.h"
 
 // TODO version with getter and setter method passed by param
 
