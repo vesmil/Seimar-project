@@ -31,8 +31,8 @@ public:
 
     ItemLayout(QWidget *parent) : QHBoxLayout(parent)
     {
-        setMargin(10);
-        setSpacing(15);
+        setMargin(0);
+        setSpacing(0);
     }
 };
 

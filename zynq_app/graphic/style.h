@@ -5,27 +5,17 @@
 
 #include <QPalette>
 
-// TODO QPlaette vs QML vs Style sheets
-
 class Style
 {
 public:
     static Style& getInstance();
 
-    /* struct {
-        QString main = "background-color : gray; color : black;";
-
-        QString item = "background-color : gray; color : black;";
-        QString selectedItem = "background-color : darkgray; color : white;";
-        QString executedItem = "background-color : cyan; color : black;";
-    } menu; */
-
     struct {
-        QPalette main;
+        QString main = "background : gray; color : black;";
 
-        QPalette item;
-        QPalette selectedItem;
-        QPalette executedItem;
+        QString item = "background : gray; color : black; padding: 10px;";
+        QString selectedItem = "background : rgb(100, 100, 100); color : white; padding: 10px;";
+        QString executedItem = "background : cyan; color : black; padding: 10px;";
     } menu;
 
 private:

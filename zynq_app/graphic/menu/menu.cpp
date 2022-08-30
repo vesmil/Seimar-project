@@ -18,7 +18,8 @@ Menu::Menu() : QWidget()
 
     m_layout = new QVBoxLayout(this);
     m_layout->setAlignment(Qt::AlignTop);
-    setPalette(Style::getInstance().menu.main);
+
+    setStyleSheet(Style::getInstance().menu.main);
 
     MenuBuilder::buildMenuTree(m_root.get(), this);
 }
@@ -67,7 +68,7 @@ void Menu::menuNav(QKeyEvent *event)
     switch (event->key())
     {
     case Qt::Key_Left:
-        m_currentSubmenu->itemList[m_currentElement]->setPalette(Style::getInstance().menu.item);
+        m_currentSubmenu->itemList[m_currentElement]->setStyleSheet(Style::getInstance().menu.item);
 
         if (m_currentSubmenu->parentMenu != nullptr)
         {
@@ -110,7 +111,6 @@ void Menu::menuNav(QKeyEvent *event)
 void Menu::setSubmenu(SubmenuItem *submenu, std::size_t index)
 {
     // TODO solve empty list + not display submenu
-
     if (m_currentSubmenu != nullptr)
     {
         for (auto &&item : m_currentSubmenu->itemList)
