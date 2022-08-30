@@ -8,6 +8,8 @@
 
 // TODO version with getter and setter method passed by param
 
+// TODO specialized version with bool and string
+
 //! \brief Item which after confirmation will offer access to setting some value
 template<typename T>
 class ValueItem : public ItemBase

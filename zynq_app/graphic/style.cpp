@@ -1,17 +1,16 @@
-#include "qtpalettes.h"
+#include "style.h"
 
-QtPalettes& QtPalettes::getInstance()
+Style& Style::getInstance()
 {
-    static QtPalettes instance;
+    static Style instance;
     return instance;
 }
 
-QtPalettes::QtPalettes()
+Style::Style()
 {
     menu.main.setColor(QPalette::Window, Qt::gray);
 
     menu.item.setColor(QPalette::Window, Qt::gray);
     menu.selectedItem.setColor(QPalette::Window, Qt::darkGray);
-    menu.executedItem.setColor(QPalette::Window, Qt::cyan);
-
+    menu.executedItem.setColor(QPalette::Window, QColor(220,130,0));
 }

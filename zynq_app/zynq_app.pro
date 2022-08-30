@@ -13,8 +13,9 @@ SOURCES += \
     graphic/menu/items/submenuitem.cpp \
     graphic/menu/menu.cpp \
     graphic/menu/menubuilder.cpp \
-    graphic/qtpalettes.cpp \
+    graphic/style.cpp \
     library/application/settings.cpp \
+    library/controller/controller.cpp \
     library/visible/gstreamer/gsfacade.cpp \
     library/visible/gstreamer/pipelines/internalpipeline.cpp \
     library/visible/gstreamer/pipelines/pipelinebase.cpp \
@@ -41,8 +42,9 @@ HEADERS += \
         graphic/menu/items/valueItem.h \
         graphic/menu/menu.h \
         graphic/menu/menubuilder.h \
-        graphic/qtpalettes.h \
+        graphic/style.h \
         library/application/settings.h \
+        library/controller/controller.h \
         library/visible/gstreamer/gsfacade.h \
         library/visible/gstreamer/pipelines/internalpipeline.h \
         library/visible/gstreamer/pipelines/pipelinebase.h \

@@ -26,16 +26,31 @@ protected:
     void setDefaultCapsFilter(const gchar *name);
     void setSrcFromInternalPipeline(const gchar *name);
 
+    //!
+    //! \brief gst_add_many and gst_link_many with null check
+    //!
     template <typename T, typename ...TElems >
-    void addAndLink(T pipeline, TElems ... elements)
+    bool addAndLink(T pipeline, TElems ... elements)
     {
-        // TODO add null check
+        bool nullElement;
+        // Check whether any of parameter is null
+        ([&] {if(!elements) {nullElement = true;}} (), ...);
+
+        if (nullElement)
+        {
+            qCWarning(gsLog()) << "Some of the pipeline elements weren't initialized";
+            return false;
+        }
+
         gst_bin_add_many(GST_BIN(pipeline), elements ..., nullptr);
 
         if (!gst_element_link_many(elements ..., nullptr))
+        {
             qCWarning(gsLog()) << "Elements could not be linked.";
-        else
-            m_completed = true;
+            return false;
+        }
+
+        return true;
     }
 
     void completePipeline(const gchar *name);

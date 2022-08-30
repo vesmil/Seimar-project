@@ -1,6 +1,6 @@
 #include "itembase.h"
 
-#include <graphic/qtpalettes.h>
+#include <graphic/style.h>
 #include <QPalette>
 
 ItemBase::ItemBase(QWidget* parent) : QWidget(parent)
@@ -11,17 +11,17 @@ ItemBase::ItemBase(QWidget* parent) : QWidget(parent)
 
 void ItemBase::execute()
 {    
-    setPalette(QtPalettes::getInstance().menu.executedItem);
+    setPalette(Style::getInstance().menu.executedItem);
 }
 
 void ItemBase::select()
 {
-    setPalette(QtPalettes::getInstance().menu.selectedItem);
+    setPalette(Style::getInstance().menu.selectedItem);
 }
 
 void ItemBase::deselect()
 {
-    setPalette(QtPalettes::getInstance().menu.item);
+    setPalette(Style::getInstance().menu.item);
 }
 
 void ItemBase::control(QKeyEvent*)
