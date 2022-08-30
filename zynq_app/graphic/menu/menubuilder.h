@@ -8,7 +8,7 @@
 class MenuBuilder
 {
 public:
-    static void buildRoot(SubmenuItem* root, QWidget* parent);
+    static void buildMenuTree(SubmenuItem* root, QWidget* parent);
 
 private:
     // buildSubmenu...();

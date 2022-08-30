@@ -1,6 +1,6 @@
 #include "rawrtppipeline.h"
 
-#include "global/config.h"
+#include "library/application/settings.h"
 #include "library/visible/gstreamer/gsfacade.h"
 
 RawRtpPipeline::RawRtpPipeline() : PipelineBase()
@@ -21,8 +21,8 @@ void RawRtpPipeline::setUdpsink()
 {
     m_data.sink = GsFacade::makeElement("udpsink", "rtp-sink");
 
-    g_object_set(m_data.sink, "port", glb::rtp::PORT, nullptr);
-    g_object_set(m_data.sink, "host", glb::rtp::IP_ADDRESS.c_str(), nullptr);
+    g_object_set(m_data.sink, "port", Settings::getInstance().rtp.port, nullptr);
+    g_object_set(m_data.sink, "host", Settings::getInstance().rtp.ip_address.c_str(), nullptr);
 }
 
 void RawRtpPipeline::completePipeline()

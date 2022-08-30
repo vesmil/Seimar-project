@@ -2,14 +2,15 @@
 #include <QKeyEvent>
 #include <QVBoxLayout>
 
-#include "global/logCategories.h"
+#include "global/logcategories.h"
+#include "graphic/menu/menu.h"
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), menu(this)
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
-    setCentralWidget(&menu);
+    setCentralWidget(static_cast<QWidget*>(&Menu::getInstance()));
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
-    menu.keyPressEvent(event);
+    // Menu::getInstance().keyPressEvent(event);
 }

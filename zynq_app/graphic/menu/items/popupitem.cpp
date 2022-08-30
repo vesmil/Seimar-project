@@ -24,6 +24,7 @@ void PopupItem::control(QKeyEvent* event)
     switch (event->key())
     {
     case Qt::Key_Left:
+        // Restore state
         Menu::getInstance().completeExec();
         break;
 
@@ -36,8 +37,8 @@ void PopupItem::control(QKeyEvent* event)
         QLabel* label = new QLabel(this);
         label->setText("...");
         layout()->addWidget(label);
-     }
         break;
+    }
 
     case Qt::Key_Down:
         layout()->removeItem(layout()->takeAt(0));

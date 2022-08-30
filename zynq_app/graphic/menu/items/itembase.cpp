@@ -1,23 +1,27 @@
 #include "itembase.h"
 
+#include <graphic/qtpalettes.h>
+#include <QPalette>
+
 ItemBase::ItemBase(QWidget* parent) : QWidget(parent)
 {
     setVisible(false);
+    setAutoFillBackground(true);
 }
 
 void ItemBase::execute()
-{
-    setStyleSheet("background-color: cyan");
+{    
+    setPalette(QtPalettes::getInstance().menu.executedItem);
 }
 
 void ItemBase::select()
 {
-    setStyleSheet("background-color: lightGray");
+    setPalette(QtPalettes::getInstance().menu.selectedItem);
 }
 
 void ItemBase::deselect()
 {
-    setStyleSheet("background-color: transparent");
+    setPalette(QtPalettes::getInstance().menu.item);
 }
 
 void ItemBase::control(QKeyEvent*)

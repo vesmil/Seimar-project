@@ -11,7 +11,6 @@ class ItemBase : public QWidget
 public:
     ItemBase(QWidget* parent);
 
-    // should be pure virtual but I need ElemnetBase to have constructor...
     virtual void execute();
 
     virtual void select();
@@ -23,15 +22,17 @@ protected:
     using BaseClass = ItemBase;
 };
 
+
 class ItemLayout : public QHBoxLayout
 {
     Q_OBJECT
 
 public:
+
     ItemLayout(QWidget *parent) : QHBoxLayout(parent)
     {
-        setMargin(0);
-        setSpacing(5);
+        setMargin(10);
+        setSpacing(15);
     }
 };
 

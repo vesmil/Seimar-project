@@ -3,6 +3,7 @@
 #include "items/valueItem.h"
 
 #include "global/logcategories.h"
+#include "graphic/qtpalettes.h"
 #include "menubuilder.h"
 
 Menu& Menu::getInstance()
@@ -14,12 +15,12 @@ Menu& Menu::getInstance()
 Menu::Menu() : QWidget()
 {
     m_root = std::make_unique<SubmenuItem>(QString{}, m_root.get(), this);
-    m_root->setVisible(false);
 
     m_layout = new QVBoxLayout(this);
     m_layout->setAlignment(Qt::AlignTop);
+    setPalette(QtPalettes::getInstance().menu.main);
 
-    MenuBuilder::buildRoot(m_root.get(), this);
+    MenuBuilder::buildMenuTree(m_root.get(), this);
 }
 
 void Menu::keyPressEvent(QKeyEvent *event)
@@ -66,7 +67,7 @@ void Menu::menuNav(QKeyEvent *event)
     switch (event->key())
     {
     case Qt::Key_Left:
-        m_currentSubmenu->itemList[m_currentElement]->setStyleSheet("background-color:transparent;");
+        m_currentSubmenu->itemList[m_currentElement]->setPalette(QtPalettes::getInstance().menu.item);
 
         if (m_currentSubmenu->parentMenu != nullptr)
         {
