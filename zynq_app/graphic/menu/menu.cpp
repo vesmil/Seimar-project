@@ -1,6 +1,6 @@
 ﻿#include "menu.h"
 #include "global/logcategories.h"
-#include "items/valueItem.h"
+#include "items/valueitem.h"
 
 #include "global/logcategories.h"
 #include "graphic/style.h"
@@ -14,14 +14,13 @@ Menu& Menu::getInstance()
 
 Menu::Menu() : QWidget()
 {
-    m_root = std::make_unique<SubmenuItem>(QString{}, m_root.get(), this);
+    m_root = std::make_unique<SubmenuItem>(QString{}, nullptr, this);
 
-    m_layout = new QVBoxLayout(this);
-    m_layout->setAlignment(Qt::AlignTop);
+    new QVBoxLayout(this);
+
+    layout()->setAlignment(Qt::AlignTop);
 
     setStyleSheet(Style::getInstance().menu.main);
-
-    MenuBuilder::buildMenuTree(m_root.get(), this);
 }
 
 void Menu::keyPressEvent(QKeyEvent *event)
@@ -110,13 +109,21 @@ void Menu::menuNav(QKeyEvent *event)
 
 void Menu::setSubmenu(SubmenuItem *submenu, std::size_t index)
 {
-    // TODO solve empty list + not display submenu
+    // TDOO don't display empty submenu?
+    if (submenu->itemList.size() == 0)
+    {
+        m_currentSubmenu->itemList[m_currentElement]->select();
+        m_currentSubmenu->itemList[m_currentElement]->setStyleSheet(Style::getInstance().menu.emptyItemList);
+        qCWarning(uiLog()) << "Empty submenu";
+        return;
+    }
+
     if (m_currentSubmenu != nullptr)
     {
         for (auto &&item : m_currentSubmenu->itemList)
         {
             item->setVisible(false);
-            m_layout->removeWidget(item.get());
+            layout()->removeWidget(item.get());
         }
     }
 
@@ -125,7 +132,7 @@ void Menu::setSubmenu(SubmenuItem *submenu, std::size_t index)
     for (auto &&item : m_currentSubmenu->itemList)
     {
         item->setVisible(true);
-        m_layout->addWidget(item.get());
+        layout()->addWidget(item.get());
     }
 
     m_currentElement = index;

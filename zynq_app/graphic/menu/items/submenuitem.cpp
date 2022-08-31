@@ -8,7 +8,7 @@ SubmenuItem::SubmenuItem(QString text, SubmenuItem *parentMenu, QWidget *parent)
 {
     ItemLayout* layout = new ItemLayout(this);
 
-    m_text = new QLabel();
+    m_text = new QLabel(this);
     m_text->setText(text);
     m_text->setVisible(true);
 

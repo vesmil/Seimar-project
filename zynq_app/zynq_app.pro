@@ -1,9 +1,11 @@
-QT += widgets core gui
+QT += widgets core gui multimedia multimediawidgets
 
-CONFIG += c++17
+CONFIG += c++1z
 
 CONFIG += link_pkgconfig
-PKGCONFIG += gstreamer-1.0 gstreamer-video-1.0
+
+# PKGCONFIG += gstreamer-1.0 gstreamer-video-1.0
+LIBS +=  -lgstreamer-1.0 -lgobject-2.0 -lglib-2.0 -lgstrtspserver-1.0
 
 SOURCES += \
     global/logcategories.cpp \
@@ -11,6 +13,7 @@ SOURCES += \
     graphic/menu/items/itembase.cpp \
     graphic/menu/items/popupitem.cpp \
     graphic/menu/items/submenuitem.cpp \
+    graphic/menu/items/valueitem.cpp \
     graphic/menu/menu.cpp \
     graphic/menu/menubuilder.cpp \
     graphic/style.cpp \
@@ -39,7 +42,8 @@ HEADERS += \
         graphic/menu/items/itembase.h \
         graphic/menu/items/popupitem.h \
         graphic/menu/items/submenuitem.h \
-        graphic/menu/items/valueItem.h \
+        graphic/menu/items/value.h \
+        graphic/menu/items/valueitem.h \
         graphic/menu/menu.h \
         graphic/menu/menubuilder.h \
         graphic/style.h \

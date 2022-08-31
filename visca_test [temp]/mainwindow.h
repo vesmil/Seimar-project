@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "../zynq_app/library/visca/visca.h"
+#include "../zynq_app/library/visible/visca/visca.h"
 
 #include <QLoggingCategory>
 Q_DECLARE_LOGGING_CATEGORY(driverUsb)

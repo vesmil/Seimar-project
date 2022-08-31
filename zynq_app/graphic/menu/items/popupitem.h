@@ -11,7 +11,6 @@ public:
     PopupItem(QWidget* parent);
 
     void execute() override;
-
     void control(QKeyEvent* event) override;
 };
 

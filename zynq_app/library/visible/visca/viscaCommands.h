@@ -5,7 +5,7 @@
 #include <cstdint>
 #include <string>
 
-#include "global/logcategories.h"
+#include "../zynq_app/global/logcategories.h"
 
 // Duplicates could probably be avoided using builder pattern
 //  ...but it would unnecessarily increase the complexity and would be slower
@@ -73,10 +73,10 @@ namespace ViscaCommands
         static constexpr byteArray<4> getVersionInfo() { return { INQ, 0x00, 0x02, 0xFF}; }
         static void printVersionInfo(byteArray<10> reply)
         {
-            qCInfo(viscaLog()) << "Vendor ID:" << Qt::hex << (((uint16_t) reply[2] << 8) + reply[3]);
-            qCInfo(viscaLog()) << "Model ID:" << Qt::hex << (((uint16_t) reply[4] << 8) + reply[5]);
-            qCInfo(viscaLog()) << "ROM revision:" << Qt::hex << (((uint16_t) reply[6] << 8) + reply[7]);
-            qCInfo(viscaLog()) << "Maximum socket #:" << Qt::hex << (reply[8]);
+            qCInfo(viscaLog()) << "Vendor ID:" << hex << (((uint16_t) reply[2] << 8) + reply[3]);
+            qCInfo(viscaLog()) << "Model ID:" << hex << (((uint16_t) reply[4] << 8) + reply[5]);
+            qCInfo(viscaLog()) << "ROM revision:" << hex << (((uint16_t) reply[6] << 8) + reply[7]);
+            qCInfo(viscaLog()) << "Maximum socket #:" << hex << (reply[8]);
         }
     }
 

@@ -34,7 +34,7 @@ protected:
     {
         bool nullElement;
         // Check whether any of parameter is null
-        ([&] {if(!elements) {nullElement = true;}} (), ...);
+        // TODO not working on 1z - ([&] {if(!elements) {nullElement = true;}} (), ...);
 
         if (nullElement)
         {

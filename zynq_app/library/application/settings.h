@@ -14,10 +14,11 @@ public:
         int port = 9002;
     } rtp;
 
-    struct Visca
+    struct
     {
-        // ...
-    };
+        uint16_t exposure;
+        int zoom;
+    } visca;
 
     struct Display
     {

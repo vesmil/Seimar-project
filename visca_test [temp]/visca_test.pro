@@ -9,19 +9,19 @@ CONFIG += c++1z
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    ../zynq_app/global/logCategories.cpp \
-    ../zynq_app/library/visca/uartCommunication.cpp \
-    ../zynq_app/library/visca/visca.cpp \
-    library/gstreamer/visible.cpp \
+    ../zynq_app/library/visible/visca/uartcommunication.cpp \
+    ../zynq_app/library/visible/visca/visca.cpp \
+    global/logcategories.cpp \
+    lib/gstreamer/visible.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
-    ../zynq_app/global/logCategories.h \
-    ../zynq_app/library/visca/uartCommunication.h \
-    ../zynq_app/library/visca/visca.h \
-    ../zynq_app/library/visca/viscaCommands.h \
-    library/gstreamer/visible.h \
+    ../zynq_app/library/visible/visca/uartcommunication.h \
+    ../zynq_app/library/visible/visca/visca.h \
+    ../zynq_app/library/visible/visca/viscacommands.h \
+    global/logcategories.h \
+    lib/gstreamer/visible.h \
     mainwindow.h
 
 LIBS +=  -lgstreamer-1.0 -lgobject-2.0 -lglib-2.0 -lgstrtspserver-1.0

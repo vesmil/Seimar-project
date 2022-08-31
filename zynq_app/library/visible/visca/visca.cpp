@@ -37,7 +37,7 @@ bool Visca::setAddress()
     }
 
     m_camAddr = reply[2] - 1 + addr::CAM_BASE;
-    qCInfo(viscaLog()) << "Address set succesfull, returned device address:" << Qt::hex << reply[2] - 1;
+    qCInfo(viscaLog()) << "Address set succesfull, returned device address:" << hex << reply[2] - 1;
 
     return true;
 }

@@ -27,6 +27,10 @@ public:
 
     void setSubmenu(SubmenuItem* submenu, std::size_t index = 0);
 
+    //! \brief Stores the whole menu in tree structure - child elements are in elementlist
+    std::unique_ptr<SubmenuItem> m_root = nullptr;
+    // TODO private
+
 private:
     Menu();
 
@@ -34,12 +38,6 @@ private:
     void close();
 
     void menuNav(QKeyEvent *event);
-
-    //! \brief Layout used to store all menu butons (they are added and removed)
-    QVBoxLayout *m_layout = nullptr;  // TODO probably can be replaced by layout()
-
-    //! \brief Stores the whole menu in tree structure - child elements are in elementlist
-    std::unique_ptr<SubmenuItem> m_root = nullptr;
 
     ControlMode m_currentMode = INACTIVE;
 

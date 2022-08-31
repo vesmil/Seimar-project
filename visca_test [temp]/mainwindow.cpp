@@ -2,7 +2,7 @@
 
 #include <QKeyEvent>
 
-#include "../zynq_app/global/logCategories.h"
+#include "../zynq_app/global/logcategories.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow{parent}
@@ -13,16 +13,14 @@ MainWindow::MainWindow(QWidget *parent)
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
     // visca->inquireCommand(ViscaCommands::Init::getVersionInfo(), ViscaCommands::Init::printVersionInfo);
-
-
     switch(event->key())
     {
         case Qt::Key_Q:
-            visca->executeCommand(ViscaCommands::horizontalFlip(ViscaCommands::OFF));
+            visca->executeCommand(ViscaCommands::Zoom::setValue(0x4000));
             break;
 
         case Qt::Key_W:
-            visca->executeCommand(ViscaCommands::Exposure::setMode(ViscaCommands::Exposure::Mode::IRIS_PRI));
+            visca->executeCommand(ViscaCommands::Zoom::setValue(0x0));
             break;
 
         case Qt::Key_E:
