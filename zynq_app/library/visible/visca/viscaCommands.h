@@ -90,6 +90,16 @@ namespace ViscaCommands
     namespace Exposure
     {
         enum Mode : uint8_t {FULL_AUTO = 0x00, MANUAL = 0x03, SHUTTER_PRI = 0x0A, IRIS_PRI = 0x0B, GAIN_PRI = 0x0E };
+        static const QString ModeToQString(Mode mode) {
+            switch(mode){
+                case ViscaCommands::Exposure::FULL_AUTO: return "Full auto";
+                case ViscaCommands::Exposure::MANUAL: return "Manual";
+                case ViscaCommands::Exposure::SHUTTER_PRI: return "Shutter";
+                case ViscaCommands::Exposure::IRIS_PRI: return "Iris priority";
+                case ViscaCommands::Exposure::GAIN_PRI: return "Gain priority";
+                default: return "Invalid";
+            }
+        }
 
         static constexpr byteArray<5> setMode(Mode mode)  { return { CTRL, 0x04, 0x39, mode, 0xFF}; }
         static constexpr byteArray<4> getMode()           { return { INQ, 0x04, 0x39, 0xFF}; }

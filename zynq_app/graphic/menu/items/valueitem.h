@@ -4,9 +4,9 @@
 #include <QLabel>
 
 #include "library/controller/controller.h"
+#include "library/controller/value.h"
 #include "graphic/menu/items/itembase.h"
 #include "graphic/menu/menu.h"
-#include "graphic/menu/items/value.h"
 
 //! \brief Item which after confirmation will offer access to setting some value
 class ValueItem : public ItemBase

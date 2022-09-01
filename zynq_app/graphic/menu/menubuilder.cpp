@@ -11,8 +11,8 @@ void MenuBuilder::buildMenuTree(SubmenuItem* root, QWidget* parent, Controller* 
 
     SubmenuItem* casted = static_cast<SubmenuItem*>((root->itemList[0]).get());
 
-    Value<int, Controller>* zoom_val = new Value<int, Controller>{Settings::getInstance().visca.zoom, &Controller::setZoom, controller};
-    casted->itemList.emplace_back(std::make_unique<ValueItem>("Zoom", *zoom_val, parent));
+    casted->itemList.emplace_back(std::make_unique<ValueItem>("Zoom", controller->zoom, parent));
+    casted->itemList.emplace_back(std::make_unique<ValueItem>("Exposure mode", controller->exposureMode, parent));
 
     // Value<uint16_t, Controller>* exp_val = new Value<uint16_t, Controller>{Settings::getInstance().visca.zoom, &Controller::setZoom, controller};
     // casted->itemList.emplace_back(std::make_unique<ValueItem>("Exposure", *zoom_val, parent));

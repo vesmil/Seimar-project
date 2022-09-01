@@ -16,19 +16,13 @@ public:
 
     struct
     {
-        uint16_t exposure;
-        int zoom;
-    } visca;
+        // ...
+    } display;
 
-    struct Display
+    struct
     {
         // ...
-    };
-
-    struct File
-    {
-        // ...
-    };
+    } file;
 
 private:
     Settings();

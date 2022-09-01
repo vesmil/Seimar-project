@@ -19,6 +19,7 @@ SOURCES += \
     graphic/style.cpp \
     library/application/settings.cpp \
     library/controller/controller.cpp \
+    library/controller/value.cpp \
     library/visible/gstreamer/gsfacade.cpp \
     library/visible/gstreamer/pipelines/internalpipeline.cpp \
     library/visible/gstreamer/pipelines/pipelinebase.cpp \
@@ -42,13 +43,13 @@ HEADERS += \
         graphic/menu/items/itembase.h \
         graphic/menu/items/popupitem.h \
         graphic/menu/items/submenuitem.h \
-        graphic/menu/items/value.h \
         graphic/menu/items/valueitem.h \
         graphic/menu/menu.h \
         graphic/menu/menubuilder.h \
         graphic/style.h \
         library/application/settings.h \
         library/controller/controller.h \
+        library/controller/value.h \
         library/visible/gstreamer/gsfacade.h \
         library/visible/gstreamer/pipelines/internalpipeline.h \
         library/visible/gstreamer/pipelines/pipelinebase.h \

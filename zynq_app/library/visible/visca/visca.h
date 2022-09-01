@@ -34,7 +34,7 @@ public:
 
         if (!m_uart.sendMessage(m_camAddr, data))
         {
-            qCInfo(viscaLog()).noquote() << "Failed sending" << logMessage;
+            qCInfo(viscaLog()).noquote() << "UART fail" << logMessage;
             return false;
         }
 

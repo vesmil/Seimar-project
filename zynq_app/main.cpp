@@ -83,13 +83,12 @@ int main(int argc, char *argv[])
     // GsFacade gsFacade{};
     // gsFacade.initAndStart(GsFacade::RAW_RTP | GsFacade::RAW_DISPLAY);
 
-    // Setup Visca protocol
     Visca visca(glb::path::CAMERA_UART.c_str());
+
+    Controller controller(visca);
 
     // Create UI
     Menu &menu = Menu::getInstance();
-
-    Controller controller(visca);
     MenuBuilder::buildMenuTree(menu.m_root.get(), static_cast<QWidget*>(&menu), &controller);
 
     menu.show();

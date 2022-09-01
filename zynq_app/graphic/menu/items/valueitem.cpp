@@ -26,19 +26,17 @@ void ValueItem::control(QKeyEvent* event)
     switch (event->key())
     {
         case Qt::Key_Left:
-            m_value.restore();
-            m_valueLabel.setText(m_value.getQString());
+            m_value.restorePrev();
             Menu::getInstance().completeExec();
             break;
 
         case Qt::Key_Right:
-            Menu::getInstance().completeExec();
             m_value.set();
+            Menu::getInstance().completeExec();
             break;
 
         case Qt::Key_Up:
             ++m_value;
-            m_valueLabel.setText(m_value.getQString());
             if (m_liveView)
             {
                 m_value.set();
@@ -47,11 +45,16 @@ void ValueItem::control(QKeyEvent* event)
 
         case Qt::Key_Down:
             --m_value;
-            m_valueLabel.setText(m_value.getQString());
             if (m_liveView)
             {
                 m_value.set();
             }
             break;
+
+        default:
+            return;
     }
+
+    // It's better to set the text in all cases
+    m_valueLabel.setText(m_value.getQString());
 }

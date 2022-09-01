@@ -1,6 +1,5 @@
 #include "controller.h"
-
-#include <library/application/settings.h>
+#include "global/config.h"
 
 Controller::Controller(Visca& visca) : m_visca(visca)
 {
@@ -9,20 +8,22 @@ Controller::Controller(Visca& visca) : m_visca(visca)
 
 bool Controller::setDefault()
 {
-    // settings.setdefault
-    // visca send all...
-    // menu refresh
-
-    Settings::getInstance().visca.zoom = 0;
-    m_visca.executeCommand(ViscaCommands::Zoom::setValue(0),400,"zooming");
+    setZoom(0);
+    setExposureMode(ViscaCommands::Exposure::Mode::FULL_AUTO);
+    // ...
 
     return false;
 }
 
-// ...zoom in range 0-16
-bool Controller::setZoom(int zoom)
+//! \brief zoom in range 0-10
+bool Controller::setZoom(uint8_t zoom)
 {
-    return m_visca.executeCommand(ViscaCommands::Zoom::setValue(zoom * 0x400),400,"zooming");
+    uint16_t remappedZoom = (zoom * 0x4000) / 16;
+    return m_visca.executeCommand(ViscaCommands::Zoom::setValue(remappedZoom),400,"zoom");
 }
 
+bool Controller::setExposureMode(ViscaCommands::Exposure::Mode mode)
+{
+    return m_visca.executeCommand(ViscaCommands::Exposure::setMode(mode),400,"exposure mode");
+}
 
