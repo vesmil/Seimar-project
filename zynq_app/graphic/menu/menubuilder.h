@@ -13,11 +13,9 @@ public:
     static void buildMenuTree(SubmenuItem* root, QWidget* parent, Controller* controller);
 
 private:
-    // buildSubmenu...();
-    // buildSubmenu...();
-    // ...
-
-    // root and parent member vars?
+    static void buildFunctions(SubmenuItem* submenu, QWidget* parent, Controller* controller);
+    static void buildStream(SubmenuItem* submenu, QWidget* parent, Controller* controller);
+    static void buildAdvanced(SubmenuItem* submenu, QWidget* parent, Controller* controller);
 };
 
 #endif // MENUBUILDER_H

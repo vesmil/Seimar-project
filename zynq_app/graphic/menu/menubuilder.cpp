@@ -6,24 +6,37 @@
 void MenuBuilder::buildMenuTree(SubmenuItem* root, QWidget* parent, Controller* controller)
 {
     root->itemList.emplace_back(std::make_unique<SubmenuItem>("Functions", root, parent));
+    buildFunctions(static_cast<SubmenuItem*>((root->itemList[0]).get()), parent, controller);
+
     root->itemList.emplace_back(std::make_unique<SubmenuItem>("Stream", root, parent));
+    buildStream(static_cast<SubmenuItem*>((root->itemList[1]).get()), parent, controller);
+
     root->itemList.emplace_back(std::make_unique<SubmenuItem>("Advanced", root, parent));
-
-    SubmenuItem* casted = static_cast<SubmenuItem*>((root->itemList[0]).get());
-
-    casted->itemList.emplace_back(std::make_unique<ValueItem>("Zoom", controller->zoom, parent));
-    casted->itemList.emplace_back(std::make_unique<ValueItem>("Exposure mode", controller->exposureMode, parent));
-
-    // Value<uint16_t, Controller>* exp_val = new Value<uint16_t, Controller>{Settings::getInstance().visca.zoom, &Controller::setZoom, controller};
-    // casted->itemList.emplace_back(std::make_unique<ValueItem>("Exposure", *zoom_val, parent));
-
-    //casted->itemList.emplace_back(std::make_unique<ValueItem<int>>("Exposure", *val, parent));
-
-    SubmenuItem* casted2 = static_cast<SubmenuItem*>((root->itemList[1]).get());
-    //casted2->itemList.emplace_back(std::make_unique<ValueItem<int>>("Display", *val, parent));
-    //casted2->itemList.emplace_back(std::make_unique<ValueItem<int>>("RTP", *val, parent));
-    //casted2->itemList.emplace_back(std::make_unique<ValueItem<int>>("File", *val, parent));
-
-    SubmenuItem* casted3 = static_cast<SubmenuItem*>((root->itemList[2]).get());
-    casted3->itemList.emplace_back(std::make_unique<PopupItem>(parent));
+    buildAdvanced(static_cast<SubmenuItem*>((root->itemList[2]).get()), parent, controller);
 }
+
+void MenuBuilder::buildFunctions(SubmenuItem* submenu, QWidget* parent, Controller* controller)
+{
+    submenu->itemList.emplace_back(std::make_unique<ValueItem>("Zoom", controller->zoom, parent));
+    submenu->itemList.emplace_back(std::make_unique<ValueItem>("Exposure mode", controller->exposureMode, parent));
+    submenu->itemList.emplace_back(std::make_unique<ValueItem>("Shutter", controller->shutter, parent));
+    submenu->itemList.emplace_back(std::make_unique<ValueItem>("Iris", controller->iris, parent));
+    submenu->itemList.emplace_back(std::make_unique<ValueItem>("Gain", controller->gain, parent));
+    // TODO add compensation
+    // TODO add ...
+}
+
+void MenuBuilder::buildStream(SubmenuItem* submenu, QWidget* parent, Controller* controller)
+{
+    // TODO create complete pop up class
+    submenu->itemList.emplace_back(std::make_unique<ValueItem>("Display", controller->gain, parent));
+    submenu->itemList.emplace_back(std::make_unique<ValueItem>("RTP", controller->gain, parent));
+    submenu->itemList.emplace_back(std::make_unique<ValueItem>("File", controller->gain, parent));
+}
+
+void MenuBuilder::buildAdvanced(SubmenuItem* submenu, QWidget* parent, Controller*)//controller)
+{
+    // What will be in advanced? Ip address? ...
+    submenu->itemList.emplace_back(std::make_unique<PopupItem>(parent));
+}
+

@@ -11,8 +11,9 @@ class ItemBase : public QWidget
 public:
     ItemBase(QWidget* parent);
 
-    virtual void execute();
+    virtual bool isHidden();
 
+    virtual void execute();
     virtual void select();
     virtual void deselect();
 

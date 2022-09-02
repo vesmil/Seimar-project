@@ -131,8 +131,11 @@ void Menu::setSubmenu(SubmenuItem *submenu, std::size_t index)
 
     for (auto &&item : m_currentSubmenu->itemList)
     {
-        item->setVisible(true);
-        layout()->addWidget(item.get());
+        if (!item->isHidden())
+        {
+            item->setVisible(true);
+            layout()->addWidget(item.get());
+        }
     }
 
     m_currentElement = index;

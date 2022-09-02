@@ -216,7 +216,7 @@ S vzniklým arrayem následně pracuje třída `Visca`, která předá referenci
 
 ## Přehled
 
-Přibližný pohled na objektový návrh programu:
+Dosti zjednodušený pohled na objektový návrh programu:
 
 ```mermaid
 classDiagram
@@ -232,6 +232,49 @@ classDiagram
 	Visca <-- Controller
 	Menu *--> MenuItem
 	GsFacade *--> PipelineBase
+	Controller --> ViscaCommands
+	GsFacade <-- Controller
 	
+	class MenuBuilder {
+		void buildTree()
+	}
+	
+    class Menu {
+		void keyPressEvent(QKeyEvent)
+	}
+	
+	class MenuItem {
+		void execute()
+	}
+	
+    class Controller {
+		void setZoom(uint value)
+		void set...()
+	}
+	
+	class Visca {
+		bool execute(byte[] data)
+		bool inquire(byte[] data, func* parse)
+	}
+	
+	class Uart {
+		bool sendMessage(byte[]& data)
+		bool reciveMessage(byte[]& data)
+	}
+	
+    class GsFacade {
+		bool start(PipelineEnum pipelines)
+		bool stop(PipelineEnum pipelines)
+	}
+	
+	class PipelineBase {
+		void start()
+		void stop()
+	}
+	
+	class ViscaCommands {
+		byte[] setZoom(uint8_t value)
+		byte[] ...())
+	}
 ```
 

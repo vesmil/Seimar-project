@@ -3,7 +3,7 @@
 
 #include <array>
 #include <cstdint>
-#include <string>
+#include <utility>
 
 #include "../zynq_app/global/logcategories.h"
 
@@ -89,17 +89,13 @@ namespace ViscaCommands
 
     namespace Exposure
     {
+        static constexpr std::size_t ModeCount = 5;
         enum Mode : uint8_t {FULL_AUTO = 0x00, MANUAL = 0x03, SHUTTER_PRI = 0x0A, IRIS_PRI = 0x0B, GAIN_PRI = 0x0E };
-        static const QString ModeToQString(Mode mode) {
-            switch(mode){
-                case ViscaCommands::Exposure::FULL_AUTO: return "Full auto";
-                case ViscaCommands::Exposure::MANUAL: return "Manual";
-                case ViscaCommands::Exposure::SHUTTER_PRI: return "Shutter";
-                case ViscaCommands::Exposure::IRIS_PRI: return "Iris priority";
-                case ViscaCommands::Exposure::GAIN_PRI: return "Gain priority";
-                default: return "Invalid";
-            }
-        }
+        static const std::array<std::pair<Mode, QString>,ModeCount> ModeArray { std::pair<Mode, QString>{FULL_AUTO, QString("Full auto")},
+                                                                                std::pair<Mode, QString>{MANUAL, QString("Manual")},
+                                                                                std::pair<Mode, QString>{SHUTTER_PRI, QString("Shutter")},
+                                                                                std::pair<Mode, QString>{IRIS_PRI, QString("Iris priority")},
+                                                                                std::pair<Mode, QString>{GAIN_PRI, QString("Gain priority")}};
 
         static constexpr byteArray<5> setMode(Mode mode)  { return { CTRL, 0x04, 0x39, mode, 0xFF}; }
         static constexpr byteArray<4> getMode()           { return { INQ, 0x04, 0x39, 0xFF}; }
@@ -107,7 +103,7 @@ namespace ViscaCommands
 
         namespace Iris
         {
-            static constexpr byteArray<5> change(ChangeEnum change) { return { CTRL, 0x04, 0x0B, change, 0xFF}; }
+            // static constexpr byteArray<5> change(ChangeEnum change) { return { CTRL, 0x04, 0x0B, change, 0xFF}; }
 
             //! \brief returns command packet for setting iris - value is in range 0x05 - 0x15
             static constexpr byteArray<8> setValue(uint8_t value) {
@@ -120,7 +116,7 @@ namespace ViscaCommands
 
         namespace Gain
         {
-            static constexpr byteArray<5> change(ChangeEnum change) { return { CTRL, 0x04, 0x0C, change, 0xFF}; }
+            // static constexpr byteArray<5> change(ChangeEnum change) { return { CTRL, 0x04, 0x0C, change, 0xFF}; }
 
             //! \brief returns command packet for setting gain - value is in range 0x00 (–3dB) - 0x0C (33 dB)
             static constexpr byteArray<8> setValue(uint8_t value) { return { CTRL, 0x04, 0x4C, 0x00, 0x00, 0, ensureMaxU8(value, 0x0C), 0xFF}; }
@@ -141,7 +137,7 @@ namespace ViscaCommands
 
         namespace Shutter
         {
-            static constexpr byteArray<5> change(ChangeEnum change) { return { CTRL, 0x04, 0x0A, change, 0xFF}; }
+            // static constexpr byteArray<5> change(ChangeEnum change) { return { CTRL, 0x04, 0x0A, change, 0xFF}; }
 
             //! \brief returns command packet for setting shutter - value is in range 0x01 - 0x15
             static constexpr byteArray<8> setValue(uint8_t value) { return { CTRL, 0x04, 0x4A, 0x00, 0x00, parseParam(value, 1), parseParam(value, 0), 0xFF}; }
@@ -152,7 +148,7 @@ namespace ViscaCommands
         namespace Compensation
         {
             static constexpr byteArray<5> setState(State state) { return { CTRL, 0x04, 0x3E, state, 0xFF}; }
-            static constexpr byteArray<5> change(ChangeEnum change) { return { CTRL, 0x04, 0x0E, change, 0xFF}; }
+            // static constexpr byteArray<5> change(ChangeEnum change) { return { CTRL, 0x04, 0x0E, change, 0xFF}; }
 
             //! \brief returns command packet for setting exposure compensation - value is in range 0x00 - 0x0E
             static constexpr byteArray<8> setValue(uint8_t value)
@@ -191,7 +187,7 @@ namespace ViscaCommands
 
         namespace RGain
         {
-            static constexpr byteArray<5> change(ChangeEnum change) { return { CTRL, 0x04, 0x03, change, 0xFF}; }
+            // static constexpr byteArray<5> change(ChangeEnum change) { return { CTRL, 0x04, 0x03, change, 0xFF}; }
 
             //! \brief returns command packet for setting red gain - value is in range 0x00 (–128) - 0x80 (0) - 0xFF (128)
             static constexpr byteArray<8> setValue(uint8_t value) { return { CTRL, 0x04, 0x43, 0x00, 0x00, parseParam(value, 1), parseParam(value, 0), 0xFF}; }
@@ -199,7 +195,7 @@ namespace ViscaCommands
 
         namespace BGain
         {
-            static constexpr byteArray<5> change(ChangeEnum change) { return { CTRL, 0x04, 0x04, change, 0xFF}; }
+            // static constexpr byteArray<5> change(ChangeEnum change) { return { CTRL, 0x04, 0x04, change, 0xFF}; }
 
             //! \brief returns command packet for setting blue gain - value is in range 0x00 (–128) - 0x80 (0) - 0xFF (128)
             static constexpr byteArray<8> setValue(uint8_t value) { return { CTRL, 0x04, 0x44, 0x00, 0x00, parseParam(value, 1), parseParam(value, 0), 0xFF}; }
@@ -212,7 +208,7 @@ namespace ViscaCommands
 
     namespace Aperture
     {
-        static constexpr byteArray<5> change(ChangeEnum change) { return { CTRL, 0x04, 0x02, change, 0xFF}; }
+        // static constexpr byteArray<5> change(ChangeEnum change) { return { CTRL, 0x04, 0x02, change, 0xFF}; }
         //! \brief returns command packet for setting aperture gain - value is in range 0x00 - 0x0F
         static constexpr byteArray<8> setValue(uint8_t value) { return { CTRL, 0x04, 0x42, 0x00, 0x00, parseParam(value, 1), parseParam(value, 0), 0xFF}; }
 

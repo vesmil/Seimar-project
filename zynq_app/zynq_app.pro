@@ -19,6 +19,7 @@ SOURCES += \
     graphic/style.cpp \
     library/application/settings.cpp \
     library/controller/controller.cpp \
+    library/controller/dependency.cpp \
     library/controller/value.cpp \
     library/visible/gstreamer/gsfacade.cpp \
     library/visible/gstreamer/pipelines/internalpipeline.cpp \
@@ -49,6 +50,7 @@ HEADERS += \
         graphic/style.h \
         library/application/settings.h \
         library/controller/controller.h \
+        library/controller/dependency.h \
         library/controller/value.h \
         library/visible/gstreamer/gsfacade.h \
         library/visible/gstreamer/pipelines/internalpipeline.h \

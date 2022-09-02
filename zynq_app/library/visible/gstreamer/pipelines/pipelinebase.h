@@ -32,14 +32,13 @@ protected:
     template <typename T, typename ...TElems >
     bool addAndLink(T pipeline, TElems ... elements)
     {
-        bool nullElement;
-        // Check whether any of parameter is null
-        // TODO not working on 1z - ([&] {if(!elements) {nullElement = true;}} (), ...);
-
-        if (nullElement)
+        for (auto&& element : {elements...})
         {
-            qCWarning(gsLog()) << "Some of the pipeline elements weren't initialized";
-            return false;
+            if(!element)
+            {
+                qCWarning(gsLog()) << "Some of the pipeline elements weren't initialized";
+                return false;
+            }
         }
 
         gst_bin_add_many(GST_BIN(pipeline), elements ..., nullptr);

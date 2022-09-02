@@ -28,3 +28,8 @@ void ItemBase::control(QKeyEvent*)
 {
 
 }
+
+bool ItemBase::isHidden()
+{
+    return false;
+}
