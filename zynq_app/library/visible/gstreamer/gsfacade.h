@@ -7,11 +7,14 @@
 #include "pipelines/pipelinebase.h"
 
 // TODO remove - only for Wiris testing
+#define WIRIS_TEST
+
 class Visible
 {
 public:
     Visible()
     {
+#ifdef WIRIS_TEST
         gst_init(nullptr, nullptr);
         gst_debug_set_active(TRUE);
         gst_debug_set_default_threshold(GST_LEVEL_FIXME);
@@ -51,17 +54,22 @@ public:
             gst_object_unref (streamData.pipeline);
             throw std::runtime_error("Elements could not be linked.");
         }
+#endif
     }
 
     void start()
     {
+#ifdef WIRIS_TEST
         gst_element_set_state (streamData.pipeline, GST_STATE_PLAYING);
+#endif
     }
 
     void stop()
     {
+#ifdef WIRIS_TEST
         gst_element_set_state (streamData.pipeline, GST_STATE_READY);
         gst_element_set_state (streamData.pipeline, GST_STATE_NULL);
+#endif
     }
 
 private:

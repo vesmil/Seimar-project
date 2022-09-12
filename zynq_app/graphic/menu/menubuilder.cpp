@@ -32,7 +32,7 @@ void MenuBuilder::buildStream(SubmenuItem* submenu, QWidget* parent, Controller*
     submenu->itemList.emplace_back(std::make_unique<ValueItem>("File", controller->file_stream, parent));
 }
 
-void MenuBuilder::buildAdvanced(SubmenuItem* submenu, QWidget* parent, Controller*)//controller)
+void MenuBuilder::buildAdvanced(SubmenuItem* submenu, QWidget* parent, Controller*) //controller)
 {
     // TODO complete popup item and add ip address settings...
     submenu->itemList.emplace_back(std::make_unique<PopupItem>(parent));

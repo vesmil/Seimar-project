@@ -106,7 +106,7 @@ void Menu::menuNav(QKeyEvent *event)
 
         do
         {
-            ++m_currentElement %= m_currentSubmenu->itemList.size();
+                ++m_currentElement %= m_currentSubmenu->itemList.size();
         } while (m_currentSubmenu->itemList[m_currentElement]->isHidden());
 
         m_currentSubmenu->itemList[m_currentElement]->select();

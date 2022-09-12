@@ -79,13 +79,15 @@ Navíc se stále čeká na nosnou desku od ČVUT, která místo HDMI nabídne Di
     - [x] KMS sink
     - [ ] Jako součást UI (možná nebude potřeba)
 - [ ] Menu
-  - [ ] Šablona
-    - [x] Návrh
-    - [x] Funkční zobrazení
-    - [ ] Kompletní
+  - [x] Kostra menu
+    - [x] Základní položky - submenu, hodnotové položky
+    - [x] Závislosti jednotlivých položek
   - [ ] Vyplnit menu
-      - [ ] Práce se streamem - ukládání, atd.
+      - [x] Práce se streamem - zapnout, vypnout jednotlivé pipelines
       - [ ] Komunikace s kamerou
+        - [x] Zoom, expozice
+        - [ ] ...
+  - [ ] Zařídit odesílání na KMS sink pro kombinaci obrazu
 - [ ] Upravit výsledek pro finální použití
 - [ ] Bonusy...
 

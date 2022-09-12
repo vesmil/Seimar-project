@@ -25,7 +25,7 @@ void PopupItem::control(QKeyEvent* event)
     switch (event->key())
     {
     case Qt::Key_Left:
-        // Restore state
+        // TODO Restore state
         Menu::getInstance().completeExec();
         break;
 

@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     setCentralWidget(static_cast<QWidget*>(&Menu::getInstance()));
 }
 
-void MainWindow::keyPressEvent(QKeyEvent *event)
+void MainWindow::keyPressEvent(QKeyEvent*)
 {
     // Menu::getInstance().keyPressEvent(event);
 }
