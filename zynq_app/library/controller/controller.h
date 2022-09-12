@@ -16,17 +16,18 @@ public:
 
     Value<uint8_t, uint8_t, Controller> zoom {0, 0, 10, &Controller::setZoom, this, "x"};
 
-    ArrValue<ViscaCommands::Exposure::Mode, Controller, 5U> exposureMode{&ViscaCommands::Exposure::ModeArray, &Controller::setExposureMode, this};
+    using ModeValue = ArrValue<ViscaCommands::Exposure::Mode, Controller, 5U>;
+    ModeValue exposureMode{&ViscaCommands::Exposure::ModeArray, &Controller::setExposureMode, this};
 
     Value<uint8_t, uint8_t, Controller> shutter {0, 0, 10, &Controller::setShutter, this, ""};
-    Dependency<Value<uint8_t, uint8_t, Controller>, ViscaCommands::Exposure::Mode, ViscaCommands::Exposure::Mode::MANUAL, ViscaCommands::Exposure::Mode::SHUTTER_PRI> validShutter{shutter};
+    Dependency<ModeValue, ViscaCommands::Exposure::Mode, ViscaCommands::Exposure::Mode::MANUAL, ViscaCommands::Exposure::Mode::SHUTTER_PRI> validShutter{exposureMode};
 
     Value<uint8_t, uint8_t, Controller> iris {0x10, 0x5, 0x15, &Controller::setIris, this, ""};
-    Dependency<Value<uint8_t, uint8_t, Controller>, ViscaCommands::Exposure::Mode, ViscaCommands::Exposure::Mode::MANUAL, ViscaCommands::Exposure::Mode::IRIS_PRI> validIris{shutter};
+    Dependency<ModeValue, ViscaCommands::Exposure::Mode, ViscaCommands::Exposure::Mode::MANUAL, ViscaCommands::Exposure::Mode::IRIS_PRI> validIris{exposureMode};
 
     // TODO add remaping to db
     Value<uint8_t, uint8_t, Controller> gain {0, 6, 0x0C, &Controller::setGain, this, "dB"};
-    Dependency<Value<uint8_t, uint8_t, Controller>, ViscaCommands::Exposure::Mode, ViscaCommands::Exposure::Mode::MANUAL, ViscaCommands::Exposure::Mode::GAIN_PRI> validGain{shutter};
+    Dependency<ModeValue, ViscaCommands::Exposure::Mode, ViscaCommands::Exposure::Mode::MANUAL, ViscaCommands::Exposure::Mode::GAIN_PRI> validGain{exposureMode};
 
     BoolValue<Controller> rtp_stream {false, &Controller::switchRtp, this};
     BoolValue<Controller> file_stream {false, &Controller::switchFile, this};
@@ -38,7 +39,6 @@ private:
     bool setZoom(uint8_t value);
     bool setExposureMode(ViscaCommands::Exposure::Mode mode);
 
-    // TODO add exposure check
     bool setShutter(u_int8_t value);
     bool setIris(uint8_t value);
     bool setGain(u_int8_t value);

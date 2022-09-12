@@ -22,13 +22,11 @@ void MenuBuilder::buildFunctions(SubmenuItem* submenu, QWidget* parent, Controll
     submenu->itemList.emplace_back(std::make_unique<ValueItem>("Shutter", controller->shutter, parent));
     submenu->itemList.emplace_back(std::make_unique<ValueItem>("Iris", controller->iris, parent));
     submenu->itemList.emplace_back(std::make_unique<ValueItem>("Gain", controller->gain, parent));
-    // TODO add compensation
-    // TODO add ...
+    // TODO add compensation, ...
 }
 
 void MenuBuilder::buildStream(SubmenuItem* submenu, QWidget* parent, Controller* controller)
 {
-    // TODO create complete pop up class
     submenu->itemList.emplace_back(std::make_unique<ValueItem>("Display", controller->hdmi_stream, parent));
     submenu->itemList.emplace_back(std::make_unique<ValueItem>("RTP", controller->rtp_stream, parent));
     submenu->itemList.emplace_back(std::make_unique<ValueItem>("File", controller->file_stream, parent));
@@ -36,7 +34,7 @@ void MenuBuilder::buildStream(SubmenuItem* submenu, QWidget* parent, Controller*
 
 void MenuBuilder::buildAdvanced(SubmenuItem* submenu, QWidget* parent, Controller*)//controller)
 {
-    // What will be in advanced? Ip address? ...
+    // TODO complete popup item and add ip address settings...
     submenu->itemList.emplace_back(std::make_unique<PopupItem>(parent));
 }
 

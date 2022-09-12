@@ -97,7 +97,7 @@ struct Value : public IValue
         }
     }
 
-    void addDependency(IDependency& dependency)
+    void addDependency(IDependency* dependency)
     {
         m_dependencies.emplace_back(dependency);
     }
@@ -108,11 +108,11 @@ struct Value : public IValue
         {
             if (!dependency->isValid())
             {
-                return false;
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 
 protected:
@@ -128,7 +128,7 @@ protected:
     TContext* m_context;
     bool (TContext::*m_setFunc) (TParam);
 
-    std::vector<std::unique_ptr<IDependency>> m_dependencies {};
+    std::vector<IDependency*> m_dependencies {};
 };
 
 template<typename TContext>
@@ -171,6 +171,12 @@ struct ArrValue : public Value<std::size_t, TVar, TContext>
     QString getQString() override
     {
         return m_array->at(this->m_value).second;
+    }
+
+
+    const TVar& getValue()
+    {
+        return m_array->at(this->m_value).first;
     }
 
     void set() override

@@ -20,6 +20,8 @@ public:
     PipelineBase(const PipelineBase&) = delete;
     PipelineBase& operator =(const PipelineBase&) = delete;
 
+    bool isCompleted();
+
 protected:
     PipelineBase() = default;
 

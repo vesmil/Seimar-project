@@ -42,6 +42,11 @@ PipelineBase::~PipelineBase()
         gst_object_unref(m_data.sink);
 }
 
+bool PipelineBase::isCompleted()
+{
+    return m_completed;
+}
+
 void PipelineBase::setDefaultCapsFilter(const gchar* name)
 {
     /* TODO put back when testing on Zynq

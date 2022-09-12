@@ -33,23 +33,49 @@ bool GsFacade::initAndStart(PipelineEnum pipelineEnum)
 
     if (pipelineEnum & RAW_SAVE)
     {
+        // TODO replace this copy paste with method
         qCInfo(gsLog()) << "Initializing and starting storage of RAW stream";
-        rawPipe = std::make_unique<RawFilePipeline>();
+        if (!rawPipe)
+        {
+            rawPipe = std::make_unique<RawFilePipeline>();
+        }
+
         rawPipe->start();
+        if (!rawPipe->isCompleted())
+        {
+            errors = true;
+        }
     }
 
     if (pipelineEnum & RAW_RTP)
     {
         qCInfo(gsLog()) << "Initializing and starting stream of RAW data over RTP";
-        rtpPipe =  std::make_unique<RawRtpPipeline>();
+        if (!rtpPipe)
+        {
+            rtpPipe =  std::make_unique<RawRtpPipeline>();
+        }
+
         rtpPipe->start();
+        if (!rtpPipe->isCompleted())
+        {
+            errors = true;
+        }
     }
 
     if (pipelineEnum & RAW_DISPLAY)
     {
         qCInfo(gsLog()) << "Initializing and starting Display port stream";
-        displayPipe =  std::make_unique<RawDisplayPipeline>();
+        if (!displayPipe)
+        {
+            displayPipe =  std::make_unique<RawDisplayPipeline>();
+        }
+
         displayPipe->start();
+
+        if (!displayPipe->isCompleted())
+        {
+            errors = true;
+        }
     }
 
     if (pipelineEnum & WIRIS_RTP)

@@ -21,6 +21,8 @@ void ValueItem::execute()
     m_value.store();
 }
 
+
+
 void ValueItem::control(QKeyEvent* event)
 {
     switch (event->key())
@@ -57,4 +59,9 @@ void ValueItem::control(QKeyEvent* event)
 
     // It's better to set the text in all cases
     m_valueLabel.setText(m_value.getQString());
+}
+
+bool ValueItem::isHidden()
+{
+    return m_value.isHidden();
 }

@@ -6,7 +6,7 @@
 
 #include "pipelines/pipelinebase.h"
 
-// TODO remove
+// TODO remove - only for Wiris testing
 class Visible
 {
 public:

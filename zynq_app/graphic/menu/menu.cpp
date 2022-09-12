@@ -134,6 +134,7 @@ void Menu::setSubmenu(SubmenuItem *submenu, std::size_t index)
         if (!item->isHidden())
         {
             item->setVisible(true);
+            // TODO change style for not visible or ...
             layout()->addWidget(item.get());
         }
     }

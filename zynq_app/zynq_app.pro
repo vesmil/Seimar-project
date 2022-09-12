@@ -19,7 +19,6 @@ SOURCES += \
     graphic/style.cpp \
     library/application/settings.cpp \
     library/controller/controller.cpp \
-    library/controller/value.cpp \
     library/visible/gstreamer/gsfacade.cpp \
     library/visible/gstreamer/pipelines/internalpipeline.cpp \
     library/visible/gstreamer/pipelines/pipelinebase.cpp \

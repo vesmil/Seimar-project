@@ -12,12 +12,12 @@
 class ValueItem : public ItemBase
 {
 public:
-    // TODO How to solve missing context?
-
     ValueItem(const QString& text, IValue& value, QWidget* parent = nullptr, bool live = false);
 
     void execute() override;
     void control(QKeyEvent* event) override;
+
+    bool isHidden() override;
 
 private:
     QLabel m_textLabel{};

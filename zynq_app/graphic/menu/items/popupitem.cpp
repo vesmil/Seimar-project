@@ -7,7 +7,7 @@ PopupItem::PopupItem(QWidget* parent) : ItemBase(parent)
 {
     ItemLayout* layout = new ItemLayout(this);
 
-    // TODO
+    // TODO complete popup item
     QLabel* label = new QLabel(this);
     label->setText("Pop-up");
 

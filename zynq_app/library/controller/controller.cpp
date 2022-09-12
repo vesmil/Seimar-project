@@ -3,7 +3,9 @@
 
 Controller::Controller(Visca& visca, GsFacade& gstreamer) : m_visca(visca), m_gstreamer(gstreamer)
 {
-    // shutter.addDependency(validShutter);
+    shutter.addDependency(&validShutter);
+    iris.addDependency(&validIris);
+    gain.addDependency(&validGain);
 
     setDefault();
 }
@@ -35,7 +37,6 @@ bool Controller::setShutter(u_int8_t value)
 
 bool Controller::setIris(uint8_t value)
 {
-    // TODO find out why no more than 17
     return m_visca.executeCommand(ViscaCommands::Exposure::Iris::setValue(value),400,"iris");
 }
 
