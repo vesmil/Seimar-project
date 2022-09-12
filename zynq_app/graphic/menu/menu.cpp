@@ -64,6 +64,7 @@ void Menu::completeExec()
 
 void Menu::menuNav(QKeyEvent *event)
 {
+    // TODO should be in submenu item...
     switch (event->key())
     {
     case Qt::Key_Left:
@@ -91,8 +92,11 @@ void Menu::menuNav(QKeyEvent *event)
     case Qt::Key_Up:
         m_currentSubmenu->itemList[m_currentElement]->deselect();
 
-        m_currentElement = m_currentElement == 0? m_currentSubmenu->itemList.size() : m_currentElement;
-        --m_currentElement;
+        do
+        {
+            m_currentElement = m_currentElement == 0? m_currentSubmenu->itemList.size() : m_currentElement;
+            --m_currentElement;
+        } while (m_currentSubmenu->itemList[m_currentElement]->isHidden());
 
         m_currentSubmenu->itemList[m_currentElement]->select();
         break;
@@ -100,7 +104,10 @@ void Menu::menuNav(QKeyEvent *event)
     case Qt::Key_Down:
         m_currentSubmenu->itemList[m_currentElement]->deselect();
 
-        ++m_currentElement %= m_currentSubmenu->itemList.size();
+        do
+        {
+            ++m_currentElement %= m_currentSubmenu->itemList.size();
+        } while (m_currentSubmenu->itemList[m_currentElement]->isHidden());
 
         m_currentSubmenu->itemList[m_currentElement]->select();
         break;
