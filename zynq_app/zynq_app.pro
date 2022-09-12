@@ -4,8 +4,8 @@ CONFIG += c++1z
 
 CONFIG += link_pkgconfig
 
-# PKGCONFIG += gstreamer-1.0 gstreamer-video-1.0
-LIBS +=  -lgstreamer-1.0 -lgobject-2.0 -lglib-2.0 -lgstrtspserver-1.0
+PKGCONFIG += gstreamer-1.0 gstreamer-video-1.0
+# LIBS +=  -lgstreamer-1.0 -lgobject-2.0 -lglib-2.0 -lgstrtspserver-1.0
 
 SOURCES += \
     global/logcategories.cpp \
@@ -19,7 +19,6 @@ SOURCES += \
     graphic/style.cpp \
     library/application/settings.cpp \
     library/controller/controller.cpp \
-    library/controller/dependency.cpp \
     library/controller/value.cpp \
     library/visible/gstreamer/gsfacade.cpp \
     library/visible/gstreamer/pipelines/internalpipeline.cpp \

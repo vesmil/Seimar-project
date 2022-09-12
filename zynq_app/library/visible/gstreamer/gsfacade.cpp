@@ -27,8 +27,10 @@ GsFacade::~GsFacade()
     gst_deinit();
 }
 
-void GsFacade::initAndStart(PipelineEnum pipelineEnum)
+bool GsFacade::initAndStart(PipelineEnum pipelineEnum)
 {
+    bool errors = false;
+
     if (pipelineEnum & RAW_SAVE)
     {
         qCInfo(gsLog()) << "Initializing and starting storage of RAW stream";
@@ -49,6 +51,13 @@ void GsFacade::initAndStart(PipelineEnum pipelineEnum)
         displayPipe =  std::make_unique<RawDisplayPipeline>();
         displayPipe->start();
     }
+
+    if (pipelineEnum & WIRIS_RTP)
+    {
+        m_wirisVisiblePipeline.start();
+    }
+
+    return !errors;
 }
 
 void GsFacade::stop(PipelineEnum pipelineEnum)
@@ -66,6 +75,24 @@ void GsFacade::stop(PipelineEnum pipelineEnum)
     if (pipelineEnum & RAW_DISPLAY && displayPipe)
     {
         displayPipe ->stop();
+    }
+
+    if (pipelineEnum & WIRIS_RTP)
+    {
+        m_wirisVisiblePipeline.stop();
+    }
+}
+
+bool GsFacade::setState(PipelineEnum pipeline, bool state)
+{
+    if (state)
+    {
+        return initAndStart(pipeline);
+    }
+    else
+    {
+        stop(pipeline);
+        return true;
     }
 }
 

@@ -29,9 +29,9 @@ void MenuBuilder::buildFunctions(SubmenuItem* submenu, QWidget* parent, Controll
 void MenuBuilder::buildStream(SubmenuItem* submenu, QWidget* parent, Controller* controller)
 {
     // TODO create complete pop up class
-    submenu->itemList.emplace_back(std::make_unique<ValueItem>("Display", controller->gain, parent));
-    submenu->itemList.emplace_back(std::make_unique<ValueItem>("RTP", controller->gain, parent));
-    submenu->itemList.emplace_back(std::make_unique<ValueItem>("File", controller->gain, parent));
+    submenu->itemList.emplace_back(std::make_unique<ValueItem>("Display", controller->hdmi_stream, parent));
+    submenu->itemList.emplace_back(std::make_unique<ValueItem>("RTP", controller->rtp_stream, parent));
+    submenu->itemList.emplace_back(std::make_unique<ValueItem>("File", controller->file_stream, parent));
 }
 
 void MenuBuilder::buildAdvanced(SubmenuItem* submenu, QWidget* parent, Controller*)//controller)

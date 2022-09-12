@@ -1,9 +1,9 @@
 #include "controller.h"
 #include "global/config.h"
 
-Controller::Controller(Visca& visca) : m_visca(visca)
+Controller::Controller(Visca& visca, GsFacade& gstreamer) : m_visca(visca), m_gstreamer(gstreamer)
 {
-    shutter.addDependency(validShutter);
+    // shutter.addDependency(validShutter);
 
     setDefault();
 }
@@ -43,5 +43,20 @@ bool Controller::setGain(u_int8_t value)
 {
     // TODO add remaping to db
     return m_visca.executeCommand(ViscaCommands::Exposure::Gain::setValue(value),400,"gain");
+}
+
+bool Controller::switchRtp(bool state)
+{
+    return m_gstreamer.setState(GsFacade::WIRIS_RTP, state);
+}
+
+bool Controller::switchFile(bool state)
+{
+    return m_gstreamer.setState(GsFacade::RAW_SAVE, state);
+}
+
+bool Controller::switchHDMI(bool state)
+{
+    return m_gstreamer.setState(GsFacade::RAW_DISPLAY, state);
 }
 

@@ -25,9 +25,9 @@ struct IValue
 };
 
 template<typename TValue, typename TParam, typename TContext>
-struct NumValue : public IValue
+struct Value : public IValue
 {
-    NumValue(TValue defaultValue, TValue minValue, TValue maxValue, bool (TContext::*setFunc) (TParam), TContext* context, QString units = "")
+    Value(TValue defaultValue, TValue minValue, TValue maxValue, bool (TContext::*setFunc) (TParam), TContext* context, QString units = "")
         : m_value(defaultValue),
           m_units(units),
           m_default(m_value),
@@ -77,7 +77,11 @@ struct NumValue : public IValue
     {
         if(m_value < m_max)
         {
-            m_value = (TValue) (m_value + 1);
+            m_value = static_cast<TValue>(m_value + 1);
+        }
+        else
+        {
+            m_value = m_min;
         }
     }
 
@@ -85,7 +89,11 @@ struct NumValue : public IValue
     {
         if(m_value > m_min)
         {
-            m_value = (TValue) (m_value - 1);
+            m_value = static_cast<TValue>(m_value - 1);
+        }
+        else
+        {
+            m_value = m_max;
         }
     }
 
@@ -123,12 +131,42 @@ protected:
     std::vector<std::unique_ptr<IDependency>> m_dependencies {};
 };
 
+template<typename TContext>
+struct BoolValue : public Value<bool, bool, TContext>
+{
+    BoolValue(bool defaultVal, bool (TContext::*setFunc) (bool), TContext* context, QString trueMessage = "On", QString falseMessage = "Off")
+        : Value<bool, bool, TContext>(defaultVal, false, true, setFunc, context, ""),
+          m_onString(trueMessage), m_offString(falseMessage)
+    {
+    }
 
-template<typename TVar, std::size_t TSize, typename TContext>
-struct ArrValue : public NumValue<std::size_t, TVar, TContext> {
+    QString getQString() override
+    {
+        return this->m_value ? m_onString : m_offString;
+    }
+
+    void operator++() override
+    {
+        this->m_value = !this->m_value;
+    }
+
+    void operator--() override
+    {
+        this->m_value = !this->m_value;
+    }
+
+private:
+    QString m_onString;
+    QString m_offString;
+};
+
+template<typename TVar, typename TContext, std::size_t TSize>
+struct ArrValue : public Value<std::size_t, TVar, TContext>
+{
     ArrValue(const std::array<std::pair<TVar, QString>, TSize> *array, bool (TContext::*setFunc) (TVar), TContext* context)
-        : NumValue<std::size_t, TVar, TContext>(0U, 0U, TSize, setFunc, context),
-          m_array(array) { }
+        : m_array(array), Value<std::size_t, TVar,TContext>(0U, 0U, TSize - 1, setFunc, context)
+    {
+    }
 
     QString getQString() override
     {
