@@ -10,9 +10,7 @@ class PopupItem : public ItemBase
 public:
     PopupItem(QWidget* parent);
 
-    void open() override;
-    void exit() override;
-
+    void execute() override;
     void control(QKeyEvent* event) override;
 };
 

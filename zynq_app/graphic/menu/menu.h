@@ -5,8 +5,8 @@
 #include <QVBoxLayout>
 #include <stack>
 
-#include "graphic/menu/items/itembase.h"
-#include "graphic/menu/items/submenuitem.h"
+#include "items/itembase.h"
+#include "items/submenuitem.h"
 
 /*!
  * \brief QWidget used to display, control and store the whole menu
@@ -19,21 +19,34 @@ public:
     static Menu& getInstance();
 
     void keyPressEvent(QKeyEvent *event);
-    void setSubmenu(SubmenuItem* submenu);
 
-    SubmenuItem *getRoot();
+    enum ControlMode { INACTIVE, ACTIVE, EXEC };
 
-    void open();
-    void exit();
+    void startExec();
+    void completeExec();
+
+    void setSubmenu(SubmenuItem* submenu, std::size_t index = 0);
+
+    //! \brief Stores the whole menu in tree structure - child elements are in elementlist
+    std::unique_ptr<SubmenuItem> m_root = nullptr;
+    // TODO private
 
 private:
     Menu();
 
-    //! \brief Stores the whole menu in tree structure - child elements are in elementlist
-    std::unique_ptr<SubmenuItem> m_root = nullptr;
-    ItemBase *m_currentItem = nullptr;
+    void open();
+    void close();
 
-    bool m_active = false;
+    void menuNav(QKeyEvent *event);
+
+    ControlMode m_currentMode = INACTIVE;
+
+    //! \brief Submenu from which the elements are displayed
+    SubmenuItem *m_currentSubmenu = nullptr;
+
+    //! \brief stack used to remember prev indexes when going back
+    std::stack<std::size_t> m_indexstack{};
+    std::size_t m_currentElement = 0;
 };
 
 #endif // MENU_H

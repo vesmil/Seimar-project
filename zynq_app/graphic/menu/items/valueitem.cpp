@@ -14,16 +14,11 @@ ValueItem::ValueItem(const QString& text, IValue& value, QWidget* parent, bool l
     layout->addWidget(&m_valueLabel);
 }
 
-void ValueItem::open()
+void ValueItem::execute()
 {
-    ItemBase::open();
-    // Menu::getInstance().startExec();
+    ItemBase::execute();
+    Menu::getInstance().startExec();
     m_value.store();
-}
-
-void ValueItem::exit()
-{
-
 }
 
 
@@ -34,12 +29,12 @@ void ValueItem::control(QKeyEvent* event)
     {
         case Qt::Key_Left:
             m_value.restorePrev();
-            // Menu::getInstance().completeExec();
+            Menu::getInstance().completeExec();
             break;
 
         case Qt::Key_Right:
             m_value.set();
-            // Menu::getInstance().completeExec();
+            Menu::getInstance().completeExec();
             break;
 
         case Qt::Key_Up:

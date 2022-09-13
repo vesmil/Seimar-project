@@ -1,14 +1,10 @@
 #include "menubuilder.h"
 
 #include "library/application/settings.h"
-#include "graphic/menu/items/valueitem.h"
-#include "graphic/menu/items/popupitem.h"
+#include "library/controller/controller.h"
 
-void MenuBuilder::buildMenuTree(Menu* menu, Controller* controller)
+void MenuBuilder::buildMenuTree(SubmenuItem* root, QWidget* parent, Controller* controller)
 {
-    SubmenuItem* root = menu->getRoot();
-    QWidget* parent = static_cast<QWidget*>(menu);
-
     root->itemList.emplace_back(std::make_unique<SubmenuItem>("Functions", root, parent));
     buildFunctions(static_cast<SubmenuItem*>((root->itemList[0]).get()), parent, controller);
 

@@ -9,14 +9,9 @@ ItemBase::ItemBase(QWidget* parent) : QWidget(parent)
     setStyleSheet(Style::getInstance().menu.item);
 }
 
-void ItemBase::open()
+void ItemBase::execute()
 {    
     setStyleSheet(Style::getInstance().menu.executedItem);
-}
-
-void ItemBase::exit()
-{
-
 }
 
 void ItemBase::select()

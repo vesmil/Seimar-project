@@ -11,19 +11,18 @@ class ItemBase : public QWidget
 public:
     ItemBase(QWidget* parent);
 
-    virtual void open();
-    virtual void exit();
+    virtual bool isHidden();
 
+    virtual void execute();
     virtual void select();
     virtual void deselect();
 
     virtual void control(QKeyEvent* event);
 
-    virtual bool isHidden();
-
 protected:
     using BaseClass = ItemBase;
 };
+
 
 class ItemLayout : public QHBoxLayout
 {

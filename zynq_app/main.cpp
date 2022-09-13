@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 
     // Create UI
     Menu &menu = Menu::getInstance();
-    MenuBuilder::buildMenuTree(&menu, &controller);
+    MenuBuilder::buildMenuTree(menu.m_root.get(), static_cast<QWidget*>(&menu), &controller);
 
     menu.show();
 
