@@ -14,10 +14,15 @@ PopupItem::PopupItem(QWidget* parent) : ItemBase(parent)
     layout->addWidget(label);
 }
 
-void PopupItem::execute()
+void PopupItem::open()
 {
-    ItemBase::execute();
-    Menu::getInstance().startExec();
+    ItemBase::open();
+    // Menu::getInstance().startExec();
+}
+
+void PopupItem::exit()
+{
+
 }
 
 void PopupItem::control(QKeyEvent* event)
@@ -26,11 +31,11 @@ void PopupItem::control(QKeyEvent* event)
     {
     case Qt::Key_Left:
         // TODO Restore state
-        Menu::getInstance().completeExec();
+        // Menu::getInstance().completeExec();
         break;
 
     case Qt::Key_Right:
-        Menu::getInstance().completeExec();
+        // Menu::getInstance().completeExec();
         break;
 
     case Qt::Key_Up:

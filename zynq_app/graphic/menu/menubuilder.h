@@ -1,16 +1,13 @@
 #ifndef MENUBUILDER_H
 #define MENUBUILDER_H
 
-#include "graphic/menu/items/submenuitem.h"
-#include "graphic/menu/items/valueitem.h"
-#include "graphic/menu/items/popupitem.h"
-
+#include "graphic/menu/menu.h"
 #include "library/controller/controller.h"
 
 class MenuBuilder
 {
 public:
-    static void buildMenuTree(SubmenuItem* root, QWidget* parent, Controller* controller);
+    static void buildMenuTree(Menu* menu, Controller* controller);
 
 private:
     static void buildFunctions(SubmenuItem* submenu, QWidget* parent, Controller* controller);

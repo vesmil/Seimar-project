@@ -2,6 +2,8 @@
 
 #include "library/visible/gstreamer/gsfacade.h"
 
+// TODO consider merging all raw pipelines together
+
 RawDisplayPipeline::RawDisplayPipeline()
 {
     setSrcFromInternalPipeline("display-source");
@@ -12,7 +14,8 @@ RawDisplayPipeline::RawDisplayPipeline()
 
 void RawDisplayPipeline::setKmssink()
 {
-    // m_data.sink = GsWrapper::makeElement("kmssink", "kmssink");
+    // TODO ...
+    // m_data.sink = GsFacade::makeElement("kmssink", "kmssink");
     // g_object_set(m_data.sink, "fullscreen-overlay", 1, nullptr);
 
     m_data.sink = GsFacade::makeElement("autovideosink", "display-autovideosink");

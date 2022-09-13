@@ -7,7 +7,7 @@
 #include "pipelines/pipelinebase.h"
 
 // TODO remove - only for Wiris testing
-#define WIRIS_TEST
+// #define WIRIS_TEST
 
 class Visible
 {

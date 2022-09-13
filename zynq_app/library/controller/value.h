@@ -164,7 +164,8 @@ template<typename TVar, typename TContext, std::size_t TSize>
 struct ArrValue : public Value<std::size_t, TVar, TContext>
 {
     ArrValue(const std::array<std::pair<TVar, QString>, TSize> *array, bool (TContext::*setFunc) (TVar), TContext* context)
-        : m_array(array), Value<std::size_t, TVar,TContext>(0U, 0U, TSize - 1, setFunc, context)
+        : Value<std::size_t, TVar,TContext>(0U, 0U, TSize - 1, setFunc, context),
+          m_array(array)
     {
     }
 
