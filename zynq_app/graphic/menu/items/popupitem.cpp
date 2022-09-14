@@ -13,9 +13,9 @@ PopupItem::PopupItem(QWidget* parent) : ItemBase(parent)
     layout->addWidget(label);
 }
 
-void PopupItem::executeSlected()
+void PopupItem::executeSelected()
 {
-    ItemBase::executeSlected();
+    ItemBase::executeSelected();
 }
 
 void PopupItem::control(QKeyEvent* event)

@@ -135,6 +135,7 @@ classDiagram
 	
 	class ItemBase {
 		void execute()
+        void control(QKeyEvent)
 	}
 	
     class SubmenuItem{
@@ -148,9 +149,7 @@ classDiagram
 	
 	class ValueItem{
 		QString text
-		Value value
-		
-		void control(QKeyEvent)
+		Value value		
 	}
 	
 	class Value {
@@ -195,9 +194,19 @@ classDiagram
 		Controller* controller
 	}
 	
-	MenuBuilder --> MenuItem
+    class Visca {
+		...
+	}
+	
+	class GsFacade {
+		...
+	}
+	
+	MenuBuilder --> ItemBase
 	Value --> Controller
     MenuBuilder --> Controller
+    Controller --> Visca
+    Controller --> GsFacade
 ```
 
 
@@ -232,8 +241,11 @@ classDiagram
 	Visca <-- Controller
 	Menu *--> MenuItem
 	GsFacade *--> PipelineBase
-	Controller --> ViscaCommands
+	PipelineBase --|> InternalPipeline
+    PipelineBase --|> RawXxxPipeline
 	GsFacade <-- Controller
+	Controller *--> Value
+	Value --> ViscaCommands
 	
 	class MenuBuilder {
 		void buildTree()
@@ -276,5 +288,12 @@ classDiagram
 		byte[] setZoom(uint8_t value)
 		byte[] ...())
 	}
+	
+	class Value {
+		operator++()
+		operator--()
+		set()
+		...()
+	}	
 ```
 

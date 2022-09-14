@@ -14,7 +14,7 @@ class SubmenuItem : public ItemBase
 public:
     SubmenuItem(QString text, SubmenuItem *parentMenu, QWidget *parent = nullptr);
 
-    void executeSlected() override;
+    void executeSelected() override;
     void control(QKeyEvent* event) override;
 
     void close();

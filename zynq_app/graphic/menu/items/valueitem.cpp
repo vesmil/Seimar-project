@@ -14,9 +14,9 @@ ValueItem::ValueItem(const QString& text, IValue& value, QWidget* parent, bool l
     layout->addWidget(&m_valueLabel);
 }
 
-void ValueItem::executeSlected()
+void ValueItem::executeSelected()
 {
-    ItemBase::executeSlected();
+    ItemBase::executeSelected();
     m_value.store();
 }
 

@@ -10,7 +10,7 @@ ItemBase::ItemBase(QWidget* parent) : QWidget(parent)
     setStyleSheet(Style::getInstance().menu.item);
 }
 
-void ItemBase::executeSlected()
+void ItemBase::executeSelected()
 {    
     setStyleSheet(Style::getInstance().menu.executedItem);
 }

@@ -14,7 +14,7 @@ class ValueItem : public ItemBase
 public:
     ValueItem(const QString& text, IValue& value, QWidget* parent = nullptr, bool live = false);
 
-    void executeSlected() override;
+    void executeSelected() override;
     void control(QKeyEvent* event) override;
 
     bool isHidden() override;

@@ -17,7 +17,7 @@ SubmenuItem::SubmenuItem(QString text, SubmenuItem *parentMenu, QWidget *parent)
     layout->addWidget(m_text);
 }
 
-void SubmenuItem::executeSlected()
+void SubmenuItem::executeSelected()
 {
     m_currentElement = 0;
     Menu::getInstance().setSubmenu(this);
@@ -45,7 +45,7 @@ void SubmenuItem::control(QKeyEvent* event)
             Menu::getInstance().m_currentItem = itemList[m_currentElement].get();
 
             itemList[m_currentElement]->onDeselect();
-            itemList[m_currentElement]->executeSlected();
+            itemList[m_currentElement]->executeSelected();
 
             break;
 
