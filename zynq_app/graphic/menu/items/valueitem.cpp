@@ -29,14 +29,17 @@ void ValueItem::control(QKeyEvent* event)
 
             if (m_liveView)
             {
-                m_value.set();
+                m_value.setAsync();
             }
 
             Menu::getInstance().completeExec();
             break;
 
         case Qt::Key_Right:
-            m_value.set();
+            if (!m_liveView)
+            {
+                m_value.setAsync();
+            }
             Menu::getInstance().completeExec();
             break;
 
@@ -45,7 +48,7 @@ void ValueItem::control(QKeyEvent* event)
 
             if (m_liveView)
             {
-                m_value.set();
+                m_value.setAsync();
             }
             break;
 
@@ -54,7 +57,7 @@ void ValueItem::control(QKeyEvent* event)
 
             if (m_liveView)
             {
-                m_value.set();
+                m_value.setAsync();
             }
             break;
 

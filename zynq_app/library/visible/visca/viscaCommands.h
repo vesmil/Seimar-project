@@ -42,15 +42,6 @@ namespace {
     {
         return (firstParam << 4 * sizeof...(params)) | reverseParse<TRet>(params...);
     }
-
-    /*!
-     * \brief Used to remap values from one range to another
-     */
-    template <typename TNew, typename TOld>
-    constexpr TNew mapToNewRange(TOld value, TOld oldMin, TOld oldMax, TNew newMin, TNew newMax)
-    {
-        return (value - oldMin) * (newMax - newMin) / (oldMax - oldMin) + newMin;
-    }
 }
 
 /*!
@@ -64,6 +55,15 @@ namespace ViscaCommands
     enum CommandType : uint8_t { CTRL = 0x01, INQ = 0x09 };
     enum ChangeEnum  : uint8_t { RESET = 0x00, UP = 0x02, DOWN = 0x03 };
     enum State       : uint8_t { ON = 0x02, OFF = 0x03 };
+
+    /*!
+     * \brief Used to remap values from one range to another
+     */
+    template <typename TNew, typename TOld>
+    constexpr TNew mapToNewRange(TOld value, TOld oldMin, TOld oldMax, TNew newMin, TNew newMax)
+    {
+        return (value - oldMin) * (newMax - newMin) / (oldMax - oldMin) + newMin;
+    }
 
     namespace Init
     {

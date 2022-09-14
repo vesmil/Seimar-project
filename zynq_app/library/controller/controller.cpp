@@ -40,10 +40,10 @@ bool Controller::setIris(uint8_t value)
     return m_visca.executeCommand(ViscaCommands::Exposure::Iris::setValue(value),400,"iris");
 }
 
-bool Controller::setGain(u_int8_t value)
+bool Controller::setGain(int value)
 {
-    // TODO add remaping to db
-    return m_visca.executeCommand(ViscaCommands::Exposure::Gain::setValue(value),400,"gain");
+    uint8_t remappedValue = ViscaCommands::mapToNewRange<uint8_t, int>(value, -3, 33,  0, 0x0C);
+    return m_visca.executeCommand(ViscaCommands::Exposure::Gain::setValue(remappedValue),400,"gain");
 }
 
 bool Controller::switchRtp(bool state)

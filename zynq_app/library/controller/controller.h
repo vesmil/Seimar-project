@@ -25,8 +25,7 @@ public:
     Value<uint8_t, uint8_t, Controller> iris {0x10, 0x5, 0x15, &Controller::setIris, this, ""};
     Dependency<ModeValue, ViscaCommands::Exposure::Mode, ViscaCommands::Exposure::Mode::MANUAL, ViscaCommands::Exposure::Mode::IRIS_PRI> validIris{exposureMode};
 
-    // TODO add remaping to db
-    Value<uint8_t, uint8_t, Controller> gain {0, 6, 0x0C, &Controller::setGain, this, "dB"};
+    Value<int, int, Controller> gain {0, -3, 33, &Controller::setGain, this, "dB"};
     Dependency<ModeValue, ViscaCommands::Exposure::Mode, ViscaCommands::Exposure::Mode::MANUAL, ViscaCommands::Exposure::Mode::GAIN_PRI> validGain{exposureMode};
 
     BoolValue<Controller> rtp_stream {false, &Controller::switchRtp, this};
@@ -41,7 +40,7 @@ private:
 
     bool setShutter(u_int8_t value);
     bool setIris(uint8_t value);
-    bool setGain(u_int8_t value);
+    bool setGain(int value);
 
     bool setExposureCompensation(uint8_t value);
 

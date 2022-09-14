@@ -12,8 +12,8 @@
 class IValue
 {
 public:
-    virtual void set() = 0;
-    virtual void setDefault() = 0;
+    virtual void setAsync() = 0;
+    virtual void revertDefault() = 0;
 
     virtual void store() = 0;
     virtual void restorePrev() = 0;
@@ -46,9 +46,11 @@ public:
         return m_value;
     }
 
-    void set() override
+    void setAsync() override
     {
-        // TODO lock m_value and m_prev value
+        QMutexLocker locker(&m_mutex);
+
+        // TODO this doesnt need to be fturue... it just has to norify menu
 
         QFuture<void> future = QtConcurrent::run([&](){
             if (!(m_context->*m_setFunc)(static_cast<TParam>(m_value)))
@@ -59,19 +61,21 @@ public:
         });
     }
 
-    void setDefault() override
+    void revertDefault() override
     {
+        QMutexLocker locker(&m_mutex);
         m_value = m_default;
-        set();
     }
 
     void store() override
     {
+        QMutexLocker locker(&m_mutex);
         m_prevValue = TValue(m_value);
     }
 
     void restorePrev() override
     {
+        QMutexLocker locker(&m_mutex);
         m_value = m_prevValue;
     }
 
@@ -82,6 +86,8 @@ public:
 
     void operator++() override
     {
+        QMutexLocker locker(&m_mutex);
+
         if(m_value < m_max)
         {
             m_value = static_cast<TValue>(m_value + 1);
@@ -94,6 +100,8 @@ public:
 
     void operator--() override
     {
+        QMutexLocker locker(&m_mutex);
+
         if(m_value > m_min)
         {
             m_value = static_cast<TValue>(m_value - 1);
@@ -125,6 +133,8 @@ public:
 protected:
     TValue m_value;
     QString m_units;
+
+    QMutex m_mutex;
 
     TValue m_default;
     TValue m_min;
@@ -188,7 +198,7 @@ public:
         return m_array->at(this->m_value).first;
     }
 
-    void set() override
+    void setAsync() override
     {
         QFuture<void> future = QtConcurrent::run([&](){
             if (!(this->m_context->*this->m_setFunc)(m_array->at(this->m_value).first))

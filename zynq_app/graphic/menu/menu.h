@@ -27,7 +27,6 @@ public:
 
     // backToParent(SubmenuItem ...)
     // gotoChild(ItemBase ...)
-    //
 
     void setSubmenu(SubmenuItem* submenu);
 
