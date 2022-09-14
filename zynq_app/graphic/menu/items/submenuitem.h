@@ -14,12 +14,18 @@ class SubmenuItem : public ItemBase
 public:
     SubmenuItem(QString text, SubmenuItem *parentMenu, QWidget *parent = nullptr);
 
-    void execute() override;
+    void executeSlected() override;
+    void control(QKeyEvent* event) override;
+
+    void close();
+
+    bool isHidden() override;
 
     QLabel* m_text;
+    size_t m_currentElement = 0;
 
     SubmenuItem* parentMenu;
-    std::vector<std::unique_ptr<ItemBase>> itemList{};
+    std::vector<std::unique_ptr<ItemBase>> itemList {};
 };
 
 #endif // SUBMENUITEM_H

@@ -7,17 +7,15 @@ PopupItem::PopupItem(QWidget* parent) : ItemBase(parent)
 {
     ItemLayout* layout = new ItemLayout(this);
 
-    // TODO complete popup item
     QLabel* label = new QLabel(this);
     label->setText("Pop-up");
 
     layout->addWidget(label);
 }
 
-void PopupItem::execute()
+void PopupItem::executeSlected()
 {
-    ItemBase::execute();
-    Menu::getInstance().startExec();
+    ItemBase::executeSlected();
 }
 
 void PopupItem::control(QKeyEvent* event)

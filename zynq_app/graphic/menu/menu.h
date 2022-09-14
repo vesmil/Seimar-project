@@ -8,6 +8,7 @@
 #include "items/itembase.h"
 #include "items/submenuitem.h"
 
+
 /*!
  * \brief QWidget used to display, control and store the whole menu
  */
@@ -20,33 +21,36 @@ public:
 
     void keyPressEvent(QKeyEvent *event);
 
-    enum ControlMode { INACTIVE, ACTIVE, EXEC };
-
-    void startExec();
     void completeExec();
 
-    void setSubmenu(SubmenuItem* submenu, std::size_t index = 0);
+    // TODO move the responsibilities of SubmenuItem out of Menu -> remove ControlMode and Exec
 
-    //! \brief Stores the whole menu in tree structure - child elements are in elementlist
-    std::unique_ptr<SubmenuItem> m_root = nullptr;
-    // TODO private
+    // backToParent(SubmenuItem ...)
+    // gotoChild(ItemBase ...)
+    //
 
-private:
-    Menu();
+    void setSubmenu(SubmenuItem* submenu);
+
+    void refreshMenu();
+
+    SubmenuItem* getRoot();
+
+    ItemBase *m_currentItem = nullptr;
 
     void open();
     void close();
 
-    void menuNav(QKeyEvent *event);
+private:
+    Menu();
 
-    ControlMode m_currentMode = INACTIVE;
+    //! \brief Stores the whole menu in tree structure - child elements are in elementlist
+    std::unique_ptr<SubmenuItem> m_root = nullptr;
 
     //! \brief Submenu from which the elements are displayed
     SubmenuItem *m_currentSubmenu = nullptr;
 
-    //! \brief stack used to remember prev indexes when going back
-    std::stack<std::size_t> m_indexstack{};
-    std::size_t m_currentElement = 0;
+    bool m_active;
+    bool m_controlToItem;
 };
 
 #endif // MENU_H

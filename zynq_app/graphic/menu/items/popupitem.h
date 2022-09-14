@@ -4,13 +4,15 @@
 #include <QKeyEvent>
 #include "itembase.h"
 
+// TODO complete popup item
+
 //! \brief Item which will open a new window upon confirmation
 class PopupItem : public ItemBase
 {
 public:
     PopupItem(QWidget* parent);
 
-    void execute() override;
+    void executeSlected() override;
     void control(QKeyEvent* event) override;
 };
 

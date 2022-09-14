@@ -4,6 +4,8 @@
 #include "uartcommunication.h"
 #include "global/logcategories.h"
 
+// TODO run in different thread
+
 /*!
  * \brief Class with basic VISCA commands - facade on UartCommunication class
  */
@@ -45,6 +47,7 @@ public:
 
         return true;
     }
+
 
     /*!
      * \brief Send VISCA inquiry command (request camera to send some information)

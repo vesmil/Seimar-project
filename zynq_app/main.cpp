@@ -21,19 +21,22 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
 
+    Menu &menu = Menu::getInstance();
+    menu.show();
+
     // Setup gstreamer pipelines from cam
     GsFacade gsFacade{};
-    // gsFacade.initAndStart(GsFacade::WIRIS_RTP); // | GsFacade::RAW_DISPLAY
+
+    // No stream starts by default
+    // gsFacade.initAndStart(GsFacade::WIRIS_RTP | GsFacade::RAW_DISPLAY);
 
     Visca visca(glb::path::CAMERA_UART.c_str());
 
     Controller controller(visca, gsFacade);
 
     // Create UI
-    Menu &menu = Menu::getInstance();
-    MenuBuilder::buildMenuTree(menu.m_root.get(), static_cast<QWidget*>(&menu), &controller);
+    MenuBuilder::buildMenuTree(menu, &controller);
 
-    menu.show();
 
     return a.exec();
 }

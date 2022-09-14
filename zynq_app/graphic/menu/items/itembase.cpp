@@ -1,7 +1,8 @@
 #include "itembase.h"
 
-#include <graphic/style.h>
 #include <QPalette>
+#include <graphic/style.h>
+#include "global/logcategories.h"
 
 ItemBase::ItemBase(QWidget* parent) : QWidget(parent)
 {
@@ -9,24 +10,24 @@ ItemBase::ItemBase(QWidget* parent) : QWidget(parent)
     setStyleSheet(Style::getInstance().menu.item);
 }
 
-void ItemBase::execute()
+void ItemBase::executeSlected()
 {    
     setStyleSheet(Style::getInstance().menu.executedItem);
 }
 
-void ItemBase::select()
+void ItemBase::onSelect()
 {
     setStyleSheet(Style::getInstance().menu.selectedItem);
 }
 
-void ItemBase::deselect()
+void ItemBase::onDeselect()
 {
     setStyleSheet(Style::getInstance().menu.item);
 }
 
 void ItemBase::control(QKeyEvent*)
 {
-
+    qCWarning(gsLog()) << "Calling control on abstract type";
 }
 
 bool ItemBase::isHidden()

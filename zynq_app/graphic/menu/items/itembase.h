@@ -8,14 +8,16 @@
 class ItemBase : public QWidget
 {
     Q_OBJECT
+
 public:
     ItemBase(QWidget* parent);
 
     virtual bool isHidden();
 
-    virtual void execute();
-    virtual void select();
-    virtual void deselect();
+    virtual void executeSlected();
+
+    virtual void onSelect();
+    virtual void onDeselect();
 
     virtual void control(QKeyEvent* event);
 

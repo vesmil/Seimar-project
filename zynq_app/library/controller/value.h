@@ -1,6 +1,7 @@
 #ifndef VALUE_H
 #define VALUE_H
 
+#include <QtConcurrent/QtConcurrent>
 #include <QString>
 
 #include <bits/unique_ptr.h>
@@ -8,8 +9,9 @@
 #include "global/logcategories.h"
 #include "library/controller/dependency.h"
 
-struct IValue
+class IValue
 {
+public:
     virtual void set() = 0;
     virtual void setDefault() = 0;
 
@@ -25,8 +27,9 @@ struct IValue
 };
 
 template<typename TValue, typename TParam, typename TContext>
-struct Value : public IValue
-{
+class Value : public IValue
+{\
+public:
     Value(TValue defaultValue, TValue minValue, TValue maxValue, bool (TContext::*setFunc) (TParam), TContext* context, QString units = "")
         : m_value(defaultValue),
           m_units(units),
@@ -45,11 +48,15 @@ struct Value : public IValue
 
     void set() override
     {
-        bool result = (m_context->*m_setFunc)(static_cast<TParam>(m_value));
-        if (!result)
-        {
-            m_value = m_prevValue;
-        }
+        // TODO lock m_value and m_prev value
+
+        QFuture<void> future = QtConcurrent::run([&](){
+            if (!(m_context->*m_setFunc)(static_cast<TParam>(m_value)))
+            {
+                m_value = m_prevValue;
+                // m_context->refreshCurrentMenu();
+            }
+        });
     }
 
     void setDefault() override
@@ -132,8 +139,9 @@ protected:
 };
 
 template<typename TContext>
-struct BoolValue : public Value<bool, bool, TContext>
+class BoolValue : public Value<bool, bool, TContext>
 {
+public:
     BoolValue(bool defaultVal, bool (TContext::*setFunc) (bool), TContext* context, QString trueMessage = "On", QString falseMessage = "Off")
         : Value<bool, bool, TContext>(defaultVal, false, true, setFunc, context, ""),
           m_onString(trueMessage), m_offString(falseMessage)
@@ -161,8 +169,9 @@ private:
 };
 
 template<typename TVar, typename TContext, std::size_t TSize>
-struct ArrValue : public Value<std::size_t, TVar, TContext>
+class ArrValue : public Value<std::size_t, TVar, TContext>
 {
+public:
     ArrValue(const std::array<std::pair<TVar, QString>, TSize> *array, bool (TContext::*setFunc) (TVar), TContext* context)
         : m_array(array), Value<std::size_t, TVar,TContext>(0U, 0U, TSize - 1, setFunc, context)
     {
@@ -181,12 +190,12 @@ struct ArrValue : public Value<std::size_t, TVar, TContext>
 
     void set() override
     {
-        bool result = (this->m_context->*this->m_setFunc)(m_array->at(this->m_value).first);
-
-        if (!result)
-        {
-            this->m_value = this->m_prevValue;
-        }
+        QFuture<void> future = QtConcurrent::run([&](){
+            if (!(this->m_context->*this->m_setFunc)(m_array->at(this->m_value).first))
+            {
+                this->m_value = this->m_prevValue;
+            }
+        });
     }
 
 private:

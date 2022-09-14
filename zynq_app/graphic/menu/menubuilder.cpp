@@ -3,8 +3,11 @@
 #include "library/application/settings.h"
 #include "library/controller/controller.h"
 
-void MenuBuilder::buildMenuTree(SubmenuItem* root, QWidget* parent, Controller* controller)
+void MenuBuilder::buildMenuTree(Menu &menu, Controller* controller)
 {
+    SubmenuItem* root = menu.getRoot();
+    QWidget* parent = static_cast<QWidget*>(&menu);
+
     root->itemList.emplace_back(std::make_unique<SubmenuItem>("Functions", root, parent));
     buildFunctions(static_cast<SubmenuItem*>((root->itemList[0]).get()), parent, controller);
 
@@ -17,12 +20,13 @@ void MenuBuilder::buildMenuTree(SubmenuItem* root, QWidget* parent, Controller* 
 
 void MenuBuilder::buildFunctions(SubmenuItem* submenu, QWidget* parent, Controller* controller)
 {
-    submenu->itemList.emplace_back(std::make_unique<ValueItem>("Zoom", controller->zoom, parent));
+    submenu->itemList.emplace_back(std::make_unique<ValueItem>("Zoom", controller->zoom, parent, true));
     submenu->itemList.emplace_back(std::make_unique<ValueItem>("Exposure mode", controller->exposureMode, parent));
     submenu->itemList.emplace_back(std::make_unique<ValueItem>("Shutter", controller->shutter, parent));
     submenu->itemList.emplace_back(std::make_unique<ValueItem>("Iris", controller->iris, parent));
     submenu->itemList.emplace_back(std::make_unique<ValueItem>("Gain", controller->gain, parent));
-    // TODO add compensation, ...
+
+    // TODO add compensation and others
 }
 
 void MenuBuilder::buildStream(SubmenuItem* submenu, QWidget* parent, Controller* controller)
@@ -35,6 +39,7 @@ void MenuBuilder::buildStream(SubmenuItem* submenu, QWidget* parent, Controller*
 void MenuBuilder::buildAdvanced(SubmenuItem* submenu, QWidget* parent, Controller*) //controller)
 {
     // TODO complete popup item and add ip address settings...
+
     submenu->itemList.emplace_back(std::make_unique<PopupItem>(parent));
 }
 

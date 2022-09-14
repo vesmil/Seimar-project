@@ -14,14 +14,11 @@ ValueItem::ValueItem(const QString& text, IValue& value, QWidget* parent, bool l
     layout->addWidget(&m_valueLabel);
 }
 
-void ValueItem::execute()
+void ValueItem::executeSlected()
 {
-    ItemBase::execute();
-    Menu::getInstance().startExec();
+    ItemBase::executeSlected();
     m_value.store();
 }
-
-
 
 void ValueItem::control(QKeyEvent* event)
 {
@@ -29,6 +26,12 @@ void ValueItem::control(QKeyEvent* event)
     {
         case Qt::Key_Left:
             m_value.restorePrev();
+
+            if (m_liveView)
+            {
+                m_value.set();
+            }
+
             Menu::getInstance().completeExec();
             break;
 
@@ -39,6 +42,7 @@ void ValueItem::control(QKeyEvent* event)
 
         case Qt::Key_Up:
             ++m_value;
+
             if (m_liveView)
             {
                 m_value.set();
@@ -47,6 +51,7 @@ void ValueItem::control(QKeyEvent* event)
 
         case Qt::Key_Down:
             --m_value;
+
             if (m_liveView)
             {
                 m_value.set();
