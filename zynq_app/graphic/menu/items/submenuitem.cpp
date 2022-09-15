@@ -96,6 +96,11 @@ bool SubmenuItem::isHidden()
     return m_itemList.size() == 0;
 }
 
+void SubmenuItem::addItem(std::unique_ptr<ItemBase> item)
+{
+    m_itemList.emplace_back(std::move(item));
+}
+
 void SubmenuItem::display(QLayout* layout)
 {
     if( m_itemList.size() == 0)

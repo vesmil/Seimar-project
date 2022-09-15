@@ -13,9 +13,9 @@ public:
     static void buildMenuTree(Menu& menu, Controller* controller);
 
 private:
-    static void buildFunctions(SubmenuItem* submenu, QWidget* parent, Controller* controller);
-    static void buildStream(SubmenuItem* submenu, QWidget* parent, Controller* controller);
-    static void buildAdvanced(SubmenuItem* submenu, QWidget* parent, Controller* controller);
+    static std::unique_ptr<SubmenuItem> buildFunctions(SubmenuItem* parentMenu, QWidget* parentWidget, Controller* controller);
+    static std::unique_ptr<SubmenuItem> buildStream(SubmenuItem* parentMenu, QWidget* parentWidget, Controller* controller);
+    static std::unique_ptr<SubmenuItem> buildAdvanced(SubmenuItem* parentMenu, QWidget* parentWidget, Controller* controller);
 };
 
 #endif // MENUBUILDER_H

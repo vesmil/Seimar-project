@@ -29,6 +29,9 @@ public:
     virtual bool isHidden() = 0;
 };
 
+// TOOD probobaly could be split better - keep just one Value but mby add Iterator
+// ...the different thing across values is getting QString, increasing and decreasing
+
 template<typename TValue, typename TParam, typename TContext>
 class Value : public IValue
 {\

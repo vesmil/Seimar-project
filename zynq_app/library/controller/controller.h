@@ -36,6 +36,8 @@ public:
 private:
     bool setDefault();
 
+    void addToViscaQueue();
+
     bool setZoom(uint8_t value);
     bool setExposureMode(ViscaCommands::Exposure::Mode mode);
 

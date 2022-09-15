@@ -7,7 +7,6 @@ class ControlableWidget : public QLabel
 {
 public:
     ControlableWidget(const QString& text, QWidget* parentWidget);
-
     void control(QKeyEvent* event);
 };
 

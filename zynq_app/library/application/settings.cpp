@@ -5,8 +5,3 @@ Settings& Settings::getInstance()
     static Settings instance;
     return instance;
 }
-
-Settings::Settings()
-{
-
-}

@@ -8,39 +8,44 @@ void MenuBuilder::buildMenuTree(Menu &menu, Controller* controller)
     SubmenuItem* root = menu.getRoot();
     QWidget* parent = static_cast<QWidget*>(&menu);
 
-    root->m_itemList.emplace_back(std::make_unique<SubmenuItem>("Functions", root, parent));
-    buildFunctions(static_cast<SubmenuItem*>((root->m_itemList[0]).get()), parent, controller);
-
-    root->m_itemList.emplace_back(std::make_unique<SubmenuItem>("Stream", root, parent));
-    buildStream(static_cast<SubmenuItem*>((root->m_itemList[1]).get()), parent, controller);
-
-    root->m_itemList.emplace_back(std::make_unique<SubmenuItem>("Advanced", root, parent));
-    buildAdvanced(static_cast<SubmenuItem*>((root->m_itemList[2]).get()), parent, controller);
+    root->addItem(buildFunctions(root, parent, controller));
+    root->addItem(buildStream(root, parent, controller));
+    root->addItem(buildAdvanced(root, parent, controller));
 }
 
-void MenuBuilder::buildFunctions(SubmenuItem* submenu, QWidget* parent, Controller* controller)
+std::unique_ptr<SubmenuItem> MenuBuilder::buildFunctions(SubmenuItem* parentMenu, QWidget* parentWidget, Controller* controller)
 {
-    submenu->m_itemList.emplace_back(std::make_unique<ValueItem>("Zoom", controller->zoom, submenu, parent, true));
-    submenu->m_itemList.emplace_back(std::make_unique<ValueItem>("Exposure mode", controller->exposureMode, submenu, parent));
-    submenu->m_itemList.emplace_back(std::make_unique<ValueItem>("Shutter", controller->shutter, submenu, parent));
-    submenu->m_itemList.emplace_back(std::make_unique<ValueItem>("Iris", controller->iris, submenu, parent));
-    submenu->m_itemList.emplace_back(std::make_unique<ValueItem>("Gain", controller->gain, submenu, parent));
-    // TODO add compensation and other items
+    auto functionMenu = std::make_unique<SubmenuItem>("Functions", parentMenu, parentWidget);
+
+    functionMenu->addItem(std::make_unique<ValueItem>("Zoom", controller->zoom, functionMenu.get(), parentWidget, true));
+    functionMenu->addItem(std::make_unique<ValueItem>("Exposure mode", controller->exposureMode, functionMenu.get(), parentWidget));
+    functionMenu->addItem(std::make_unique<ValueItem>("Shutter", controller->shutter, functionMenu.get(), parentWidget));
+    functionMenu->addItem(std::make_unique<ValueItem>("Iris", controller->iris, functionMenu.get(), parentWidget));
+    functionMenu->addItem(std::make_unique<ValueItem>("Gain", controller->gain, functionMenu.get(), parentWidget));
+
+    return functionMenu;
 }
 
-void MenuBuilder::buildStream(SubmenuItem* submenu, QWidget* parent, Controller* controller)
+std::unique_ptr<SubmenuItem> MenuBuilder::buildStream(SubmenuItem* parentMenu, QWidget* parentWidget, Controller* controller)
 {
-    submenu->m_itemList.emplace_back(std::make_unique<ValueItem>("Display", controller->hdmi_stream, submenu, parent));
-    submenu->m_itemList.emplace_back(std::make_unique<ValueItem>("RTP", controller->rtp_stream, submenu, parent));
-    submenu->m_itemList.emplace_back(std::make_unique<ValueItem>("File", controller->file_stream, submenu, parent));
+    auto streamMenu = std::make_unique<SubmenuItem>("Stream", parentMenu, parentWidget);
+
+    streamMenu->addItem(std::make_unique<ValueItem>("Display", controller->hdmi_stream, streamMenu.get(), parentWidget));
+    streamMenu->addItem(std::make_unique<ValueItem>("RTP", controller->rtp_stream, streamMenu.get(), parentWidget));
+    streamMenu->addItem(std::make_unique<ValueItem>("File", controller->file_stream, streamMenu.get(), parentWidget));
+
+    return streamMenu;
 }
 
-void MenuBuilder::buildAdvanced(SubmenuItem* submenu, QWidget* parent, Controller*)
+std::unique_ptr<SubmenuItem> MenuBuilder::buildAdvanced(SubmenuItem* parentMenu, QWidget* parentWidget, Controller*)
 {
+    auto advMenu = std::make_unique<SubmenuItem>("Advanced", parentMenu, parentWidget);
+
     // NOTE remove these dangling pointers
-    ControlableWidget* widget = new ControlableWidget("...", parent);
+    ControlableWidget* widget = new ControlableWidget("...", parentWidget);
 
-    submenu->m_itemList.emplace_back(std::make_unique<PopupItem>("test", widget, submenu, parent));
-    submenu->m_itemList.emplace_back(std::make_unique<PopupItem>("test 2", widget, submenu, parent));
+    advMenu->addItem(std::make_unique<PopupItem>("test", widget, advMenu.get(), parentWidget));
+    advMenu->addItem(std::make_unique<PopupItem>("test 2", widget, advMenu.get(), parentWidget));
+
+    return advMenu;
 }
-

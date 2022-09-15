@@ -19,6 +19,8 @@ public:
 
     bool isHidden() override;
 
+    void addItem(std::unique_ptr<ItemBase> item);
+
     void display(QLayout* layout);
     void close(QLayout* layout);
 
@@ -28,9 +30,6 @@ private:
     void goBack();
 
     QLabel* m_text;
-
-    // TODO it might be better to add public addItem()
-    friend class MenuBuilder;
 
     size_t m_currentElement = 0;
     std::vector<std::unique_ptr<ItemBase>> m_itemList {};

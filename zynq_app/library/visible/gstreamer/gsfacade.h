@@ -7,7 +7,7 @@
 #include "pipelines/pipelinebase.h"
 
 // NOTE remove all of after done w Wiris
-#define WIRIS_TEST
+// #define WIRIS_TEST
 
 class Visible
 {
@@ -105,13 +105,14 @@ public:
     Visible m_wirisVisiblePipeline{};
 
 private:
+    // NOTE prob would move to settings
+    static const int DEBUG_LEVEL = 2;
+
     std::unique_ptr<PipelineBase> rtpPipe;
     std::unique_ptr<PipelineBase> rawPipe;
     std::unique_ptr<PipelineBase> displayPipe;
 
     static bool m_interpipelineInited;
-
-    static const int DEBUG_LEVEL = 3;
 };
 
 inline GsFacade::PipelineEnum operator|(GsFacade::PipelineEnum a, GsFacade::PipelineEnum b)
