@@ -12,13 +12,16 @@ class ValueItem : public ItemBase
 public:
     ValueItem(const QString& text, IValue& value, SubmenuItem* parentMenu, QWidget* parentWidget = nullptr, bool live = false);
 
-    void executeSelected() override;
+    void execute() override;
     void control(QKeyEvent* event) override;
 
     void refresh() override;
     bool isHidden() override;
 
 private:
+    void increase();
+    void decrease();
+
     QLabel m_textLabel{};
     QLabel m_valueLabel{};
 

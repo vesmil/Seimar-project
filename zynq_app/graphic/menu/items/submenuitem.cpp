@@ -19,10 +19,10 @@ SubmenuItem::SubmenuItem(QString text, SubmenuItem *parentMenu, QWidget *parent)
     layout->addWidget(m_text);
 }
 
-void SubmenuItem::executeSelected()
+void SubmenuItem::execute()
 {
     m_currentElement = 0;
-    Menu::getInstance().displaySubmenu(this);
+    Menu::getInstance().setOnSubmenu(this);
 }
 
 void SubmenuItem::control(QKeyEvent* event)
@@ -34,9 +34,9 @@ void SubmenuItem::control(QKeyEvent* event)
             break;
 
         case Qt::Key_Right:
-            Menu::getInstance().setItem(itemList[m_currentElement].get());
-            itemList[m_currentElement]->onDeselect();
-            itemList[m_currentElement]->executeSelected();
+            Menu::getInstance().setCurrentItem(m_itemList[m_currentElement].get());
+            m_itemList[m_currentElement]->onDeselect();
+            m_itemList[m_currentElement]->execute();
             break;
 
         case Qt::Key_Up:
@@ -49,24 +49,13 @@ void SubmenuItem::control(QKeyEvent* event)
     }
 }
 
-void SubmenuItem::close()
-{
-    // TODO add layout as param
-
-    for (auto &&item : itemList)
-    {
-        item->setVisible(false);
-        Menu::getInstance().layout()->removeWidget(item.get());
-    }
-}
-
 void SubmenuItem::goBack()
 {
-    itemList[m_currentElement]->setStyleSheet(Style::getInstance().menu.item);
+    m_itemList[m_currentElement]->setStyleSheet(Style::getInstance().menu.item);
 
     if (m_parentMenu != nullptr)
     {
-        Menu::getInstance().displaySubmenu(m_parentMenu);
+        Menu::getInstance().setOnSubmenu(m_parentMenu);
     }
     else
     {
@@ -76,50 +65,62 @@ void SubmenuItem::goBack()
 
 void SubmenuItem::moveUp()
 {
-    itemList[m_currentElement]->onDeselect();
+    m_itemList[m_currentElement]->onDeselect();
 
     // NOTE prob could find next not hidden item better way...
-
     do
     {
-        m_currentElement = m_currentElement == 0? itemList.size() : m_currentElement;
+        m_currentElement = m_currentElement == 0? m_itemList.size() : m_currentElement;
         --m_currentElement;
     }
-    while (itemList[m_currentElement]->isHidden());
+    while (m_itemList[m_currentElement]->isHidden());
 
-    itemList[m_currentElement]->onSelect();
+    m_itemList[m_currentElement]->onSelect();
 }
 
 void SubmenuItem::moveDown()
 {
-    itemList[m_currentElement]->onDeselect();
+    m_itemList[m_currentElement]->onDeselect();
 
     do
     {
-            ++m_currentElement %= itemList.size();
+            ++m_currentElement %= m_itemList.size();
     }
-    while (itemList[m_currentElement]->isHidden());
+    while (m_itemList[m_currentElement]->isHidden());
 
-    itemList[m_currentElement]->onSelect();
+    m_itemList[m_currentElement]->onSelect();
 }
 
 bool SubmenuItem::isHidden()
 {
-    return itemList.size() == 0;
+    return m_itemList.size() == 0;
 }
 
-void SubmenuItem::display()
+void SubmenuItem::display(QLayout* layout)
 {
-    // TODO add layout as
+    if( m_itemList.size() == 0)
+    {
+        qCWarning(uiLog()) << "Empty submenu";
+        return;
+    }
 
-    for (auto &&item : itemList)
+    for (auto &&item : m_itemList)
     {
         if (!item->isHidden())
         {
             item->setVisible(true);
-            Menu::getInstance().layout()->addWidget(item.get());
+            layout->addWidget(item.get());
         }
     }
 
-    itemList[m_currentElement]->onSelect();
+    m_itemList[m_currentElement]->onSelect();
+}
+
+void SubmenuItem::close(QLayout* layout)
+{
+    for (auto &&item : m_itemList)
+    {
+        item->setVisible(false);
+        layout->removeWidget(item.get());
+    }
 }

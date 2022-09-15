@@ -8,5 +8,4 @@ Style& Style::getInstance()
 
 Style::Style()
 {
-
 }

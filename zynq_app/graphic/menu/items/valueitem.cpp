@@ -16,9 +16,9 @@ ValueItem::ValueItem(const QString& text, IValue& value, SubmenuItem* parentMenu
     layout->addWidget(&m_valueLabel);
 }
 
-void ValueItem::executeSelected()
+void ValueItem::execute()
 {
-    ItemBase::executeSelected();
+    ItemBase::execute();
     m_value.store();
 }
 
@@ -35,7 +35,7 @@ void ValueItem::control(QKeyEvent* event)
                     m_value.set();
                 }
             }
-            Menu::getInstance().displaySubmenu(m_parentMenu);
+            Menu::getInstance().setOnSubmenu(m_parentMenu);
             break;
 
         case Qt::Key_Right:
@@ -43,23 +43,15 @@ void ValueItem::control(QKeyEvent* event)
             {
                 m_value.set();
             }
-            Menu::getInstance().displaySubmenu(m_parentMenu);
+            Menu::getInstance().setOnSubmenu(m_parentMenu);
             break;
 
         case Qt::Key_Up:
-            ++m_value;
-            if (m_liveView)
-            {
-                m_value.set();
-            }
+            increase();
             break;
 
         case Qt::Key_Down:
-            --m_value;
-            if (m_liveView)
-            {
-                m_value.set();
-            }
+            decrease();
             break;
 
         default:
@@ -77,4 +69,22 @@ void ValueItem::refresh()
 bool ValueItem::isHidden()
 {
     return m_value.isHidden();
+}
+
+void ValueItem::increase()
+{
+    ++m_value;
+    if (m_liveView)
+    {
+        m_value.set();
+    }
+}
+
+void ValueItem::decrease()
+{
+    --m_value;
+    if (m_liveView)
+    {
+        m_value.set();
+    }
 }

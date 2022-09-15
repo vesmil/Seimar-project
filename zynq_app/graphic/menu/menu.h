@@ -18,27 +18,28 @@ class Menu  : public QWidget
 public:
     static Menu& getInstance();
 
-    void keyPressEvent(QKeyEvent *event);
-
     void open();
     void close();
 
-    void setItem(ItemBase* item);
-    void displaySubmenu(SubmenuItem* submenu);
+    void keyPressEvent(QKeyEvent *event);
+
+    void setCurrentItem(ItemBase* item);
+    void setOnSubmenu(SubmenuItem* submenu);
 
     SubmenuItem* getRoot();
 
 private:
     Menu();
+    bool m_active;
 
     //! \brief Stores the whole menu in tree structure - child elements are in elementlist
     std::unique_ptr<SubmenuItem> m_root = nullptr;
+
+    //! \brief Item in charge of menu controls
     ItemBase *m_currentItem = nullptr;
 
     //! \brief Submenu from which the elements are displayed
     SubmenuItem *m_currentSubmenu = nullptr;
-
-    bool m_active;
 };
 
 #endif // MENU_H

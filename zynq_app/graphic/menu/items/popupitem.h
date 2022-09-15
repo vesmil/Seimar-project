@@ -12,7 +12,7 @@ class PopupItem : public ItemBase
 public:
     PopupItem(const QString& text, ControlableWidget* popup, SubmenuItem* parentMenu, QWidget* parent);
 
-    void executeSelected() override;
+    void execute() override;
     void control(QKeyEvent* event) override;
 
     ControlableWidget* m_popupWidget;

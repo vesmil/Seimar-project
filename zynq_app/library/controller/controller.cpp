@@ -12,12 +12,25 @@ Controller::Controller(Visca& visca, GsFacade& gstreamer) : m_visca(visca), m_gs
 
 bool Controller::setDefault()
 {
-    setZoom(0);
-    setExposureMode(ViscaCommands::Exposure::Mode::FULL_AUTO);
-    // ...
+    // TODO...
+    zoom.setDefault();
+    exposureMode.setDefault();
 
-    return false;
+    rtp_stream.setDefault();
+    file_stream.setDefault();
+    hdmi_stream.setDefault();
+
+    return true;
 }
+
+void Controller::addToViscaQueue(/* Visca set function pointer */) // prob will be template
+{
+    // TODO should queue be in controller or in Visca
+    // ...I guess Visca would make more sense
+
+    // NOTE there could be some optimatizations in the future - check for same commands and skip them
+}
+
 
 bool Controller::setZoom(uint8_t zoom)
 {

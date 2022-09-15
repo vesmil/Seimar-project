@@ -14,7 +14,7 @@ class Controller
 public:
     Controller(Visca& visca, GsFacade& gstreamer);
 
-    // TODO create as ArrValue
+    // TODO create as ArrValue - zoom values set as {1, 1.2, 1.5, 2, 5, 10}
     Value<uint8_t, uint8_t, Controller> zoom {0, 0, 10, &Controller::setZoom, this, "x"};
 
     using ModeValue = ArrValue<ViscaCommands::Exposure::Mode, Controller, 5U>;
@@ -29,7 +29,7 @@ public:
     Value<int, int, Controller> gain {0, -3, 33, &Controller::setGain, this, "dB"};
     Dependency<ModeValue, ViscaCommands::Exposure::Mode, ViscaCommands::Exposure::Mode::MANUAL, ViscaCommands::Exposure::Mode::GAIN_PRI> validGain{exposureMode};
 
-    BoolValue<Controller> rtp_stream {false, &Controller::switchRtp, this};
+    BoolValue<Controller> rtp_stream {true, &Controller::switchRtp, this};
     BoolValue<Controller> file_stream {false, &Controller::switchFile, this};
     BoolValue<Controller> hdmi_stream {false, &Controller::switchHDMI, this};
 

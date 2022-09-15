@@ -14,7 +14,7 @@ class ItemBase : public QWidget
 public:
     ItemBase(QWidget* parent, SubmenuItem* parentMenu);
 
-    virtual void executeSelected();
+    virtual void execute();
     virtual void onSelect();
     virtual void onDeselect();
     virtual void control(QKeyEvent* event);

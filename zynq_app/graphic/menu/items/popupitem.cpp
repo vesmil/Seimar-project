@@ -12,11 +12,11 @@ PopupItem::PopupItem(const QString& text, ControlableWidget* popupWidget, Submen
     m_popupWidget->setVisible(false);
 }
 
-void PopupItem::executeSelected()
+void PopupItem::execute()
 {
     layout()->addWidget(m_popupWidget);
     m_popupWidget->setVisible(true);
-    ItemBase::executeSelected();
+    ItemBase::execute();
 }
 
 void PopupItem::control(QKeyEvent* event)
@@ -26,7 +26,7 @@ void PopupItem::control(QKeyEvent* event)
         layout()->removeWidget(m_popupWidget);
         m_popupWidget->setVisible(false);
 
-        Menu::getInstance().displaySubmenu(m_parentMenu);
+        Menu::getInstance().setOnSubmenu(m_parentMenu);
     }
     else
     {

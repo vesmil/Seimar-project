@@ -33,30 +33,20 @@ void Menu::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void Menu::setItem(ItemBase* item)
+void Menu::setCurrentItem(ItemBase* item)
 {
     m_currentItem = item;
 }
 
-void Menu::displaySubmenu(SubmenuItem *submenu)
+void Menu::setOnSubmenu(SubmenuItem *submenu)
 {
-    if (submenu->itemList.size() == 0)
-    {
-        m_currentSubmenu->itemList[m_currentSubmenu->m_currentElement]->onSelect();
-        m_currentSubmenu->itemList[m_currentSubmenu->m_currentElement]->setStyleSheet(Style::getInstance().menu.emptyItemList);
-        qCWarning(uiLog()) << "Empty submenu";
-        return;
-    }
-
     if (m_currentSubmenu)
     {
-        m_currentSubmenu->close();
+        m_currentSubmenu->close(layout());
     }
 
-    m_currentItem = submenu;
-    m_currentSubmenu = submenu;
-
-    submenu->display();
+    m_currentItem = m_currentSubmenu = submenu;
+    submenu->display(layout());
 }
 
 SubmenuItem* Menu::getRoot()
@@ -67,16 +57,11 @@ SubmenuItem* Menu::getRoot()
 void Menu::open()
 {
     m_active = true;
-    displaySubmenu(m_root.get());
+    setOnSubmenu(m_root.get());
 }
 
 void Menu::close()
 {
     m_active = false;
-
-    for (auto &&item : m_currentSubmenu->itemList)
-    {
-        layout()->removeWidget(item.get());
-        item->setVisible(false);
-    }
+    m_currentSubmenu->close(layout());
 }

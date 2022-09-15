@@ -14,10 +14,11 @@ class IValue
 {
 public:
     virtual void set() = 0;
-    virtual void revertDefault() = 0;
 
     virtual void store() = 0;
     virtual void restorePrev() = 0;
+    virtual void setDefault() = 0;
+
     virtual bool hasChanged() = 0;
 
     virtual QString getQString() = 0;
@@ -53,10 +54,12 @@ public:
         (m_context->*m_setFunc)(static_cast<TParam>(m_value));
     }
 
-    void revertDefault() override
+    void setDefault() override
     {
         m_value = m_default;
+        set();
     }
+
     void restorePrev() override
     {
         m_value = m_prevValue;
