@@ -1,7 +1,9 @@
 #include "valueitem.h"
 
-ValueItem::ValueItem(const QString& text, IValue& value, QWidget* parent, bool live)
-    : ItemBase(parent), m_value(value), m_liveView(live)
+ValueItem::ValueItem(const QString& text, IValue& value, SubmenuItem* parentMenu, QWidget* parentWidget, bool live)
+    : ItemBase(parentWidget, parentMenu),
+      m_value(value),
+      m_liveView(live)
 {
     ItemLayout* layout = new ItemLayout(this);
 
@@ -25,27 +27,27 @@ void ValueItem::control(QKeyEvent* event)
     switch (event->key())
     {
         case Qt::Key_Left:
-            m_value.restorePrev();
-
-            if (m_liveView)
+            if (m_value.hasChanged())
             {
-                m_value.set();
+                m_value.restorePrev();
+                if (m_liveView)
+                {
+                    m_value.set();
+                }
             }
-
-            Menu::getInstance().completeExec();
+            Menu::getInstance().displaySubmenu(m_parentMenu);
             break;
 
         case Qt::Key_Right:
-            if (!m_liveView)
+            if (!m_liveView && m_value.hasChanged())
             {
                 m_value.set();
             }
-            Menu::getInstance().completeExec();
+            Menu::getInstance().displaySubmenu(m_parentMenu);
             break;
 
         case Qt::Key_Up:
             ++m_value;
-
             if (m_liveView)
             {
                 m_value.set();
@@ -54,7 +56,6 @@ void ValueItem::control(QKeyEvent* event)
 
         case Qt::Key_Down:
             --m_value;
-
             if (m_liveView)
             {
                 m_value.set();
@@ -65,7 +66,6 @@ void ValueItem::control(QKeyEvent* event)
             return;
     }
 
-    // It's better to set the text in all cases
     m_valueLabel.setText(m_value.getQString());
 }
 

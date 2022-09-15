@@ -10,7 +10,7 @@
 class ValueItem : public ItemBase
 {
 public:
-    ValueItem(const QString& text, IValue& value, QWidget* parent = nullptr, bool live = false);
+    ValueItem(const QString& text, IValue& value, SubmenuItem* parentMenu, QWidget* parentWidget = nullptr, bool live = false);
 
     void executeSelected() override;
     void control(QKeyEvent* event) override;

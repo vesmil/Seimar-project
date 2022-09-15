@@ -33,18 +33,13 @@ void Menu::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void Menu::completeExec()
+void Menu::setItem(ItemBase* item)
 {
-    if (m_currentSubmenu != nullptr)
-    {
-        setSubmenu(m_currentSubmenu);
-    }
+    m_currentItem = item;
 }
 
-void Menu::setSubmenu(SubmenuItem *submenu)
+void Menu::displaySubmenu(SubmenuItem *submenu)
 {
-    // TODO move partly to SubmenuItem
-
     if (submenu->itemList.size() == 0)
     {
         m_currentSubmenu->itemList[m_currentSubmenu->m_currentElement]->onSelect();
@@ -53,26 +48,15 @@ void Menu::setSubmenu(SubmenuItem *submenu)
         return;
     }
 
-
     if (m_currentSubmenu)
     {
         m_currentSubmenu->close();
     }
 
-    // TODO add parent to currentItem so I ditch currentSubmenu
     m_currentItem = submenu;
     m_currentSubmenu = submenu;
 
-    for (auto &&item : m_currentSubmenu->itemList)
-    {
-        if (!item->isHidden())
-        {
-            item->setVisible(true);
-            layout()->addWidget(item.get());
-        }
-    }
-
-    m_currentSubmenu->itemList[m_currentSubmenu->m_currentElement]->onSelect();
+    submenu->display();
 }
 
 SubmenuItem* Menu::getRoot()
@@ -83,7 +67,7 @@ SubmenuItem* Menu::getRoot()
 void Menu::open()
 {
     m_active = true;
-    setSubmenu(m_root.get());
+    displaySubmenu(m_root.get());
 }
 
 void Menu::close()

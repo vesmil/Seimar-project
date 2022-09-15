@@ -4,7 +4,7 @@
 #include <graphic/style.h>
 #include "global/logcategories.h"
 
-ItemBase::ItemBase(QWidget* parent) : QWidget(parent)
+ItemBase::ItemBase(QWidget* parent, SubmenuItem* parentMenu) : QWidget(parent), m_parentMenu(parentMenu)
 {
     setVisible(false);
     setStyleSheet(Style::getInstance().menu.item);

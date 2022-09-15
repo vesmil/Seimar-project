@@ -8,7 +8,6 @@
 #include "items/itembase.h"
 #include "items/submenuitem.h"
 
-
 /*!
  * \brief QWidget used to display, control and store the whole menu
  */
@@ -21,32 +20,25 @@ public:
 
     void keyPressEvent(QKeyEvent *event);
 
-    // TODO move the responsibilities of SubmenuItem out of Menu -> remove ControlMode and Exec
-
-    // backToParent(SubmenuItem ...)
-    // gotoChild(ItemBase ...)
-
-    void setSubmenu(SubmenuItem* submenu);
-    void completeExec();
-
-    SubmenuItem* getRoot();
-
-    ItemBase *m_currentItem = nullptr;
-
     void open();
     void close();
+
+    void setItem(ItemBase* item);
+    void displaySubmenu(SubmenuItem* submenu);
+
+    SubmenuItem* getRoot();
 
 private:
     Menu();
 
     //! \brief Stores the whole menu in tree structure - child elements are in elementlist
     std::unique_ptr<SubmenuItem> m_root = nullptr;
+    ItemBase *m_currentItem = nullptr;
 
     //! \brief Submenu from which the elements are displayed
     SubmenuItem *m_currentSubmenu = nullptr;
 
     bool m_active;
-    bool m_controlToItem;
 };
 
 #endif // MENU_H

@@ -17,15 +17,15 @@ public:
     void executeSelected() override;
     void control(QKeyEvent* event) override;
 
-    void close();
-
     bool isHidden() override;
+
+    void display();
+    void close();
 
     QLabel* m_text;
 
     size_t m_currentElement = 0;
     std::vector<std::unique_ptr<ItemBase>> itemList {};
-    SubmenuItem* parentMenu;
 };
 
 #endif // SUBMENUITEM_H

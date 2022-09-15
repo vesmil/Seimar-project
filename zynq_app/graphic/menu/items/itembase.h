@@ -4,13 +4,15 @@
 #include <QHBoxLayout>
 #include <QWidget>
 
+class SubmenuItem;
+
 //! \brief Base class for all items displayed in menu
 class ItemBase : public QWidget
 {
     Q_OBJECT
 
 public:
-    ItemBase(QWidget* parent);
+    ItemBase(QWidget* parent, SubmenuItem* parentMenu);
 
     virtual void executeSelected();
     virtual void onSelect();
@@ -21,6 +23,8 @@ public:
     virtual bool isHidden();
 
 protected:
+    SubmenuItem* m_parentMenu;
+
     using BaseClass = ItemBase;
 };
 

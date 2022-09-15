@@ -13,11 +13,12 @@
 class IValue
 {
 public:
-    virtual void setAsync() = 0;
+    virtual void set() = 0;
     virtual void revertDefault() = 0;
 
     virtual void store() = 0;
     virtual void restorePrev() = 0;
+    virtual bool hasChanged() = 0;
 
     virtual QString getQString() = 0;
 
@@ -47,32 +48,28 @@ public:
         return m_value;
     }
 
-    void setAsync() override
+    void set() override
     {
-        // TODO do better
-        // Create queue on VISCA
-        // Limit to just one thread
-
-        QMutexLocker locker(&m_mutex);
-        QFuture<void> future = QtConcurrent::run(m_context, m_setFunc ,(static_cast<TParam>(m_value)));
+        (m_context->*m_setFunc)(static_cast<TParam>(m_value));
     }
 
     void revertDefault() override
     {
-        QMutexLocker locker(&m_mutex);
         m_value = m_default;
+    }
+    void restorePrev() override
+    {
+        m_value = m_prevValue;
+    }
+
+    bool hasChanged() override
+    {
+        return m_prevValue != m_value;
     }
 
     void store() override
     {
-        QMutexLocker locker(&m_mutex);
         m_prevValue = TValue(m_value);
-    }
-
-    void restorePrev() override
-    {
-        QMutexLocker locker(&m_mutex);
-        m_value = m_prevValue;
     }
 
     QString getQString() override
@@ -82,8 +79,6 @@ public:
 
     void operator++() override
     {
-        QMutexLocker locker(&m_mutex);
-
         if(m_value < m_max)
         {
             m_value = static_cast<TValue>(m_value + 1);
@@ -96,8 +91,6 @@ public:
 
     void operator--() override
     {
-        QMutexLocker locker(&m_mutex);
-
         if(m_value > m_min)
         {
             m_value = static_cast<TValue>(m_value - 1);
@@ -130,8 +123,6 @@ protected:
     TValue m_value;
     QString m_units;
 
-    QMutex m_mutex;
-
     TValue m_default;
     TValue m_min;
     TValue m_max;
@@ -161,15 +152,11 @@ public:
 
     void operator++() override
     {
-        QMutexLocker locker(&this->m_mutex);
-
         this->m_value = !this->m_value;
     }
 
     void operator--() override
     {
-        QMutexLocker locker(&this->m_mutex);
-
         this->m_value = !this->m_value;
     }
 
@@ -198,16 +185,9 @@ public:
         return m_array->at(this->m_value).first;
     }
 
-    void setAsync() override
+    void set() override
     {
-        QMutexLocker locker(&this->m_mutex);
-
-        QFuture<void> future = QtConcurrent::run([&](){
-            if (!(this->m_context->*this->m_setFunc)(m_array->at(this->m_value).first))
-            {
-                this->m_value = this->m_prevValue;
-            }
-        });
+        (this->m_context->*this->m_setFunc)(m_array->at(this->m_value).first);
     }
 
 private:
