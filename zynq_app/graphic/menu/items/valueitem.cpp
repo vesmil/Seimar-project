@@ -29,7 +29,7 @@ void ValueItem::control(QKeyEvent* event)
 
             if (m_liveView)
             {
-                m_value.setAsync();
+                m_value.set();
             }
 
             Menu::getInstance().completeExec();
@@ -38,7 +38,7 @@ void ValueItem::control(QKeyEvent* event)
         case Qt::Key_Right:
             if (!m_liveView)
             {
-                m_value.setAsync();
+                m_value.set();
             }
             Menu::getInstance().completeExec();
             break;
@@ -48,7 +48,7 @@ void ValueItem::control(QKeyEvent* event)
 
             if (m_liveView)
             {
-                m_value.setAsync();
+                m_value.set();
             }
             break;
 
@@ -57,7 +57,7 @@ void ValueItem::control(QKeyEvent* event)
 
             if (m_liveView)
             {
-                m_value.setAsync();
+                m_value.set();
             }
             break;
 
@@ -66,6 +66,11 @@ void ValueItem::control(QKeyEvent* event)
     }
 
     // It's better to set the text in all cases
+    m_valueLabel.setText(m_value.getQString());
+}
+
+void ValueItem::refresh()
+{
     m_valueLabel.setText(m_value.getQString());
 }
 

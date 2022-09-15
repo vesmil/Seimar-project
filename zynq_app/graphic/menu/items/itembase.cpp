@@ -30,6 +30,11 @@ void ItemBase::control(QKeyEvent*)
     qCWarning(gsLog()) << "Calling control on abstract type";
 }
 
+void ItemBase::refresh()
+{
+
+}
+
 bool ItemBase::isHidden()
 {
     return false;

@@ -21,16 +21,13 @@ public:
 
     void keyPressEvent(QKeyEvent *event);
 
-    void completeExec();
-
     // TODO move the responsibilities of SubmenuItem out of Menu -> remove ControlMode and Exec
 
     // backToParent(SubmenuItem ...)
     // gotoChild(ItemBase ...)
 
     void setSubmenu(SubmenuItem* submenu);
-
-    void refreshMenu();
+    void completeExec();
 
     SubmenuItem* getRoot();
 

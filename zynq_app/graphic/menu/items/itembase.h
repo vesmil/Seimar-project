@@ -13,12 +13,11 @@ public:
     ItemBase(QWidget* parent);
 
     virtual void executeSelected();
-
     virtual void onSelect();
     virtual void onDeselect();
-
     virtual void control(QKeyEvent* event);
 
+    virtual void refresh();
     virtual bool isHidden();
 
 protected:

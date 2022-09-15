@@ -38,8 +38,8 @@ void MenuBuilder::buildStream(SubmenuItem* submenu, QWidget* parent, Controller*
 
 void MenuBuilder::buildAdvanced(SubmenuItem* submenu, QWidget* parent, Controller*) //controller)
 {
-    // TODO complete popup item and add ip address settings...
-
-    submenu->itemList.emplace_back(std::make_unique<PopupItem>(parent));
+    QWidget* widget = new QLabel("...");
+    submenu->itemList.emplace_back(std::make_unique<PopupItem>("test", widget, parent));
+    submenu->itemList.emplace_back(std::make_unique<PopupItem>("test 2", widget, parent));
 }
 

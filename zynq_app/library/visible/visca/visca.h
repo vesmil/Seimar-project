@@ -4,7 +4,7 @@
 #include "uartcommunication.h"
 #include "global/logcategories.h"
 
-// TODO run in different thread
+#include <QMutex>
 
 /*!
  * \brief Class with basic VISCA commands - facade on UartCommunication class
@@ -32,13 +32,21 @@ public:
                         QString &&logMessage = QString{})
     {
         if (logMessage.length() != 0)
+        {
             logMessage = "(" + logMessage + ")";
+        }
+
+        QMutexLocker sendLocker(&this->m_sendMutex);
 
         if (!m_uart.sendMessage(m_camAddr, data))
         {
             qCInfo(viscaLog()).noquote() << "UART fail" << logMessage;
             return false;
         }
+
+        sendLocker.unlock();
+
+        QMutexLocker recLocker(&this->m_recMutex);
 
         if (!checkReply<TReplySize>(waitTime, logMessage))
             return false;
@@ -47,7 +55,6 @@ public:
 
         return true;
     }
-
 
     /*!
      * \brief Send VISCA inquiry command (request camera to send some information)
@@ -65,9 +72,14 @@ public:
                             TFuncRet (*processReplyFunc)(std::array <uint8_t, TReplySize>) = &checkMessageBytes < TReplySize >,
                             int waitTime = BASE_WAIT_TIME_MS)
     {
+        QMutexLocker sendLocker(&this->m_sendMutex);
+
         m_uart.sendMessage(m_camAddr, data);
 
         std::array <uint8_t, TReplySize> reply{};
+
+        sendLocker.unlock();
+        QMutexLocker recLocker(&this->m_recMutex);
 
         if (!m_uart.receiveMessage(reply, waitTime))
             qCWarning(viscaLog()) << "Failed to inquire";
@@ -76,6 +88,9 @@ public:
     }
 
 private:
+    QMutex m_sendMutex;
+    QMutex m_recMutex;
+
     enum Result { SHORT, ERROR, ACKED, EXECUTED, UNKNOWN };
 
     UartCommunication m_uart;

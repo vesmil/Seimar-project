@@ -3,10 +3,8 @@
 
 #include <QLabel>
 
-#include "library/controller/controller.h"
 #include "library/controller/value.h"
 #include "graphic/menu/items/itembase.h"
-#include "graphic/menu/menu.h"
 
 //! \brief Item which after confirmation will offer access to setting some value
 class ValueItem : public ItemBase
@@ -17,6 +15,7 @@ public:
     void executeSelected() override;
     void control(QKeyEvent* event) override;
 
+    void refresh() override;
     bool isHidden() override;
 
 private:

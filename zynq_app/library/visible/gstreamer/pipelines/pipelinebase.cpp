@@ -49,8 +49,9 @@ bool PipelineBase::isCompleted()
 
 void PipelineBase::setDefaultCapsFilter(const gchar* name)
 {
-    /* TODO put back when testing on Zynq
-    m_data.videoCaps = gst_caps_new_simple("video/x-raw",
+    // NOTE put back when testing on Zynq
+
+    /* m_data.videoCaps = gst_caps_new_simple("video/x-raw",
                                       "format", G_TYPE_STRING, "RGB",
                                       "framerate", GST_TYPE_FRACTION, 60, 1,
                                       "pixel-aspect-ratio", GST_TYPE_FRACTION, 1, 1,

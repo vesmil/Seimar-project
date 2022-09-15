@@ -3,18 +3,20 @@
 #include <QLabel>
 #include <graphic/menu/menu.h>
 
-PopupItem::PopupItem(QWidget* parent) : ItemBase(parent)
+PopupItem::PopupItem(const QString& text, QWidget* popupWidget, QWidget* parent): ItemBase(parent), m_popupWidget(popupWidget)
 {
-    ItemLayout* layout = new ItemLayout(this);
-
+    new ItemLayout(this);
     QLabel* label = new QLabel(this);
-    label->setText("Pop-up");
+    label->setText(text);
+    layout()->addWidget(label);
 
-    layout->addWidget(label);
+    // m_popupWidget->setVisible(false);
 }
 
 void PopupItem::executeSelected()
 {
+    layout()->addWidget(m_popupWidget);
+    m_popupWidget->setVisible(true);
     ItemBase::executeSelected();
 }
 
@@ -23,24 +25,25 @@ void PopupItem::control(QKeyEvent* event)
     switch (event->key())
     {
     case Qt::Key_Left:
-        // TODO Restore state
+        layout()->removeWidget(m_popupWidget);
+        m_popupWidget->setVisible(false);
+
         Menu::getInstance().completeExec();
         break;
 
     case Qt::Key_Right:
+        layout()->removeWidget(m_popupWidget);
+        m_popupWidget->setVisible(false);
+
         Menu::getInstance().completeExec();
         break;
 
     case Qt::Key_Up:
     {
-        QLabel* label = new QLabel(this);
-        label->setText("...");
-        layout()->addWidget(label);
         break;
     }
 
     case Qt::Key_Down:
-        layout()->removeItem(layout()->takeAt(0));
         break;
     }
 }

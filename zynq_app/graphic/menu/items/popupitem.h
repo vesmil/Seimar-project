@@ -10,10 +10,13 @@
 class PopupItem : public ItemBase
 {
 public:
-    PopupItem(QWidget* parent);
+    PopupItem(const QString& text, QWidget* popup, QWidget* parent);
 
     void executeSelected() override;
     void control(QKeyEvent* event) override;
+
+    // TODO create interface for controlable widget
+    QWidget* m_popupWidget;
 };
 
 #endif // POPUPITEM_H

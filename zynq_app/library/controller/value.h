@@ -3,6 +3,7 @@
 
 #include <QtConcurrent/QtConcurrent>
 #include <QString>
+#include <graphic/menu/menu.h>
 
 #include <bits/unique_ptr.h>
 
@@ -48,17 +49,12 @@ public:
 
     void setAsync() override
     {
+        // TODO do better
+        // Create queue on VISCA
+        // Limit to just one thread
+
         QMutexLocker locker(&m_mutex);
-
-        // TODO this doesnt need to be fturue... it just has to norify menu
-
-        QFuture<void> future = QtConcurrent::run([&](){
-            if (!(m_context->*m_setFunc)(static_cast<TParam>(m_value)))
-            {
-                m_value = m_prevValue;
-                // m_context->refreshCurrentMenu();
-            }
-        });
+        QFuture<void> future = QtConcurrent::run(m_context, m_setFunc ,(static_cast<TParam>(m_value)));
     }
 
     void revertDefault() override
@@ -165,11 +161,15 @@ public:
 
     void operator++() override
     {
+        QMutexLocker locker(&this->m_mutex);
+
         this->m_value = !this->m_value;
     }
 
     void operator--() override
     {
+        QMutexLocker locker(&this->m_mutex);
+
         this->m_value = !this->m_value;
     }
 
@@ -183,7 +183,7 @@ class ArrValue : public Value<std::size_t, TVar, TContext>
 {
 public:
     ArrValue(const std::array<std::pair<TVar, QString>, TSize> *array, bool (TContext::*setFunc) (TVar), TContext* context)
-        : m_array(array), Value<std::size_t, TVar,TContext>(0U, 0U, TSize - 1, setFunc, context)
+        : Value<std::size_t, TVar,TContext>(0U, 0U, TSize - 1, setFunc, context), m_array(array)
     {
     }
 
@@ -200,6 +200,8 @@ public:
 
     void setAsync() override
     {
+        QMutexLocker locker(&this->m_mutex);
+
         QFuture<void> future = QtConcurrent::run([&](){
             if (!(this->m_context->*this->m_setFunc)(m_array->at(this->m_value).first))
             {

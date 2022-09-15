@@ -12,6 +12,8 @@ RawDisplayPipeline::RawDisplayPipeline()
 
 void RawDisplayPipeline::setKmssink()
 {
+    // NOTE put back when testing on Zynq
+
     // m_data.sink = GsWrapper::makeElement("kmssink", "kmssink");
     // g_object_set(m_data.sink, "fullscreen-overlay", 1, nullptr);
 

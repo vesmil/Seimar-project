@@ -6,7 +6,7 @@
 
 #include "pipelines/pipelinebase.h"
 
-// TODO remove - only for Wiris testing
+// NOTE remove all of after done w Wiris
 #define WIRIS_TEST
 
 class Visible
@@ -85,8 +85,8 @@ private:
 class GsFacade
 {
 public:
+    // PipelineEnum is used as flags - values need to be powers of two!
     enum PipelineEnum : uint8_t { NONE = 0, RAW_SAVE = 1, RAW_RTP = 2, RAW_DISPLAY = 4, WIRIS_RTP = 8};
-    // TODO static assert only powers of two
 
     GsFacade();
     ~GsFacade();
@@ -102,7 +102,6 @@ public:
      * \brief Standard GstElement creation with added logging
      */
     static GstElement* makeElement(const gchar *factoryName, const gchar *name);
-
     Visible m_wirisVisiblePipeline{};
 
 private:

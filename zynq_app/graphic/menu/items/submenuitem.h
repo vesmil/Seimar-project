@@ -22,10 +22,10 @@ public:
     bool isHidden() override;
 
     QLabel* m_text;
-    size_t m_currentElement = 0;
 
-    SubmenuItem* parentMenu;
+    size_t m_currentElement = 0;
     std::vector<std::unique_ptr<ItemBase>> itemList {};
+    SubmenuItem* parentMenu;
 };
 
 #endif // SUBMENUITEM_H

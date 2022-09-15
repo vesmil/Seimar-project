@@ -33,7 +33,6 @@ bool GsFacade::initAndStart(PipelineEnum pipelineEnum)
 
     if (pipelineEnum & RAW_SAVE)
     {
-        // TODO replace this copy paste with method
         qCInfo(gsLog()) << "Initializing and starting storage of RAW stream";
         if (!rawPipe)
         {
@@ -41,10 +40,8 @@ bool GsFacade::initAndStart(PipelineEnum pipelineEnum)
         }
 
         rawPipe->start();
-        if (!rawPipe->isCompleted())
-        {
-            errors = true;
-        }
+        errors |= !rawPipe->isCompleted();
+
     }
 
     if (pipelineEnum & RAW_RTP)
@@ -56,10 +53,7 @@ bool GsFacade::initAndStart(PipelineEnum pipelineEnum)
         }
 
         rtpPipe->start();
-        if (!rtpPipe->isCompleted())
-        {
-            errors = true;
-        }
+        errors |= !rtpPipe->isCompleted();
     }
 
     if (pipelineEnum & RAW_DISPLAY)
@@ -71,11 +65,7 @@ bool GsFacade::initAndStart(PipelineEnum pipelineEnum)
         }
 
         displayPipe->start();
-
-        if (!displayPipe->isCompleted())
-        {
-            errors = true;
-        }
+        errors |= !displayPipe->isCompleted();
     }
 
     if (pipelineEnum & WIRIS_RTP)

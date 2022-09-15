@@ -75,17 +75,6 @@ void Menu::setSubmenu(SubmenuItem *submenu)
     m_currentSubmenu->itemList[m_currentSubmenu->m_currentElement]->onSelect();
 }
 
-void Menu::refreshMenu()
-{
-    for (auto &&item : m_currentSubmenu->itemList)
-    {
-        if (!item->isHidden())
-        {
-            item->setVisible(true);
-        }
-    }
-}
-
 SubmenuItem* Menu::getRoot()
 {
     return m_root.get();
@@ -100,8 +89,10 @@ void Menu::open()
 void Menu::close()
 {
     m_active = false;
+
     for (auto &&item : m_currentSubmenu->itemList)
     {
+        layout()->removeWidget(item.get());
         item->setVisible(false);
     }
 }
