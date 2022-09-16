@@ -9,6 +9,7 @@
 // NOTE remove all of after done w Wiris
 // #define WIRIS_TEST
 
+//! \brief Temporary Gstreamer pipeline that will be removed - used for testing
 class Visible
 {
 public:
@@ -79,9 +80,7 @@ private:
     } streamData;
 };
 
-/*!
- * \brief Class for simplifying usage of GStreamer and created pipelines (facade design pattern)
- */
+//! \brief Class for simplifying usage of GStreamer and created pipelines (facade design pattern)
 class GsFacade
 {
 public:

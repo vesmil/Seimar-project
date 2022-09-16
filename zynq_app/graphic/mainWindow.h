@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 
+//! \note It won't be used in final version as we will use video mixer (to merge video from camera and UI)
 class MainWindow : public QMainWindow
 {
     Q_OBJECT

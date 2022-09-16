@@ -6,9 +6,7 @@
 #include "library/controller/value.h"
 #include "library/visible/gstreamer/gsfacade.h"
 
-/*!
- * \brief Proxy class that will link all modules together
- */
+//! \brief Proxy that links all modules together
 class Controller
 {
 public:
@@ -47,7 +45,6 @@ private:
     bool setShutter(u_int8_t value);
     bool setIris(uint8_t value);
     bool setGain(int value);
-
     bool setExposureCompensation(uint8_t value);
 
     bool switchRtp(bool state);

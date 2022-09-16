@@ -19,7 +19,7 @@ public:
     virtual void onDeselect();
     virtual void control(QKeyEvent* event);
 
-    virtual void refresh();
+    virtual void refresh(); // NOTE Do I really need that?
     virtual bool isHidden();
 
 protected:

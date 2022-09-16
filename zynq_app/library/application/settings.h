@@ -3,6 +3,8 @@
 
 #include <string>
 
+//! \brief Singleton used to store settings
+//! \note It might be replaced and done better way
 struct Settings
 {
 public:

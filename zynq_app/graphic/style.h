@@ -4,6 +4,7 @@
 #include <QString>
 #include <QPalette>
 
+//! \brief Singleton used to store cascade styles as QString
 class Style
 {
 public:

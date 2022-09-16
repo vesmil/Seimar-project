@@ -4,6 +4,7 @@
 #include "graphic/menu/menu.h"
 #include "library/controller/controller.h"
 
+//! \brief Class used to create items in menu and connect them to the controller
 class MenuBuilder
 {
 public:

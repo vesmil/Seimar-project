@@ -73,3 +73,7 @@ bool Controller::switchHDMI(bool state)
     return m_gstreamer.setState(GsFacade::RAW_DISPLAY, state);
 }
 
+bool Controller::setExposureCompensation(uint8_t value) {
+    return false;
+}
+

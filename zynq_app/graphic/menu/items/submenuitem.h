@@ -12,6 +12,11 @@
 class SubmenuItem : public ItemBase
 {
 public:
+    /*!
+     * \param text Text displayed in menu
+     * \param parentMenu Parent menu to go when going back
+     * \param parentWidget Parent widget as for all Qt widgets
+     */
     SubmenuItem(QString text, SubmenuItem *parentMenu, QWidget *parent = nullptr);
 
     void execute() override;
@@ -19,9 +24,13 @@ public:
 
     bool isHidden() override;
 
+    //! \brief Adds new item to the end of the menu
     void addItem(std::unique_ptr<ItemBase> item);
 
+    //! \brief Displays menu in \a layout
     void display(QLayout* layout);
+
+    //! \brief Hides all elements and removes them from \a layout
     void close(QLayout* layout);
 
 private:

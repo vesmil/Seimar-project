@@ -6,11 +6,12 @@ public:
     virtual bool isValid() = 0;
 };
 
+//! \brief Class used to check whether dependency is valid - \a TValue is equal to some of \a TPossible
 template<typename TValue, typename TVar, TVar ...TPossible>
 class Dependency : public IDependency
 {
 public:
-    Dependency(TValue& value) : m_value(value) { }
+    explicit Dependency(TValue& value) : m_value(value) { }
 
     bool isValid() override
     {

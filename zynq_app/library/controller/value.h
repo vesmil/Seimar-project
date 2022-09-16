@@ -29,9 +29,15 @@ public:
 // TOOD probobaly could be split better - keep just one Value but mby add Iterator
 // ...the different thing across values is getting QString, increasing and decreasing
 
+/*!
+ * \brief Class that represents a value (in menu) and after change it calls a function
+ * @tparam TValue Type of value
+ * @tparam TParam Type to which TValue is converted before calling confirmation function
+ * @tparam TContext Context in which confirmation function is called
+ */
 template<typename TValue, typename TParam, typename TContext>
 class Value : public IValue
-{\
+{
 public:
     Value(TValue defaultValue, TValue minValue, TValue maxValue, bool (TContext::*setFunc) (TParam), TContext* context, QString units = "")
         : m_value(defaultValue),
@@ -44,7 +50,7 @@ public:
     {
     }
 
-    TValue& getValue()
+    virtual const TValue& getValue()
     {
         return m_value;
     }
@@ -183,7 +189,7 @@ public:
     }
 
 
-    const TVar& getValue()
+    const TVar& getValue() override
     {
         return m_array->at(this->m_value).first;
     }

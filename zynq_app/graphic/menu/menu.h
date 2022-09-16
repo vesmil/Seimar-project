@@ -23,16 +23,21 @@ public:
 
     void keyPressEvent(QKeyEvent *event);
 
+    //! \brief Set the current item to \a item
     void setCurrentItem(ItemBase* item);
+
+    //! \brief Closes current submenu, sets and opens \a submenu
     void setOnSubmenu(SubmenuItem* submenu);
 
+    //! \brief Returns pointer to the root of the menu
+    //! \note Without menu, the pointer is not valid
     SubmenuItem* getRoot();
 
 private:
     Menu();
-    bool m_active;
+    bool m_active = false;
 
-    //! \brief Stores the whole menu in tree structure - child elements are in elementlist
+    //! \brief Stores the whole menu in tree structure
     std::unique_ptr<SubmenuItem> m_root = nullptr;
 
     //! \brief Item in charge of menu controls
