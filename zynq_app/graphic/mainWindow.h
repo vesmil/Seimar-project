@@ -3,8 +3,6 @@
 
 #include <QMainWindow>
 
-#include "menu/menu.h"
-
 class MainWindow : public QMainWindow
 {
     Q_OBJECT

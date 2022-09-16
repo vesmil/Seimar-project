@@ -15,6 +15,9 @@ public:
     Controller(Visca& visca, GsFacade& gstreamer);
 
     // TODO create as ArrValue - zoom values set as {1, 1.2, 1.5, 2, 5, 10}
+    // static const std::array<std::pair<float, QString>, ... > ZoomArray;
+    //  { std::pair<float, QString>{1, QString("Full auto")}, ... }
+
     Value<uint8_t, uint8_t, Controller> zoom {0, 0, 10, &Controller::setZoom, this, "x"};
 
     using ModeValue = ArrValue<ViscaCommands::Exposure::Mode, Controller, 5U>;

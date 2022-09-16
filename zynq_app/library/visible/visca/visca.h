@@ -1,10 +1,9 @@
 #ifndef VISCA_H
 #define VISCA_H
 
+#include <QMutex>
 #include "uartcommunication.h"
 #include "global/logcategories.h"
-
-#include <QMutex>
 
 /*!
  * \brief Class with basic VISCA commands - facade on UartCommunication class

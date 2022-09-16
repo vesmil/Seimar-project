@@ -2,7 +2,6 @@
 #include <QKeyEvent>
 #include <QVBoxLayout>
 
-#include "global/logcategories.h"
 #include "graphic/menu/menu.h"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)

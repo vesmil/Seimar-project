@@ -2,7 +2,6 @@
 #define STYLE_H
 
 #include <QString>
-
 #include <QPalette>
 
 class Style

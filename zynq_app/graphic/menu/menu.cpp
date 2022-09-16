@@ -1,10 +1,6 @@
 ﻿#include "menu.h"
-#include "global/logcategories.h"
-#include "items/valueitem.h"
 
-#include "global/logcategories.h"
 #include "graphic/style.h"
-#include "menubuilder.h"
 
 Menu& Menu::getInstance()
 {

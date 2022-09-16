@@ -1,13 +1,10 @@
 #ifndef VALUE_H
 #define VALUE_H
 
-#include <QtConcurrent/QtConcurrent>
 #include <QString>
-#include <graphic/menu/menu.h>
+#include <array>
+#include <vector>
 
-#include <bits/unique_ptr.h>
-
-#include "global/logcategories.h"
 #include "library/controller/dependency.h"
 
 class IValue

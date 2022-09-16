@@ -5,7 +5,7 @@
 #include <cstdint>
 #include <utility>
 
-#include "../zynq_app/global/logcategories.h"
+#include "global/logcategories.h"
 
 // Duplicates could probably be avoided using builder pattern
 //  ...but it would unnecessarily increase the complexity and would be slower

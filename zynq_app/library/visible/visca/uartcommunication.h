@@ -4,11 +4,9 @@
 #include <stdint.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
-
-#include "viscaCommands.h"
-#include "global/logcategories.h"
-
 #include <QString>
+
+#include "global/logcategories.h"
 
 /*!
  * \brief Class for UART communication - intended mainly to be used by Visca class

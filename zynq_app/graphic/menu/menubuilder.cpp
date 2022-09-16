@@ -1,7 +1,8 @@
 #include "menubuilder.h"
 
-#include "library/application/settings.h"
 #include "library/controller/controller.h"
+#include "graphic/menu/items/valueitem.h"
+#include "graphic/menu/items/popupitem.h"
 
 void MenuBuilder::buildMenuTree(Menu &menu, Controller* controller)
 {

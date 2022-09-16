@@ -1,5 +1,8 @@
 #include "valueitem.h"
 
+#include <QKeyEvent>
+#include "graphic/menu/menu.h"
+
 ValueItem::ValueItem(const QString& text, IValue& value, SubmenuItem* parentMenu, QWidget* parentWidget, bool live)
     : ItemBase(parentWidget, parentMenu),
       m_value(value),

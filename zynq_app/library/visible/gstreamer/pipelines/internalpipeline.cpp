@@ -1,7 +1,6 @@
 #include "internalpipeline.h"
 
 #include "library/visible/gstreamer/gsfacade.h"
-#include "global/logcategories.h"
 #include "global/config.h"
 
 const gchar* InternalPipeline::m_intervideoChannelName  = "interchannel";

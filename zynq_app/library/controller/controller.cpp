@@ -1,5 +1,4 @@
 #include "controller.h"
-#include "global/config.h"
 
 Controller::Controller(Visca& visca, GsFacade& gstreamer) : m_visca(visca), m_gstreamer(gstreamer)
 {

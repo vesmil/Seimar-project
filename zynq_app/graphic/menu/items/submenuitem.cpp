@@ -5,8 +5,6 @@
 
 #include <graphic/style.h>
 
-// TODO replace singleton refrences with func params
-
 SubmenuItem::SubmenuItem(QString text, SubmenuItem *parentMenu, QWidget *parent)
     : ItemBase(parent, parentMenu)
 {
@@ -22,6 +20,7 @@ SubmenuItem::SubmenuItem(QString text, SubmenuItem *parentMenu, QWidget *parent)
 void SubmenuItem::execute()
 {
     m_currentElement = 0;
+
     Menu::getInstance().setOnSubmenu(this);
 }
 
