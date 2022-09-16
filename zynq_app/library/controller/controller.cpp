@@ -22,15 +22,6 @@ bool Controller::setDefault()
     return true;
 }
 
-void Controller::addToViscaQueue(/* Visca set function pointer */) // prob will be template
-{
-    // TODO should queue be in controller or in Visca
-    // ...I guess Visca would make more sense
-
-    // NOTE there could be some optimatizations in the future - check for same commands and skip them
-}
-
-
 bool Controller::setZoom(uint8_t zoom)
 {
     uint16_t remappedZoom = (zoom * 0x4000) / 16;
@@ -58,6 +49,11 @@ bool Controller::setGain(int value)
     return m_visca.executeCommand(ViscaCommands::Exposure::Gain::setValue(remappedValue),400,"gain");
 }
 
+bool Controller::setExposureCompensation(uint8_t value) {
+    // TODO Do i need to set state before that?
+    return m_visca.executeCommand(ViscaCommands::Exposure::Compensation::setValue(value),400,"exposure compensation");
+}
+
 bool Controller::switchRtp(bool state)
 {
     return m_gstreamer.setState(GsFacade::WIRIS_RTP, state);
@@ -73,7 +69,4 @@ bool Controller::switchHDMI(bool state)
     return m_gstreamer.setState(GsFacade::RAW_DISPLAY, state);
 }
 
-bool Controller::setExposureCompensation(uint8_t value) {
-    return false;
-}
 

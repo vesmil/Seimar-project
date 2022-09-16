@@ -3,8 +3,12 @@
 
 #include "library/visible/visca/visca.h"
 #include "library/visible/visca/viscaCommands.h"
-#include "library/controller/value.h"
 #include "library/visible/gstreamer/gsfacade.h"
+
+#include "library/controller/value.h"
+#include "library/controller/controllercommand.h"
+
+#include <queue>
 
 //! \brief Proxy that links all modules together
 class Controller
@@ -16,7 +20,8 @@ public:
     // static const std::array<std::pair<float, QString>, ... > ZoomArray;
     //  { std::pair<float, QString>{1, QString("Full auto")}, ... }
 
-    Value<uint8_t, uint8_t, Controller> zoom {0, 0, 10, &Controller::setZoom, this, "x"};
+    // Value<uint8_t, uint8_t, Controller> zoom {0, 0, 10, &Controller::setZoom, this, "x"};
+    Value<uint8_t, uint8_t, Controller> zoom {0, 0, 10, &Controller::addZoomToViscaQueue, this, "x"};
 
     using ModeValue = ArrValue<ViscaCommands::Exposure::Mode, Controller, 5U>;
     ModeValue exposureMode{&ViscaCommands::Exposure::ModeArray, &Controller::setExposureMode, this};
@@ -37,7 +42,11 @@ public:
 private:
     bool setDefault();
 
-    void addToViscaQueue();
+    bool addZoomToViscaQueue(uint8_t value)
+    {
+        commandQueue.emplace(makeCommand(&Controller::setZoom, this, value));
+        return commandQueue.front()->execute();
+    }
 
     bool setZoom(uint8_t value);
     bool setExposureMode(ViscaCommands::Exposure::Mode mode);
@@ -53,6 +62,8 @@ private:
 
     Visca& m_visca;
     GsFacade& m_gstreamer;
+
+    std::queue<std::unique_ptr<IControllerCommand>> commandQueue;
 };
 
 #endif // CONTROLLER_H

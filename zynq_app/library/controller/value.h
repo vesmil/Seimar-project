@@ -50,14 +50,14 @@ public:
     {
     }
 
-    virtual const TValue& getValue()
+    virtual TParam getValue()
     {
-        return m_value;
+        return static_cast<TParam>(m_value);
     }
 
     void set() override
     {
-        (m_context->*m_setFunc)(static_cast<TParam>(m_value));
+        (m_context->*m_setFunc)(getValue());
     }
 
     void setDefault() override
@@ -174,12 +174,12 @@ private:
     QString m_offString;
 };
 
-template<typename TVar, typename TContext, std::size_t TSize>
-class ArrValue : public Value<std::size_t, TVar, TContext>
+template<typename TParam, typename TContext, std::size_t TSize>
+class ArrValue : public Value<std::size_t, TParam, TContext>
 {
 public:
-    ArrValue(const std::array<std::pair<TVar, QString>, TSize> *array, bool (TContext::*setFunc) (TVar), TContext* context)
-        : Value<std::size_t, TVar,TContext>(0U, 0U, TSize - 1, setFunc, context), m_array(array)
+    ArrValue(const std::array<std::pair<TParam, QString>, TSize> *array, bool (TContext::*setFunc) (TParam), TContext* context)
+        : Value<std::size_t, TParam,TContext>(0U, 0U, TSize - 1, setFunc, context), m_array(array)
     {
     }
 
@@ -188,19 +188,13 @@ public:
         return m_array->at(this->m_value).second;
     }
 
-
-    const TVar& getValue() override
+    TParam getValue() override
     {
         return m_array->at(this->m_value).first;
     }
 
-    void set() override
-    {
-        (this->m_context->*this->m_setFunc)(m_array->at(this->m_value).first);
-    }
-
 private:
-    const std::array<std::pair<TVar, QString>, TSize> *m_array;
+    const std::array<std::pair<TParam, QString>, TSize> *m_array;
 };
 
 #endif // VALUE_H
