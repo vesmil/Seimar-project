@@ -22,6 +22,19 @@ bool Controller::setDefault()
     return true;
 }
 
+void Controller::startExecutingCommandQueue()
+{
+    queueExecuting = true;
+
+    while (!commandQueue.empty())
+    {
+        commandQueue.front()->execute();
+        commandQueue.pop();
+    }
+
+    queueExecuting = false;
+}
+
 bool Controller::setZoom(uint8_t zoom)
 {
     uint16_t remappedZoom = (zoom * 0x4000) / 16;

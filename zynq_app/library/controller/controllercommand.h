@@ -1,7 +1,6 @@
 #ifndef CONTROLLERCOMMAND_H
 #define CONTROLLERCOMMAND_H
 
-#include <iostream>
 #include <memory>
 #include <tuple>
 #include <functional>
@@ -19,19 +18,19 @@ class ControllerCommand : public IControllerCommand
     static_assert(!(std::is_rvalue_reference_v<TArgs> && ...));
 
 private:
-    TFunc f;
+    TFunc function;
     std::tuple<TArgs...> args;
 
 public:
     template <typename TFwdFunc, typename... TFwdArgs, typename = std::enable_if_t<(std::is_convertible_v<TFwdArgs&&, TArgs> && ...)>>
     ControllerCommand(TFwdFunc&& func, TFwdArgs&&... args) :
-        f(std::forward<TFwdFunc>(func)), args{std::forward<TFwdArgs>(args)...}
+        function(std::forward<TFwdFunc>(func)), args{std::forward<TFwdArgs>(args)...}
     {
     }
 
     bool execute() override
     {
-        std::apply(f, args);
+        return std::apply(function, args);
     }
 };
 

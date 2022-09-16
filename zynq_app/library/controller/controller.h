@@ -8,6 +8,8 @@
 #include "library/controller/value.h"
 #include "library/controller/controllercommand.h"
 
+#include <QFuture>
+#include <QtConcurrent/QtConcurrent>
 #include <queue>
 
 //! \brief Proxy that links all modules together
@@ -21,7 +23,7 @@ public:
     //  { std::pair<float, QString>{1, QString("Full auto")}, ... }
 
     // Value<uint8_t, uint8_t, Controller> zoom {0, 0, 10, &Controller::setZoom, this, "x"};
-    Value<uint8_t, uint8_t, Controller> zoom {0, 0, 10, &Controller::addZoomToViscaQueue, this, "x"};
+    Value<uint8_t, uint8_t, Controller> zoom {0, 0, 10, &Controller::setZoom, this, "x"};
 
     using ModeValue = ArrValue<ViscaCommands::Exposure::Mode, Controller, 5U>;
     ModeValue exposureMode{&ViscaCommands::Exposure::ModeArray, &Controller::setExposureMode, this};
@@ -42,11 +44,20 @@ public:
 private:
     bool setDefault();
 
-    bool addZoomToViscaQueue(uint8_t value)
+    template<typename TControlFunc, typename ... TParams>
+    QFuture<bool> addCommandToQueue(TControlFunc func, TParams ... params)
     {
-        commandQueue.emplace(makeCommand(&Controller::setZoom, this, value));
-        return commandQueue.front()->execute();
+        commandQueue.emplace(makeCommand(func, this, params...));
+
+        if (!queueExecuting)
+        {
+            QtConcurrent::run(this, &Controller::startExecutingCommandQueue);
+        }
     }
+
+    void startExecutingCommandQueue();
+
+    std::atomic_bool queueExecuting = false;
 
     bool setZoom(uint8_t value);
     bool setExposureMode(ViscaCommands::Exposure::Mode mode);
