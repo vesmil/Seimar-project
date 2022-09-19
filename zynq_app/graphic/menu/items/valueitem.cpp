@@ -3,7 +3,7 @@
 #include <QKeyEvent>
 #include "graphic/menu/menu.h"
 
-ValueItem::ValueItem(const QString& text, IValue& value, SubmenuItem* parentMenu, QWidget* parentWidget, bool live)
+ValueItem::ValueItem(const QString& text, IValueSetter& value, SubmenuItem* parentMenu, QWidget* parentWidget, bool live)
     : ItemBase(parentWidget, parentMenu),
       m_value(value),
       m_liveView(live)
@@ -35,7 +35,7 @@ void ValueItem::control(QKeyEvent* event)
                 m_value.restorePrev();
                 if (m_liveView)
                 {
-                    m_value.set();
+                    m_value.setAsync();
                 }
             }
             Menu::getInstance().setOnSubmenu(m_parentMenu);
@@ -44,7 +44,7 @@ void ValueItem::control(QKeyEvent* event)
         case Qt::Key_Right:
             if (!m_liveView && m_value.hasChanged())
             {
-                m_value.set();
+                m_value.setAsync();
             }
             Menu::getInstance().setOnSubmenu(m_parentMenu);
             break;
@@ -79,7 +79,7 @@ void ValueItem::increase()
     ++m_value;
     if (m_liveView)
     {
-        m_value.set();
+        m_value.setAsync();
     }
 }
 
@@ -88,6 +88,6 @@ void ValueItem::decrease()
     --m_value;
     if (m_liveView)
     {
-        m_value.set();
+        m_value.setAsync();
     }
 }

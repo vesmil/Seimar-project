@@ -23,42 +23,31 @@ public:
     //  { std::pair<float, QString>{1, QString("Full auto")}, ... }
 
     // Value<uint8_t, uint8_t, Controller> zoom {0, 0, 10, &Controller::setZoom, this, "x"};
-    Value<uint8_t, uint8_t, Controller> zoom {0, 0, 10, &Controller::setZoom, this, "x"};
+    ValueSetter<uint8_t, uint8_t, Controller> zoom {0, 0, 10, &Controller::setZoom, this, "x"};
 
     using ModeValue = ArrValue<ViscaCommands::Exposure::Mode, Controller, 5U>;
     ModeValue exposureMode{&ViscaCommands::Exposure::ModeArray, &Controller::setExposureMode, this};
 
-    Value<uint8_t, uint8_t, Controller> shutter {0, 0, 10, &Controller::setShutter, this, ""};
+    ValueSetter<uint8_t, uint8_t, Controller> shutter {0, 0, 10, &Controller::setShutter, this, ""};
     Dependency<ModeValue, ViscaCommands::Exposure::Mode, ViscaCommands::Exposure::Mode::MANUAL, ViscaCommands::Exposure::Mode::SHUTTER_PRI> validShutter{exposureMode};
 
-    Value<uint8_t, uint8_t, Controller> iris {0x10, 0x5, 0x15, &Controller::setIris, this, ""};
+    ValueSetter<uint8_t, uint8_t, Controller> iris {0x10, 0x5, 0x15, &Controller::setIris, this, ""};
     Dependency<ModeValue, ViscaCommands::Exposure::Mode, ViscaCommands::Exposure::Mode::MANUAL, ViscaCommands::Exposure::Mode::IRIS_PRI> validIris{exposureMode};
 
-    Value<int, int, Controller> gain {0, -3, 33, &Controller::setGain, this, "dB"};
+    ValueSetter<int, int, Controller> gain {0, -3, 33, &Controller::setGain, this, "dB"};
     Dependency<ModeValue, ViscaCommands::Exposure::Mode, ViscaCommands::Exposure::Mode::MANUAL, ViscaCommands::Exposure::Mode::GAIN_PRI> validGain{exposureMode};
 
     BoolValue<Controller> rtp_stream {true, &Controller::switchRtp, this};
     BoolValue<Controller> file_stream {false, &Controller::switchFile, this};
     BoolValue<Controller> hdmi_stream {false, &Controller::switchHDMI, this};
 
+    void addCommandToQueue(std::unique_ptr<IControllerCommand> command);
+
 private:
-    bool setDefault();
-
-    template<typename TControlFunc, typename ... TParams>
-    QFuture<bool> addCommandToQueue(TControlFunc func, TParams ... params)
-    {
-        commandQueue.emplace(makeCommand(func, this, params...));
-
-        if (!queueExecuting)
-        {
-            QtConcurrent::run(this, &Controller::startExecutingCommandQueue);
-        }
-    }
-
     void startExecutingCommandQueue();
+    bool queueExecuting; // TODO atomic
 
-    std::atomic_bool queueExecuting = false;
-
+    bool setDefault();
     bool setZoom(uint8_t value);
     bool setExposureMode(ViscaCommands::Exposure::Mode mode);
 

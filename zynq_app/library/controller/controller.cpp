@@ -9,6 +9,16 @@ Controller::Controller(Visca& visca, GsFacade& gstreamer) : m_visca(visca), m_gs
     setDefault();
 }
 
+void Controller::addCommandToQueue(std::unique_ptr<IControllerCommand> command)
+{
+    commandQueue.emplace(std::move(command));
+
+    if (!queueExecuting)
+    {
+        QtConcurrent::run(this, &Controller::startExecutingCommandQueue);
+    }
+}
+
 bool Controller::setDefault()
 {
     // TODO...

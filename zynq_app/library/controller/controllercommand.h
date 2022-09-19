@@ -7,6 +7,9 @@
 #include <utility>
 #include <type_traits>
 
+#include "global/logcategories.h"
+
+//! \brief Interface for wrapping function with variable number of parameters as an object
 class IControllerCommand {
 public:
   virtual bool execute() = 0;
@@ -15,8 +18,6 @@ public:
 template <typename TFunc, typename... TArgs>
 class ControllerCommand : public IControllerCommand
 {
-    static_assert(!(std::is_rvalue_reference_v<TArgs> && ...));
-
 private:
     TFunc function;
     std::tuple<TArgs...> args;

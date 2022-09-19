@@ -5,29 +5,11 @@
 #include <array>
 #include <vector>
 
+#include "library/controller/controllercommand.h"
+#include "graphic/menu/items/ivalue.h"
 #include "library/controller/dependency.h"
 
-class IValue
-{
-public:
-    virtual void set() = 0;
-
-    virtual void store() = 0;
-    virtual void restorePrev() = 0;
-    virtual void setDefault() = 0;
-
-    virtual bool hasChanged() = 0;
-
-    virtual QString getQString() = 0;
-
-    virtual void operator++() = 0;
-    virtual void operator--() = 0;
-
-    virtual bool isHidden() = 0;
-};
-
-// TOOD probobaly could be split better - keep just one Value but mby add Iterator
-// ...the different thing across values is getting QString, increasing and decreasing
+// TODO remove need for
 
 /*!
  * \brief Class that represents a value (in menu) and after change it calls a function
@@ -36,16 +18,16 @@ public:
  * @tparam TContext Context in which confirmation function is called
  */
 template<typename TValue, typename TParam, typename TContext>
-class Value : public IValue
+class ValueSetter : public IValueSetter
 {
 public:
-    Value(TValue defaultValue, TValue minValue, TValue maxValue, bool (TContext::*setFunc) (TParam), TContext* context, QString units = "")
+    ValueSetter(TValue defaultValue, TValue minValue, TValue maxValue, bool (TContext::*setFunc) (TParam), TContext* context, QString units = "")
         : m_value(defaultValue),
           m_units(units),
           m_default(m_value),
           m_min(minValue),
           m_max(maxValue),
-          m_context(context),
+          m_controller(context),
           m_setFunc(setFunc)
     {
     }
@@ -55,9 +37,14 @@ public:
         return static_cast<TParam>(m_value);
     }
 
+    void setAsync() override
+    {
+        m_controller->addCommandToQueue(makeCommand(m_setFunc, m_controller, getValue()));
+    }
+
     void set() override
     {
-        (m_context->*m_setFunc)(getValue());
+        (m_controller->*m_setFunc)(getValue());
     }
 
     void setDefault() override
@@ -138,18 +125,20 @@ protected:
 
     TValue m_prevValue;
 
-    TContext* m_context;
+    TContext* m_controller;
     bool (TContext::*m_setFunc) (TParam);
 
     std::vector<IDependency*> m_dependencies {};
 };
 
+// TODO delete BoolValue and ArrValue using iterator
+
 template<typename TContext>
-class BoolValue : public Value<bool, bool, TContext>
+class BoolValue : public ValueSetter<bool, bool, TContext>
 {
 public:
     BoolValue(bool defaultVal, bool (TContext::*setFunc) (bool), TContext* context, QString trueMessage = "On", QString falseMessage = "Off")
-        : Value<bool, bool, TContext>(defaultVal, false, true, setFunc, context, ""),
+        : ValueSetter<bool, bool, TContext>(defaultVal, false, true, setFunc, context, ""),
           m_onString(trueMessage), m_offString(falseMessage)
     {
     }
@@ -175,11 +164,11 @@ private:
 };
 
 template<typename TParam, typename TContext, std::size_t TSize>
-class ArrValue : public Value<std::size_t, TParam, TContext>
+class ArrValue : public ValueSetter<std::size_t, TParam, TContext>
 {
 public:
     ArrValue(const std::array<std::pair<TParam, QString>, TSize> *array, bool (TContext::*setFunc) (TParam), TContext* context)
-        : Value<std::size_t, TParam,TContext>(0U, 0U, TSize - 1, setFunc, context), m_array(array)
+        : ValueSetter<std::size_t, TParam,TContext>(0U, 0U, TSize - 1, setFunc, context), m_array(array)
     {
     }
 

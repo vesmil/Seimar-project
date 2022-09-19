@@ -19,7 +19,6 @@ SOURCES += \
     graphic/style.cpp \
     library/application/settings.cpp \
     library/controller/controller.cpp \
-    library/controller/controllercommand.cpp \
     library/controller/popup.cpp \
     library/visible/gstreamer/gsfacade.cpp \
     library/visible/gstreamer/pipelines/internalpipeline.cpp \
@@ -42,6 +41,7 @@ HEADERS += \
         global/logcategories.h \
         graphic/mainWindow.h \
         graphic/menu/items/itembase.h \
+        graphic/menu/items/ivalue.h \
         graphic/menu/items/popupitem.h \
         graphic/menu/items/submenuitem.h \
         graphic/menu/items/valueitem.h \
