@@ -79,7 +79,7 @@ bool Controller::setExposureCompensation(uint8_t value) {
 
 bool Controller::switchRtp(bool state)
 {
-    return m_gstreamer.setState(GsFacade::WIRIS_RTP, state);
+    return m_gstreamer.setState(GsFacade::RAW_RTP, state);
 }
 
 bool Controller::switchFile(bool state)

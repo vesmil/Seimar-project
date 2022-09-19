@@ -1,9 +1,8 @@
 #include "rawfilepipeline.h"
 
-#include "global/config.h"
 #include "global/logcategories.h"
-
 #include "library/visible/gstreamer/gsfacade.h"
+#include "library/application/settings.h"
 
 RawFilePipeline::RawFilePipeline() : PipelineBase()
 {
@@ -16,7 +15,7 @@ RawFilePipeline::RawFilePipeline() : PipelineBase()
 void RawFilePipeline::setFilesink()
 {
     m_data.sink = GsFacade::makeElement("filesink", "file-sink");
-    g_object_set(m_data.sink, "location", glb::path::VIDEO_OUT.c_str(), nullptr);
+    g_object_set(m_data.sink, "location", Settings::getInstance().path.videoOut.c_str(), nullptr);
 }
 
 RawFilePipeline::~RawFilePipeline()

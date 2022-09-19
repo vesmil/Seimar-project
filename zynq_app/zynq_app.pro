@@ -37,7 +37,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-        global/config.h \
         global/logcategories.h \
         graphic/mainWindow.h \
         graphic/menu/items/itembase.h \

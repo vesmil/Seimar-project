@@ -68,11 +68,6 @@ bool GsFacade::initAndStart(PipelineEnum pipelineEnum)
         errors |= !displayPipe->isCompleted();
     }
 
-    if (pipelineEnum & WIRIS_RTP)
-    {
-        m_wirisVisiblePipeline.start();
-    }
-
     return !errors;
 }
 
@@ -91,11 +86,6 @@ void GsFacade::stop(PipelineEnum pipelineEnum)
     if (pipelineEnum & RAW_DISPLAY && displayPipe)
     {
         displayPipe ->stop();
-    }
-
-    if (pipelineEnum & WIRIS_RTP)
-    {
-        m_wirisVisiblePipeline.stop();
     }
 }
 

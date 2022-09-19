@@ -5,7 +5,7 @@ ControlableWidget::ControlableWidget(const QString& text, QWidget* parentWidget)
 {
 }
 
-void ControlableWidget::control(QKeyEvent* event)
+void ControlableWidget::control(QKeyEvent* /*event*/)
 {
 
 }

@@ -1,7 +1,7 @@
 #include "internalpipeline.h"
 
 #include "library/visible/gstreamer/gsfacade.h"
-#include "global/config.h"
+#include "library/application/settings.h"
 
 const gchar* InternalPipeline::m_intervideoChannelName  = "interchannel";
 
@@ -22,7 +22,7 @@ InternalPipeline &InternalPipeline::getInstance()
 void InternalPipeline::setSource(const gchar *name)
 {
     m_data.videoSrc = GsFacade::makeElement("v4l2src",name);
-    g_object_set(m_data.videoSrc,"device", glb::path::VIDEO_SRC.c_str(),"do-timestamp", TRUE, nullptr);
+    g_object_set(m_data.videoSrc,"device", Settings::getInstance().path.videoSrc.c_str(),"do-timestamp", TRUE, nullptr);
 }
 
 void InternalPipeline::setSink(const gchar *name)
