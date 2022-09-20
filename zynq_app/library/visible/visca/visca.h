@@ -36,6 +36,7 @@ public:
         }
 
         QMutexLocker sendLocker(&this->m_sendMutex);
+
         if (!m_uart.sendMessage(m_camAddr, data))
         {
             qCInfo(viscaLog()).noquote() << "UART fail" << logMessage;
@@ -184,10 +185,10 @@ private:
             return ERROR;
         }
 
-        if (reply[1] == 0x41)
+        if ((reply[1] & 0xF0) == 0x40)
             return ACKED;
 
-        if (reply[1] == 0x51)
+        if ((reply[1] & 0xF0) == 0x50)
             return EXECUTED;
 
         return UNKNOWN;

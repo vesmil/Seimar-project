@@ -25,7 +25,7 @@ public:
     {
         std::string videoSrc {"/dev/video0"};
         std::string videoOut {"/video-res"};
-        std::string cameraUart {"/dev/ttymxc4"};
+        std::string cameraUart {"/dev/ttyUSB4"};
     } path;
 
     struct

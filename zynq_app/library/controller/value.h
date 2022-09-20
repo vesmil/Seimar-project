@@ -39,6 +39,7 @@ public:
 
     void setAsync() override
     {
+        // NOTE Should be solved better
         m_controller->addCommandToQueue(makeCommand(m_setFunc, m_controller, getValue()));
     }
 

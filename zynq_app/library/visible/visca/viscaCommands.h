@@ -300,14 +300,18 @@ namespace ViscaCommands
 
     namespace Hdmi
     {
+        /* OLD
         enum Format : uint8_t { _1920x1080_59_94HZ = 0x00, _1920x1080_29_97HZ = 0x02, _1920x1080_59_94HZ_i = 0x03, _1280x720_59_94HZ = 0x04,
                                 _1920x1080_50HZ = 0x08, _1920x1080_25HZ = 0x0A, _1920x1080_50HZ_i = 0x0B, _1280x720_50HZ = 0x0C, _640x480_59_94HZ = 0x18,
                                 _3840x2160_29_97HZ = 0x22, _3840x2160_25HZ = 0x26, _1920x1080_23_98HZ = 0x28, _3840x2160_23_98HZ = 0x2A };
+        */
 
-        enum Colorspace : uint8_t {YCBCR = 0, RGB = 1};
+        enum Format : uint8_t { _3840x2160_29_97HZ = 0x1D ,_3840x2160_25HZ = 0x1E ,  _1920x1080_59_94HZ = 0x13, _1920x1080_29_97HZ = 0x06, _1280x720_59_94HZ = 0x09};
 
-        static constexpr byteArray<7> setFormat(Format format)             { return {0x01, 0x7E, 0x01, 0x1E, parseParam(format, 1), parseParam(format, 0), 0xFF}; }
-        static constexpr byteArray<7> setColorspace(Colorspace colorSpace) { return {0x01, 0x7E, 0x01, 0x03, 0x00, colorSpace, 0xFF}; }
+        enum Colorspace : uint8_t {YUV = 0, RGB = 1};
+
+        static constexpr byteArray<7> setFormat(Format format)             { return {0x01, 0x04, 0x24, 0x72, parseParam(format, 1), parseParam(format, 0), 0xFF}; }
+        // static constexpr byteArray<7> setColorspace(Colorspace colorSpace) { return {0x01, 0x7E, 0x01, 0x03, 0x00, colorSpace, 0xFF}; }
     }
 
     [[maybe_unused]] static constexpr byteArray<5> horizontalFlip(State state) { return {CTRL, 0x04, 0x61, state, 0xFF}; }

@@ -18,6 +18,8 @@ class Controller
 public:
     Controller(Visca& visca, GsFacade& gstreamer);
 
+    void addCommandToQueue(std::unique_ptr<IControllerCommand> command);
+
     // TODO create as ArrValue - zoom values set as {1, 1.2, 1.5, 2, 5, 10}
     // static const std::array<std::pair<float, QString>, ... > ZoomArray;
     //  { std::pair<float, QString>{1, QString("Full auto")}, ... }
@@ -37,11 +39,10 @@ public:
     ValueSetter<int, int, Controller> gain {0, -3, 33, &Controller::setGain, this, "dB"};
     Dependency<ModeValue, ViscaCommands::Exposure::Mode, ViscaCommands::Exposure::Mode::MANUAL, ViscaCommands::Exposure::Mode::GAIN_PRI> validGain{exposureMode};
 
-    BoolValue<Controller> rtp_stream {true, &Controller::switchRtp, this};
+    BoolValue<Controller> rtp_stream {false, &Controller::switchRtp, this};
     BoolValue<Controller> file_stream {false, &Controller::switchFile, this};
     BoolValue<Controller> hdmi_stream {false, &Controller::switchHDMI, this};
 
-    void addCommandToQueue(std::unique_ptr<IControllerCommand> command);
 
 private:
     void startExecutingCommandQueue();

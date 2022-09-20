@@ -94,7 +94,7 @@ public:
             return false;
         }
 
-        /* Print recieved message...
+        /* NOTE used for printing the response
         {
             QString test;
             for (auto&& b : data)

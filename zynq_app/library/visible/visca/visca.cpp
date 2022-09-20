@@ -16,8 +16,15 @@ Visca::Visca(const char *device_path) : m_uart(device_path)
 
         if (executeCommand(ViscaCommands::Init::ifClear(), BASE_WAIT_TIME_MS * 2, "Clearing command buffer"))
         {
+            /*
+            executeCommand(ViscaCommands::Power::setState(ViscaCommands::State::OFF), BASE_WAIT_TIME_MS * 3);
+            executeCommand(ViscaCommands::Hdmi::setFormat(ViscaCommands::Hdmi::Format::_1920x1080_59_94HZ), BASE_WAIT_TIME_MS * 2, "Setting res");
+            executeCommand(ViscaCommands::Power::setState(ViscaCommands::State::ON), BASE_WAIT_TIME_MS * 3);
+            */
+
             return;
         }
+
 
         qCWarning(viscaLog()) << "Failed to clear command buffer - init attempt:" << i + 1 << "out of" << INIT_TRIES_COUNT;
         usleep(DEFAULT_USLEEP_WAIT);
