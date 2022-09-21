@@ -215,9 +215,9 @@ classDiagram
 
 Jak již bylo zmíněno v `README`, ovládání kamery je zajištěně pomocí UART komunikace s použitím tzv. VISCA prtokolu - viz. [dokumentace](https://www.sony.net/Products/CameraSystem/CA/BRC_X1000_BRC_H800/Technical_Document/C456100121.pdf).
 
-> Tuto část jsem začal dělat v době, kdy jsem ještě neměl přístup ke všemu HW a tedy jsem využil jinou desku a jinou kameru. V rychlosti jsem tedy vytvořil nový projekt s nějakým základním zobrazení pomocí RTP. Ten nyní nese označení `visca_test [temp]`
+> Tuto část jsem začal dělat v době, kdy jsem ještě neměl přístup ke všemu HW a tedy jsem využil jinou desku a jinou kameru. V rychlosti jsem tedy vytvořil nový projekt s nějakým základním zobrazení pomocí RTP - ten již je nyní smazán.
 
-Navázat UART komunikaci je díky Linuxu velmi snadné, stačí mi jednoduše otevřít soubor `/dev/ttymxc4` a nastavit termios flagy jako např. baud rate. Pro práci se samotným VISCA protkolem je potřeba následně provést ještě dva kroky a to nastavení adresy a vymazání příkazového bufferu.
+Navázat UART komunikaci je díky Linuxu velmi snadné, stačí mi jednoduše otevřít soubor a nastavit `termios` flagy jako např. baud rate. Pro práci se samotným VISCA protkolem je potřeba následně provést ještě dva kroky a to nastavení adresy a vymazání příkazového bufferu.
 
 Pro realizaci protokolu jako takového jsem hledal vhodné uložení příkazů. Ve výsledku jsem se rozhodoval mezi použitím builder pattern a více přímočarým řešením constexpr metod rozdělených do vhodných namespace, které podle argumentu vrací array `uint8_t`. Nakonec jsem se rozhodl pro druhou variantu neboť příkazů není až tak velké množství, je to nepatrně rychlejší a snadněji se přidá nový command - tomu odpovídá třída `ViscaCommands`.
 
@@ -297,3 +297,30 @@ classDiagram
 	}	
 ```
 
+## 4. část - přizpůsobení na ZCU104 a finální kameru
+
+Pipeline pro výstup na display port:
+
+```bash
+gst-launch-1.0 v4l2src device=/dev/video0 ! video/x-raw,width=3840,height=2160,framerate=30/1 ! queue ! kmssink bus-id=fd4a0000.display fullscreen-overlay=1
+```
+
+Pipeline pro odesílání po RTP
+
+```bash
+gst-launch-1.0 v4l2src device=/dev/video0 ! video/x-raw,width=1920,height=1080,framerate=30/1 ! queue ! rtpvrawpay mtu=60000 ! udpsink host=10.15.1.77 port=5000 sync=false async=false -v
+```
+
+A následné přijímání
+
+```bash
+gst-launch-1.0 udpsrc port=5000 caps = "application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)RAW, sampling=(string)YCbCr-4:2:2, depth=(string)8, width=(string)1920, height=(string)1080, colorimetry=(string)BT709-2, payload=(int)96, ssrc=(uint)2167052597, timestamp-offset=(uint)3878397462, seqnum-offset=(uint)28849, a-framerate=(string)30" ! rtpvrawdepay ! videoconvert ! autovideosink
+```
+
+### Použití video mixéru
+
+*note done yet*
+
+```bash
+gst-launch-1.0 v4l2src device=/dev/video0 ! video/x-raw, width=1024, height=768, framerate=60/1, format=GRAY16_LE ! queue ! videoconvert ! videoscale ! video/x-raw, width=1920, height=1080, format=RGB ! kmssink bus-id="a0000000.v_mix" plane-id=37 fullscreen-overlay=false sync=false 
+```

@@ -28,14 +28,15 @@ public:
     template<std::size_t TReplySize = 3, std::size_t TSize>
     bool executeCommand(const std::array <uint8_t, TSize> &&data,
                         int waitTime = BASE_WAIT_TIME_MS,
-                        QString &&logMessage = QString{})
+                        QString &&logMessage = QString{},
+                        bool epectedResponse = true)
     {
         if (logMessage.length() != 0)
         {
             logMessage = "(" + logMessage + ")";
         }
 
-        QMutexLocker sendLocker(&this->m_sendMutex);
+        // QMutexLocker sendLocker(&this->m_sendMutex);
 
         if (!m_uart.sendMessage(m_camAddr, data))
         {
@@ -43,11 +44,19 @@ public:
             return false;
         }
 
-        sendLocker.unlock();
+        qCInfo(viscaLog()).noquote() << "Command sent" << logMessage;
 
-        QMutexLocker recLocker(&this->m_recMutex);
+        // sendLocker.unlock();
+        if (!epectedResponse)
+        {
+            return true;
+        }
+
+        // QMutexLocker recLocker(&this->m_recMutex);
         if (!checkReply<TReplySize>(waitTime, logMessage))
+        {
             return false;
+        }
 
         qCInfo(viscaLog()).noquote() << "Command executed" << logMessage;
 

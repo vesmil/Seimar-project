@@ -29,6 +29,8 @@ bool Controller::setDefault()
     file_stream.setDefault();
     hdmi_stream.setDefault();
 
+    setResolution(ViscaCommands::Hdmi::_1920x1080_59_94HZ);
+
     return true;
 }
 
@@ -90,6 +92,15 @@ bool Controller::switchFile(bool state)
 bool Controller::switchHDMI(bool state)
 {
     return m_gstreamer.setState(GsFacade::RAW_DISPLAY, state);
+}
+
+bool Controller::setResolution(ViscaCommands::Hdmi::Format format)
+{
+    m_visca.executeCommand(ViscaCommands::Power::setState(ViscaCommands::State::OFF), 1000, "shutting of");
+    m_visca.executeCommand(ViscaCommands::Hdmi::setFormat(format), 1200, "Setting res", false);
+    m_visca.executeCommand(ViscaCommands::Power::setState(ViscaCommands::State::ON), 1000, "starting");
+
+    return true;
 }
 
 

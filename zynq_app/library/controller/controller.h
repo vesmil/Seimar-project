@@ -46,7 +46,7 @@ public:
 
 private:
     void startExecutingCommandQueue();
-    bool queueExecuting; // TODO atomic
+    bool queueExecuting = false; // TODO atomic
 
     bool setDefault();
     bool setZoom(uint8_t value);
@@ -60,6 +60,8 @@ private:
     bool switchRtp(bool state);
     bool switchFile(bool state);
     bool switchHDMI(bool state);
+
+    bool setResolution(ViscaCommands::Hdmi::Format);
 
     Visca& m_visca;
     GsFacade& m_gstreamer;

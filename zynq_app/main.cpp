@@ -21,6 +21,10 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
 
+
+    // QGuiApplication::screens();
+    // QWindow::setScreen();
+
     Menu &menu = Menu::getInstance();
     menu.show();
 

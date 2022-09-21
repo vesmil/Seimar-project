@@ -65,3 +65,6 @@ HEADERS += \
 
 FORMS +=
 
+DISTFILES += \
+    eglfsconfig.json
+
