@@ -22,7 +22,7 @@ InternalPipeline &InternalPipeline::getInstance()
 void InternalPipeline::setSource(const gchar *name)
 {
     m_data.videoSrc = GsFacade::makeElement("v4l2src",name);
-    g_object_set(m_data.videoSrc,"device", Settings::getInstance().path.videoSrc.c_str(),"do-timestamp", TRUE, nullptr);
+    g_object_set(m_data.videoSrc,"device", Settings::getInstance().path.videoSrc.c_str(), nullptr); // "do-timestamp", TRUE,
 }
 
 void InternalPipeline::setSink(const gchar *name)
@@ -34,12 +34,10 @@ void InternalPipeline::setSink(const gchar *name)
 void InternalPipeline::completePipeline()
 {
     m_data.pipeline = gst_pipeline_new("interpipeline");
-
     m_data.bus = gst_element_get_bus(m_data.pipeline);
     gst_bus_add_signal_watch(m_data.bus);
 
-    GstElement* test = nullptr;
-    m_completed = addAndLink(m_data.pipeline, m_data.videoSrc, test, m_data.capsFilter, m_data.sink);
+    m_completed = addAndLink(m_data.pipeline, m_data.videoSrc, m_data.capsFilter, m_data.sink);
 }
 
 const gchar* InternalPipeline::getChannelName()

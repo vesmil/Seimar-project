@@ -49,10 +49,8 @@ public:
         return true;
     }
 
-    /*!
-     * \brief Used for debug to make sending messages simpler - Do not use for production!
-     * \example To send i.e. AddressSet use it like sendMessage(0x88, 0x30, 0x01, 0xFF);
-     */
+    // NOTE function for simpler debug
+    /*
     template<typename... types>
     [[deprecated("Use only for debug")]]
     bool sendMessage(uint8_t address, types... data)
@@ -62,6 +60,7 @@ public:
 
         return sendMessage(address, message);
     }
+    */
 
     /*!
      * \brief Reads UART response and writes it to array

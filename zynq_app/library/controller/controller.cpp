@@ -21,7 +21,6 @@ void Controller::addCommandToQueue(std::unique_ptr<IControllerCommand> command)
 
 bool Controller::setDefault()
 {
-    // TODO...
     zoom.setDefault();
     exposureMode.setDefault();
 
@@ -29,7 +28,7 @@ bool Controller::setDefault()
     file_stream.setDefault();
     hdmi_stream.setDefault();
 
-    setResolution(ViscaCommands::Hdmi::_1920x1080_59_94HZ);
+    // setResolution(ViscaCommands::Hdmi::_1920x1080_59_94HZ);
 
     return true;
 }
@@ -47,9 +46,9 @@ void Controller::startExecutingCommandQueue()
     queueExecuting = false;
 }
 
-bool Controller::setZoom(uint8_t zoom)
+bool Controller::setZoom(float zoom)
 {
-    uint16_t remappedZoom = (zoom * 0x4000) / 16;
+    uint16_t remappedZoom = (zoom / 16.0f) * 0x4000;
     return m_visca.executeCommand(ViscaCommands::Zoom::setValue(remappedZoom),400,"zoom");
 }
 

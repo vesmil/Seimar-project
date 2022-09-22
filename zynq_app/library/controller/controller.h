@@ -17,15 +17,11 @@ class Controller
 {
 public:
     Controller(Visca& visca, GsFacade& gstreamer);
-
     void addCommandToQueue(std::unique_ptr<IControllerCommand> command);
 
-    // TODO create as ArrValue - zoom values set as {1, 1.2, 1.5, 2, 5, 10}
-    // static const std::array<std::pair<float, QString>, ... > ZoomArray;
-    //  { std::pair<float, QString>{1, QString("Full auto")}, ... }
-
-    // Value<uint8_t, uint8_t, Controller> zoom {0, 0, 10, &Controller::setZoom, this, "x"};
-    ValueSetter<uint8_t, uint8_t, Controller> zoom {0, 0, 10, &Controller::setZoom, this, "x"};
+    std::array<std::pair<float, QString>, 6> ZoomArray { std::pair<float, QString>{1, QString("1x")}, std::pair<float, QString>{1.2, QString("1.2x")}, std::pair<float, QString>{1.5, QString("1.5x")},
+                                                         std::pair<float, QString>{2, QString("2x")}, std::pair<float, QString>{5, QString("5x")}, std::pair<float, QString>{10, QString("10x")}};
+    ArrValue<float, Controller, 6> zoom{&ZoomArray, &Controller::setZoom, this};
 
     using ModeValue = ArrValue<ViscaCommands::Exposure::Mode, Controller, 5U>;
     ModeValue exposureMode{&ViscaCommands::Exposure::ModeArray, &Controller::setExposureMode, this};
@@ -43,13 +39,12 @@ public:
     BoolValue<Controller> file_stream {false, &Controller::switchFile, this};
     BoolValue<Controller> hdmi_stream {false, &Controller::switchHDMI, this};
 
-
 private:
     void startExecutingCommandQueue();
-    bool queueExecuting = false; // TODO atomic
+    std::atomic_bool queueExecuting{false};
 
     bool setDefault();
-    bool setZoom(uint8_t value);
+    bool setZoom(float value);
     bool setExposureMode(ViscaCommands::Exposure::Mode mode);
 
     bool setShutter(u_int8_t value);

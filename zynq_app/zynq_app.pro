@@ -5,7 +5,8 @@ CONFIG += c++1z
 CONFIG += link_pkgconfig
 
 PKGCONFIG += gstreamer-1.0 gstreamer-video-1.0
-# LIBS +=  -lgstreamer-1.0 -lgobject-2.0 -lglib-2.0 -lgstrtspserver-1.0
+
+# DEFINES += QT_NO_INFO_OUTPUT
 
 SOURCES += \
     global/logcategories.cpp \

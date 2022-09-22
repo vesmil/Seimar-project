@@ -299,23 +299,45 @@ classDiagram
 
 ## 4. část - přizpůsobení na ZCU104 a finální kameru
 
-Pipeline pro výstup na display port:
+### Pipeline pro výstup na display port:
 
 ```bash
-gst-launch-1.0 v4l2src device=/dev/video0 ! video/x-raw,width=3840,height=2160,framerate=30/1 ! queue ! kmssink bus-id=fd4a0000.display fullscreen-overlay=1
+gst-launch-1.0 v4l2src device=/dev/video0 ! video/x-raw,width=1920,height=1080,framerate=30/1 ! queue ! kmssink bus-id=fd4a0000.display fullscreen-overlay=1
 ```
 
-Pipeline pro odesílání po RTP
+**TODO** nastavit kmssink na base vrstvu
+
+### Pipeline pro odesílání po RTP
 
 ```bash
-gst-launch-1.0 v4l2src device=/dev/video0 ! video/x-raw,width=1920,height=1080,framerate=30/1 ! queue ! rtpvrawpay mtu=60000 ! udpsink host=10.15.1.77 port=5000 sync=false async=false -v
+gst-launch-1.0 v4l2src device=/dev/video0 ! video/x-raw,width=1920,height=1080,framerate=30/1 ! queue ! rtpvrawpay mtu=60000 ! udpsink host=10.15.1.77 port=5000 sync=false async=false
 ```
 
-A následné přijímání
+#### A následné přijímání
 
 ```bash
-gst-launch-1.0 udpsrc port=5000 caps = "application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)RAW, sampling=(string)YCbCr-4:2:2, depth=(string)8, width=(string)1920, height=(string)1080, colorimetry=(string)BT709-2, payload=(int)96, ssrc=(uint)2167052597, timestamp-offset=(uint)3878397462, seqnum-offset=(uint)28849, a-framerate=(string)30" ! rtpvrawdepay ! videoconvert ! autovideosink
+gst-launch-1.0 udpsrc port=5000 caps = "application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)RAW, sampling=(string)YCbCr-4:2:2, depth=(string)8, width=(string)1920, height=(string)1080, colorimetry=(string)BT709-2, payload=(int)96, ssrc=(uint)3215240456, timestamp-offset=(uint)2448946101, seqnum-offset=(uint)2026, a-framerate=(string)30, format=(string)=UYVY" ! queue ! rtpvrawdepay ! videoconvert ! queue ! autovideosink
 ```
+
+---
+
+### Split - TODO
+
+Caps:
+
+* from src: `video/x-raw, width=(int)1920, height=(int)1080, framerate=(fraction)30/1, format=(string), interlace-mode=(string)progressive, colorimetry=(string)bt709`
+* from sink: `application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)RAW, sampling=(string)YCbCr-4:2:2, depth=(string)8, width=(string)1920, height=(string)1080, colorimetry=(string)BT709-2, payload=(int)96, ssrc=(uint)2846907291, timestamp-offset=(uint)2368209445, seqnum-offset=(uint)13637, a-framerate=(string)30`
+
+
+
+```bash
+gst-launch-1.0 v4l2src device=/dev/video0 ! video/x-raw, width=1920, height=1080, framerate=30/1, form ! intervideosink channel=intervideochannel -v
+
+gst-launch-1.0 intervideosrc channel=inter ! video/x-raw,width=1920,height=1080,framerate=30/1,format=UYVY,interlace-mode=progressive,colorimetry=bt709,interlace-mode=progressive,colorimetry=bt709 ! queue ! rtpvrawpay mtu=60000 ! udpsink host=10.15.1.77 port=5000 sync=false async=false -v
+```
+
+
+
 
 ### Použití video mixéru
 

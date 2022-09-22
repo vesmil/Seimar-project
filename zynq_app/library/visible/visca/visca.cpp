@@ -30,8 +30,7 @@ bool Visca::setAddress()
 {
     std::array<uint8_t, 4> reply{};
 
-    if (!m_uart.sendMessage(addr::BROADCAST, ViscaCommands::Init::addressSet())
-            || !m_uart.receiveMessage(reply, BASE_WAIT_TIME_MS))
+    if (!m_uart.sendMessage(addr::BROADCAST, ViscaCommands::Init::addressSet()) || !m_uart.receiveMessage(reply, BASE_WAIT_TIME_MS))
     {
         qCWarning(viscaLog()) << "Failed to set address.";
         return false;

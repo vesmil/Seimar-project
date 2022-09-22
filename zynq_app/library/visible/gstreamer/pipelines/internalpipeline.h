@@ -22,6 +22,8 @@ private:
 
     static const gchar* m_intervideoChannelName;
 
+    GstPad* caps;
+
     void setSource(const gchar *name);
     void setSink(const gchar *name);
     void completePipeline();

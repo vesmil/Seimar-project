@@ -49,21 +49,20 @@ bool PipelineBase::isCompleted()
 
 void PipelineBase::setDefaultCapsFilter(const gchar* name)
 {
-    // NOTE put back when testing on Zynq
-
-    /* m_data.videoCaps = gst_caps_new_simple("video/x-raw",
-                                      "format", G_TYPE_STRING, "RGB",
-                                      "framerate", GST_TYPE_FRACTION, 60, 1,
-                                      "pixel-aspect-ratio", GST_TYPE_FRACTION, 1, 1,
+    m_data.videoCaps = gst_caps_new_simple("video/x-raw",
+                                      "framerate", GST_TYPE_FRACTION, 30, 1,
+                                      "format", G_TYPE_STRING, "UYVY",
                                       "width", G_TYPE_INT, WIDTH,
                                       "height", G_TYPE_INT, HEIGHT, NULL);
-    */
-
-    m_data.videoCaps = gst_caps_new_any();
 
     m_data.capsFilter = GsFacade::makeElement("capsfilter", name);
     g_object_set(m_data.capsFilter, "caps", m_data.videoCaps, NULL);
     gst_caps_unref(m_data.videoCaps);
+}
+
+void PipelineBase::setQueue(const gchar* name)
+{
+    m_data.queue = GsFacade::makeElement("queue", name);
 }
 
 void PipelineBase::setSrcFromInternalPipeline(const gchar *name)

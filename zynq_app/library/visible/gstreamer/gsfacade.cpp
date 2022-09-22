@@ -18,8 +18,7 @@ GsFacade::GsFacade()
         gst_debug_set_default_threshold(GST_LEVEL_FIXME);
     }
 
-    // TODO put back
-    // InternalPipeline::getInstance().start();
+    InternalPipeline::getInstance().start();
     m_interpipelineInited = true;
 }
 

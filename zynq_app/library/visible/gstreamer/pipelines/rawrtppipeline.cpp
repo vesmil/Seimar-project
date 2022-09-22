@@ -7,6 +7,7 @@ RawRtpPipeline::RawRtpPipeline() : PipelineBase()
 {
     setSrcFromInternalPipeline("rtp-source");
     setDefaultCapsFilter("rtp-caps");
+    setQueue("rtp-queue");
     setRtpPayload();
     setUdpsink();
     completePipeline();
@@ -15,14 +16,15 @@ RawRtpPipeline::RawRtpPipeline() : PipelineBase()
 void RawRtpPipeline::setRtpPayload()
 {
     m_rtp_data.rtpvrawpay = GsFacade::makeElement("rtpvrawpay", "rtp-pay");
+    g_object_set(m_data.sink, "mtu", 60000, nullptr);
 }
 
 void RawRtpPipeline::setUdpsink()
 {
     m_data.sink = GsFacade::makeElement("udpsink", "rtp-sink");
 
-    g_object_set(m_data.sink, "port", Settings::getInstance().rtp.port, nullptr);
-    g_object_set(m_data.sink, "host", Settings::getInstance().rtp.ip_address.c_str(), nullptr);
+    g_object_set(m_data.sink, "port", Settings::getInstance().rtp.port, "host", Settings::getInstance().rtp.ip_address.c_str(),
+                 "sync", false, "async", false, nullptr);
 }
 
 void RawRtpPipeline::completePipeline()
@@ -31,7 +33,7 @@ void RawRtpPipeline::completePipeline()
     m_data.bus = gst_element_get_bus(m_data.pipeline);
     gst_bus_add_signal_watch(m_data.bus);
 
-    m_completed = addAndLink(m_data.pipeline, m_data.videoSrc, m_data.capsFilter, m_rtp_data.rtpvrawpay, m_data.sink);
+    m_completed = addAndLink(m_data.pipeline, m_data.videoSrc, m_data.capsFilter, m_data.queue, m_rtp_data.rtpvrawpay, m_data.sink);
 }
 
 RawRtpPipeline::~RawRtpPipeline()

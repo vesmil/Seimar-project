@@ -58,7 +58,8 @@ Navíc se stále čeká na nosnou desku od ČVUT, která místo HDMI nabídne Di
 - [x] Setup
     - [x] Specifikace
     - [x] Prázdný QT projekt
-    - [x] Setup kompilace a zynq zařízení
+    - [x] Setup zynq zařízení
+    - [x] Setup kompilace
 - [x] GStreamer
     - [x] RAW ukldání na SD kartu
         - [x] Příkazový řádek
@@ -67,6 +68,7 @@ Navíc se stále čeká na nosnou desku od ČVUT, která místo HDMI nabídne Di
         - [x] Příkazový řádek
         - [x] C++
         - [x] Klient
+    - [x] Zobrazení kamery na Display Port
 - [x] VISCA protokol
     - [x] Setup dočasné kamery s HDMI na monitor a UART do desky
     - [x] Funguící protokol
@@ -75,9 +77,6 @@ Navíc se stále čeká na nosnou desku od ČVUT, která místo HDMI nabídne Di
     - [x] Všechny potřebné příkazy
         - [x] Command
         - [x] Inquiry
-- [ ] Zobrazit stream na display port (note: HDMI na Trenz desce je problematický. je potřeba použít Zynq desku nebo počkat na ČVUT desku)
-    - [x] KMS sink
-    - [ ] Jako součást UI (možná nebude potřeba)
 - [ ] Menu
   - [x] Kostra menu
     - [x] Základní položky - submenu, hodnotové položky
@@ -89,6 +88,14 @@ Navíc se stále čeká na nosnou desku od ČVUT, která místo HDMI nabídne Di
         - [ ] ...
   - [ ] Zařídit odesílání na KMS sink pro kombinaci obrazu
 - [ ] Upravit výsledek pro finální použití
+    - [ ] Gstreamer
+        - [ ] Přidat nastavení rozlišení
+        - [ ] Využít videomixer
+        - [ ] Předělat stávající pipelines pro novou kameru
+
+    - [x] Visca - předělat na novou kameru
+        - [x] Setup rozlišení
+
 - [ ] Bonusy...
 
 ---

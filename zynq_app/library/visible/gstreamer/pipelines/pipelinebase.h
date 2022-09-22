@@ -26,6 +26,7 @@ protected:
     PipelineBase() = default;
 
     void setDefaultCapsFilter(const gchar *name);
+    void setQueue(const gchar *name);
     void setSrcFromInternalPipeline(const gchar *name);
 
     //!
@@ -58,13 +59,13 @@ protected:
 
     struct
     {
-        GstElement *videoSrc = nullptr, *capsFilter = nullptr, *sink = nullptr, *pipeline = nullptr;
+        GstElement *videoSrc = nullptr, *capsFilter = nullptr, *queue = nullptr, *sink = nullptr, *pipeline = nullptr;
         GstCaps *videoCaps = nullptr;
         GstBus *bus = nullptr;
     } m_data;
 
-    static const int WIDTH = 1024;
-    static const int HEIGHT = 768;
+    static const int WIDTH = 1920;
+    static const int HEIGHT = 1080;
 
     bool m_completed = false;
 };

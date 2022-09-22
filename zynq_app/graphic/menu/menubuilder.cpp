@@ -42,11 +42,11 @@ std::unique_ptr<SubmenuItem> MenuBuilder::buildAdvanced(SubmenuItem* parentMenu,
 {
     auto advMenu = std::make_unique<SubmenuItem>("Advanced", parentMenu, parentWidget);
 
-    // NOTE remove these dangling pointers
+    // TODO remove this dangling pointers and create proper widget
     ControlableWidget* widget = new ControlableWidget("...", parentWidget);
 
-    advMenu->addItem(std::make_unique<PopupItem>("test", widget, advMenu.get(), parentWidget));
-    advMenu->addItem(std::make_unique<PopupItem>("test 2", widget, advMenu.get(), parentWidget));
+    advMenu->addItem(std::make_unique<PopupItem>("IP address for RTP", widget, advMenu.get(), parentWidget));
+    advMenu->addItem(std::make_unique<PopupItem>("Camera resolution", widget, advMenu.get(), parentWidget));
 
     return advMenu;
 }

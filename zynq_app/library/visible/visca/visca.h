@@ -37,7 +37,6 @@ public:
         }
 
         // QMutexLocker sendLocker(&this->m_sendMutex);
-
         if (!m_uart.sendMessage(m_camAddr, data))
         {
             qCInfo(viscaLog()).noquote() << "UART fail" << logMessage;
@@ -46,12 +45,12 @@ public:
 
         qCInfo(viscaLog()).noquote() << "Command sent" << logMessage;
 
-        // sendLocker.unlock();
         if (!epectedResponse)
         {
             return true;
         }
 
+        // sendLocker.unlock();
         // QMutexLocker recLocker(&this->m_recMutex);
         if (!checkReply<TReplySize>(waitTime, logMessage))
         {
