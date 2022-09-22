@@ -1,9 +1,6 @@
 QT += widgets core gui multimedia multimediawidgets
 
-CONFIG += c++1z
-
-CONFIG += link_pkgconfig
-
+CONFIG += c++1z link_pkgconfig
 PKGCONFIG += gstreamer-1.0 gstreamer-video-1.0
 
 # DEFINES += QT_NO_INFO_OUTPUT
@@ -63,8 +60,6 @@ HEADERS += \
         library/visible/visca/uartcommunication.h \
         library/visible/visca/visca.h \
         library/visible/visca/viscaCommands.h
-
-FORMS +=
 
 DISTFILES += \
     eglfsconfig.json

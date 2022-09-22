@@ -36,10 +36,26 @@ PipelineBase::~PipelineBase()
     }
 
     if (m_data.videoSrc)
+    {
         gst_object_unref(m_data.videoSrc);
+    }
+
+    if (m_data.queue)
+    {
+        gst_object_unref(m_data.queue);
+    }
+
+    // NOTE Should I unref caps?
+
+    if (m_data.capsFilter)
+    {
+        gst_object_unref(m_data.capsFilter);
+    }
 
     if (m_data.sink)
+    {
         gst_object_unref(m_data.sink);
+    }
 }
 
 bool PipelineBase::isCompleted()

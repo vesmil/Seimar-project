@@ -29,9 +29,7 @@ protected:
     void setQueue(const gchar *name);
     void setSrcFromInternalPipeline(const gchar *name);
 
-    //!
     //! \brief gst_add_many and gst_link_many with null check
-    //!
     template <typename T, typename ...TElems >
     bool addAndLink(T pipeline, TElems ... elements)
     {

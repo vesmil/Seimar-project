@@ -88,14 +88,12 @@ Navíc se stále čeká na nosnou desku od ČVUT, která místo HDMI nabídne Di
         - [ ] ...
   - [ ] Zařídit odesílání na KMS sink pro kombinaci obrazu
 - [ ] Upravit výsledek pro finální použití
-    - [ ] Gstreamer
-        - [ ] Přidat nastavení rozlišení
-        - [ ] Využít videomixer
-        - [ ] Předělat stávající pipelines pro novou kameru
-
     - [x] Visca - předělat na novou kameru
         - [x] Setup rozlišení
-
+    - [x] Gstreamer
+        - [x] Předělat stávající pipelines pro novou kameru
+        - [ ] Přidat nastavení rozlišení
+        - [ ] Využít videomixer
 - [ ] Bonusy...
 
 ---

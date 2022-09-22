@@ -35,9 +35,9 @@ public:
     ValueSetter<int, int, Controller> gain {0, -3, 33, &Controller::setGain, this, "dB"};
     Dependency<ModeValue, ViscaCommands::Exposure::Mode, ViscaCommands::Exposure::Mode::MANUAL, ViscaCommands::Exposure::Mode::GAIN_PRI> validGain{exposureMode};
 
-    BoolValue<Controller> rtp_stream {false, &Controller::switchRtp, this};
+    BoolValue<Controller> rtp_stream {true, &Controller::switchRtp, this};
     BoolValue<Controller> file_stream {false, &Controller::switchFile, this};
-    BoolValue<Controller> hdmi_stream {false, &Controller::switchHDMI, this};
+    BoolValue<Controller> hdmi_stream {true, &Controller::switchHDMI, this};
 
 private:
     void startExecutingCommandQueue();

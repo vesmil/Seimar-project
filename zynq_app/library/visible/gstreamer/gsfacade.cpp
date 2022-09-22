@@ -15,7 +15,7 @@ GsFacade::GsFacade()
 
     if (DEBUG_LEVEL > 0) {
         gst_debug_set_active(TRUE);
-        gst_debug_set_default_threshold(GST_LEVEL_FIXME);
+        gst_debug_set_default_threshold(GST_LEVEL_WARNING);
     }
 
     InternalPipeline::getInstance().start();

@@ -6,8 +6,8 @@
 RawRtpPipeline::RawRtpPipeline() : PipelineBase()
 {
     setSrcFromInternalPipeline("rtp-source");
-    setDefaultCapsFilter("rtp-caps");
     setQueue("rtp-queue");
+    setDefaultCapsFilter("rtp-caps");
     setRtpPayload();
     setUdpsink();
     completePipeline();
@@ -33,7 +33,7 @@ void RawRtpPipeline::completePipeline()
     m_data.bus = gst_element_get_bus(m_data.pipeline);
     gst_bus_add_signal_watch(m_data.bus);
 
-    m_completed = addAndLink(m_data.pipeline, m_data.videoSrc, m_data.capsFilter, m_data.queue, m_rtp_data.rtpvrawpay, m_data.sink);
+    m_completed = addAndLink(m_data.pipeline, m_data.videoSrc, m_data.queue, m_data.capsFilter, m_rtp_data.rtpvrawpay, m_data.sink);
 }
 
 RawRtpPipeline::~RawRtpPipeline()
