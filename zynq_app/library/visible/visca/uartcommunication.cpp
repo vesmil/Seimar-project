@@ -5,7 +5,7 @@
 
 UartCommunication::UartCommunication(const char* device_path)
 {
-    m_descriptor = open(device_path, O_RDWR | O_NOCTTY | O_NDELAY);
+    m_descriptor = open(device_path, O_RDWR | O_NOCTTY);
 
     if (m_descriptor == -1)
     {

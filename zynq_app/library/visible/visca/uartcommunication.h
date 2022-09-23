@@ -1,10 +1,11 @@
 #ifndef UARTCOMMUNICATION_H
 #define UARTCOMMUNICATION_H
 
+#include <QString>
 #include <stdint.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
-#include <QString>
+#include <sys/select.h>
 
 #include "global/logcategories.h"
 
@@ -32,6 +33,15 @@ public:
             return false;
         }
 
+        /* {
+            QString test = QString::number(addr, 16) + " ";
+            for (auto&& b : message)
+                test += QString::number(b, 16) + " ";
+
+            test.chop(1);
+            qCInfo(viscaLog()).noquote() << test;
+        } */
+
         int sent_size = write(m_descriptor, &addr, 1);
         if (sent_size == -1)
         {
@@ -39,7 +49,7 @@ public:
             return false;
         }
 
-        sent_size = write(m_descriptor, message.begin(), size);
+        sent_size = write(m_descriptor, message.data(), size);
         if (sent_size != size)
         {
             qCWarning(viscaLog()) << "Writing wasn't sucesful, sent" << sent_size + 1 << "out of" << size + 1 << "bytes";
@@ -47,6 +57,76 @@ public:
         }
 
         return true;
+    }
+
+    /*!
+     * \brief Reads UART response and writes it to array
+     * \param data - array to write response to
+     * \return true if reading was successful, false otherwise
+     * \details while less than waitMS has passed it periodically checks whether the response is ready...
+     */
+    template<std::size_t size>
+    bool receiveMessage(std::array<uint8_t, size>& data, int waitMs)
+    {
+        if (m_descriptor == -1)
+        {
+            qCWarning(viscaLog()) << "Error, port is closed";
+            return false;
+        }
+
+        fd_set descriptorSet;
+
+        struct timeval tv;
+        tv.tv_sec = 10;
+        tv.tv_usec = waitMs * 1000;
+
+        int read_count = 0;
+        while (read_count < static_cast<int>(size))
+        {
+            FD_ZERO(&descriptorSet);
+            FD_SET(m_descriptor, &descriptorSet);
+
+            int result = select(m_descriptor + 1, &descriptorSet, NULL, NULL, &tv);
+            if (result == 0)
+            {
+                qCWarning(viscaLog()) << "Error, read from UART failed - timeout";
+                return false;
+            }
+            else if (result < 0)
+            {
+                qCWarning(viscaLog()) << "Error, read from UART failed - unkown error" << errno;
+                return false;
+            }
+
+            result = read(m_descriptor, data.data() + read_count, size - read_count);
+            if (result < 0)
+            {
+                qCWarning(viscaLog()) << "Error, read from UART failed - read failed";
+                return false;
+            }
+
+            read_count += result;
+        }
+
+        /* {
+            QString test;
+            for (auto&& b : data)
+                test += QString::number(b, 16) + " ";
+
+            test.chop(1);
+            qCInfo(viscaLog()).noquote() << test;
+        } */
+
+        return true;
+    }
+
+    /*!
+     * \brief Reads UART response and writes them to throwaway array - used if out of sync with messages
+     */
+    void ClearReplies()
+    {
+        int read_count = read(m_descriptor, THROWAWAY_BUFFER, BUFFER_SIZE);
+        qCInfo(viscaLog()).noquote() << "Throwing away" << read_count << "bytes";
     }
 
     // NOTE function for simpler debug
@@ -61,60 +141,6 @@ public:
         return sendMessage(address, message);
     }
     */
-
-    /*!
-     * \brief Reads UART response and writes it to array
-     * \param data - array to write response to
-     * \return true if reading was successful, false otherwise
-     * \details while less than waitMS has passed it periodically checks whether the response is ready...
-     */
-    template<std::size_t size>
-    bool receiveMessage(std::array<uint8_t, size>& data, int waitMs)
-    {
-        if (m_descriptor == -1)
-        {
-            qCWarning(viscaLog()) << "Error, port is closed";
-            return -1;
-        }
-
-        const int checkLoops = waitMs / 10 + 1;
-
-        for (int i = 0; i < checkLoops; ++i)
-        {
-            if (ioctl(m_descriptor, FIONREAD) >= (int) size)
-                break;
-            usleep(USECONDS_PER_CHECK);
-        }
-
-        int read_count = read(m_descriptor, data.begin(), size);
-        if (read_count != size && read_count < 3)
-        {
-            qCWarning(viscaLog()) << "Error, less than 3 bytes recieved!";
-            return false;
-        }
-
-        /* NOTE used for printing the response
-        {
-            QString test;
-            for (auto&& b : data)
-                test += QString::number(b, 16) + " ";
-
-            test.chop(1);
-            qCInfo(viscaLog()).noquote() << test;
-        }
-        */
-
-        return true;
-    }
-
-    /*!
-     * \brief Reads UART response and writes them to throwaway array - used if out of sync with messages
-     */
-    void ClearReplies()
-    {
-        int read_count = read(m_descriptor, THROWAWAY_BUFFER, BUFFER_SIZE);
-        qCInfo(viscaLog()).noquote() << "Throwing away" << read_count << "bytes";
-    }
 
 private:
     int m_descriptor;

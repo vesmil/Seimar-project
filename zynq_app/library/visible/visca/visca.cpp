@@ -1,5 +1,6 @@
 #include "visca.h"
 #include <unistd.h>
+#include <iostream>
 
 #include "global/logcategories.h"
 #include "viscaCommands.h"

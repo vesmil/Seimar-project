@@ -35,9 +35,9 @@ public:
     ValueSetter<int, int, Controller> gain {0, -3, 33, &Controller::setGain, this, "dB"};
     Dependency<ModeValue, ViscaCommands::Exposure::Mode, ViscaCommands::Exposure::Mode::MANUAL, ViscaCommands::Exposure::Mode::GAIN_PRI> validGain{exposureMode};
 
-    BoolValue<Controller> rtp_stream {true, &Controller::switchRtp, this};
-    BoolValue<Controller> file_stream {false, &Controller::switchFile, this};
-    BoolValue<Controller> hdmi_stream {true, &Controller::switchHDMI, this};
+    BoolValue<Controller> rtp_stream {true, &Controller::setRtp, this};
+    BoolValue<Controller> file_stream {false, &Controller::setFile, this};
+    BoolValue<Controller> hdmi_stream {false, &Controller::setHDMI, this};
 
 private:
     void startExecutingCommandQueue();
@@ -52,11 +52,12 @@ private:
     bool setGain(int value);
     bool setExposureCompensation(uint8_t value);
 
-    bool switchRtp(bool state);
-    bool switchFile(bool state);
-    bool switchHDMI(bool state);
+    bool setRtp(bool state);
+    bool setFile(bool state);
+    bool setHDMI(bool state);
 
     bool setResolution(ViscaCommands::Hdmi::Format);
+    bool setColor(ViscaCommands::Hdmi::Colorspace);
 
     Visca& m_visca;
     GsFacade& m_gstreamer;

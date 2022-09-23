@@ -311,7 +311,10 @@ namespace ViscaCommands
         enum Colorspace : uint8_t {YUV = 0, RGB = 1};
 
         static constexpr byteArray<7> setFormat(Format format)             { return {0x01, 0x04, 0x24, 0x72, parseParam(format, 1), parseParam(format, 0), 0xFF}; }
-        // static constexpr byteArray<7> setColorspace(Colorspace colorSpace) { return {0x01, 0x7E, 0x01, 0x03, 0x00, colorSpace, 0xFF}; }
+        static constexpr byteArray<7> setColorspace(Colorspace colorSpace) { return {0x01, 0x04, 0x24, 0x60, 0x00, colorSpace, 0xFF}; }
+
+        static constexpr byteArray<5> getColorspace() { return { INQ, 0x04, 0x24, 0x60, 0xFF}; }
+        [[maybe_unused]] static uint8_t valueFromReply(byteArray<4> reply) { return reverseParse<uint16_t>(reply[2], reply[3]); }
     }
 
     [[maybe_unused]] static constexpr byteArray<5> horizontalFlip(State state) { return {CTRL, 0x04, 0x61, state, 0xFF}; }

@@ -302,17 +302,21 @@ classDiagram
 ### Pipeline pro výstup na display port:
 
 ```bash
-gst-launch-1.0 v4l2src device=/dev/video0 ! video/x-raw,width=1920,height=1080,framerate=30/1 ! queue ! kmssink bus-id=fd4a0000.display fullscreen-overlay=1
+gst-launch-1.0 v4l2src device=/dev/video0 ! video/x-raw,width=1280,height=720,framerate=60/1 ! queue ! kmssink bus-id=fd4a0000.display fullscreen-overlay=1
 ```
 
 **TODO** nastavit kmssink na base vrstvu
+
+```bash
+gst-launch-1.0 v4l2src device=/dev/video0 io-mode=4 ! queue ! videoconvert ! videoscale ! video/x-raw,width=1920,height=1080,framerate=30/1,format=RGB ! kmssink bus-id="a0000000.v_mix" plane-id=37 fullscreen-overlay=false sync=false
+```
 
 ---
 
 ### Pipeline pro odesílání po RTP
 
 ```bash
-gst-launch-1.0 v4l2src device=/dev/video0 ! video/x-raw,width=1920,height=1080,framerate=30/1 ! queue ! rtpvrawpay mtu=60000 ! udpsink host=10.15.1.77 port=5000 sync=false async=false
+gst-launch-1.0 v4l2src device=/dev/video0 ! video/x-raw,width=1280,height=720,framerate=30/1 ! queue ! rtpvrawpay mtu=60000 ! udpsink host=10.15.1.77 port=5000 sync=false async=false
 ```
 
 #### A následné přijímání
@@ -327,11 +331,33 @@ gst-launch-1.0 udpsrc port=5000 caps = "application/x-rtp, media=(string)video, 
 
 *note done yet*
 
-```bash
-gst-launch-1.0 v4l2src device=/dev/video0 ! video/x-raw, width=1024, height=768, framerate=60/1, format=GRAY16_LE ! queue ! videoconvert ! videoscale ! video/x-raw, width=1920, height=1080, format=RGB ! kmssink bus-id="a0000000.v_mix" plane-id=37 fullscreen-overlay=false sync=false 
+
+``` bash
+export QT_QPA_PLATFORM=eglfs
+export QT_QPA_EGLFS_INTEGRATION=none
+
+export QT_QPA_EGLFS_KMS_CONFIG=/opt/eglfsconfig.json
+```
+
+**eglfsconfig.json:**
+
+``` json
+{
+  "outputs": [
+    {
+      "name": "HDMI1",
+      "mode": "1024x768"
+    }
+  ]
+}
 ```
 
 
 
 
 
+
+
+```
+gst-launch-1.0 v4l2src device=/dev/video0 io-mode=4 ! video/x-raw, width=1920, height=1080, framerate=60/1, format=RGB ! queue ! kmssink bus-id="a0000000.v_mix" plane-id=37 
+```

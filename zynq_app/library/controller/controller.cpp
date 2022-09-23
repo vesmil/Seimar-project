@@ -29,6 +29,9 @@ bool Controller::setDefault()
     hdmi_stream.setDefault();
 
     // setResolution(ViscaCommands::Hdmi::_1920x1080_59_94HZ);
+    setColor(ViscaCommands::Hdmi::RGB);
+
+    // qCInfo(viscaLog) << "Color" << m_visca.inquireCommand(ViscaCommands::Hdmi::getColorspace(), ViscaCommands::Hdmi::valueFromReply, 600);
 
     return true;
 }
@@ -78,26 +81,35 @@ bool Controller::setExposureCompensation(uint8_t value) {
     return m_visca.executeCommand(ViscaCommands::Exposure::Compensation::setValue(value),400,"exposure compensation");
 }
 
-bool Controller::switchRtp(bool state)
+bool Controller::setRtp(bool state)
 {
     return m_gstreamer.setState(GsFacade::RAW_RTP, state);
 }
 
-bool Controller::switchFile(bool state)
+bool Controller::setFile(bool state)
 {
     return m_gstreamer.setState(GsFacade::RAW_SAVE, state);
 }
 
-bool Controller::switchHDMI(bool state)
+bool Controller::setHDMI(bool state)
 {
     return m_gstreamer.setState(GsFacade::RAW_DISPLAY, state);
 }
 
 bool Controller::setResolution(ViscaCommands::Hdmi::Format format)
 {
-    m_visca.executeCommand(ViscaCommands::Power::setState(ViscaCommands::State::OFF), 1000, "shutting of");
-    m_visca.executeCommand(ViscaCommands::Hdmi::setFormat(format), 1200, "Setting res", false);
-    m_visca.executeCommand(ViscaCommands::Power::setState(ViscaCommands::State::ON), 1000, "starting");
+    m_visca.executeCommand(ViscaCommands::Power::setState(ViscaCommands::State::OFF), 2000, "shutting of");
+    m_visca.executeCommand(ViscaCommands::Hdmi::setFormat(format), 2000, "Setting res", false);
+    m_visca.executeCommand(ViscaCommands::Power::setState(ViscaCommands::State::ON), 2000, "starting");
+
+    return true;
+}
+
+bool Controller::setColor(ViscaCommands::Hdmi::Colorspace color)
+{
+    m_visca.executeCommand(ViscaCommands::Power::setState(ViscaCommands::State::OFF), 2000, "shutting of");
+    m_visca.executeCommand(ViscaCommands::Hdmi::setColorspace(color), 2000, "Setting color", false);
+    m_visca.executeCommand(ViscaCommands::Power::setState(ViscaCommands::State::ON), 2000, "starting");
 
     return true;
 }

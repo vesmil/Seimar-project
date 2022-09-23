@@ -36,7 +36,7 @@ public:
             logMessage = "(" + logMessage + ")";
         }
 
-        // QMutexLocker sendLocker(&this->m_sendMutex);
+        QMutexLocker sendLocker(&this->m_sendMutex);
         if (!m_uart.sendMessage(m_camAddr, data))
         {
             qCInfo(viscaLog()).noquote() << "UART fail" << logMessage;
@@ -50,8 +50,8 @@ public:
             return true;
         }
 
-        // sendLocker.unlock();
-        // QMutexLocker recLocker(&this->m_recMutex);
+        sendLocker.unlock();
+        QMutexLocker recLocker(&this->m_recMutex);
         if (!checkReply<TReplySize>(waitTime, logMessage))
         {
             return false;
