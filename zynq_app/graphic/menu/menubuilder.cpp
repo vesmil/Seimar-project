@@ -19,6 +19,9 @@ std::unique_ptr<SubmenuItem> MenuBuilder::buildFunctions(SubmenuItem* parentMenu
     auto functionMenu = std::make_unique<SubmenuItem>("Functions", parentMenu, parentWidget);
 
     functionMenu->addItem(std::make_unique<ValueItem>("Zoom", controller->zoom, functionMenu.get(), parentWidget, true));
+    functionMenu->addItem(std::make_unique<ValueItem>("Focus mode", controller->focusMode, functionMenu.get(), parentWidget, true));
+    functionMenu->addItem(std::make_unique<ValueItem>("Focus distance", controller->focusDistance, functionMenu.get(), parentWidget, true));
+
     functionMenu->addItem(std::make_unique<ValueItem>("Exposure mode", controller->exposureMode, functionMenu.get(), parentWidget));
     functionMenu->addItem(std::make_unique<ValueItem>("Shutter", controller->shutter, functionMenu.get(), parentWidget));
     functionMenu->addItem(std::make_unique<ValueItem>("Iris", controller->iris, functionMenu.get(), parentWidget));
@@ -38,9 +41,13 @@ std::unique_ptr<SubmenuItem> MenuBuilder::buildStream(SubmenuItem* parentMenu, Q
     return streamMenu;
 }
 
-std::unique_ptr<SubmenuItem> MenuBuilder::buildAdvanced(SubmenuItem* parentMenu, QWidget* parentWidget, Controller*)
+std::unique_ptr<SubmenuItem> MenuBuilder::buildAdvanced(SubmenuItem* parentMenu, QWidget* parentWidget, Controller* controller)
 {
     auto advMenu = std::make_unique<SubmenuItem>("Advanced", parentMenu, parentWidget);
+
+    advMenu->addItem(std::make_unique<ValueItem>("Power", controller->standby, advMenu.get(), parentWidget));
+    advMenu->addItem(std::make_unique<ValueItem>("Colorspace", controller->colorspace, advMenu.get(), parentWidget));
+    advMenu->addItem(std::make_unique<ValueItem>("Format", controller->format, advMenu.get(), parentWidget));
 
     // TODO remove this dangling pointers and create proper widget
     ControlableWidget* widget = new ControlableWidget("...", parentWidget);

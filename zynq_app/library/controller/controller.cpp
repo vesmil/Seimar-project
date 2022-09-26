@@ -2,16 +2,19 @@
 
 Controller::Controller(Visca& visca, GsFacade& gstreamer) : m_visca(visca), m_gstreamer(gstreamer)
 {
-    shutter.addDependency(&validShutter);
-    iris.addDependency(&validIris);
-    gain.addDependency(&validGain);
+    shutter.addDependency(&m_validShutter);
+    iris.addDependency(&m_validIris);
+    gain.addDependency(&m_validGain);
+
+    colorspace.addDependency(&m_cameraOff);
+    format.addDependency(&m_cameraOff);
 
     setDefault();
 }
 
 void Controller::addCommandToQueue(std::unique_ptr<IControllerCommand> command)
 {
-    commandQueue.emplace(std::move(command));
+    m_commandQueue.emplace(std::move(command));
 
     if (!queueExecuting)
     {
@@ -28,8 +31,10 @@ bool Controller::setDefault()
     file_stream.setDefault();
     hdmi_stream.setDefault();
 
+    focusMode.setDefault();
+
     // setResolution(ViscaCommands::Hdmi::_1920x1080_59_94HZ);
-    setColor(ViscaCommands::Hdmi::RGB);
+    // setColor(ViscaCommands::Hdmi::RGB);
 
     // qCInfo(viscaLog) << "Color" << m_visca.inquireCommand(ViscaCommands::Hdmi::getColorspace(), ViscaCommands::Hdmi::valueFromReply, 600);
 
@@ -40,10 +45,10 @@ void Controller::startExecutingCommandQueue()
 {
     queueExecuting = true;
 
-    while (!commandQueue.empty())
+    while (!m_commandQueue.empty())
     {
-        commandQueue.front()->execute();
-        commandQueue.pop();
+        m_commandQueue.front()->execute();
+        m_commandQueue.pop();
     }
 
     queueExecuting = false;
@@ -52,33 +57,33 @@ void Controller::startExecutingCommandQueue()
 bool Controller::setZoom(float zoom)
 {
     uint16_t remappedZoom = (zoom / 16.0f) * 0x4000;
-    return m_visca.executeCommand(ViscaCommands::Zoom::setValue(remappedZoom),400,"zoom");
+    return m_visca.executeCommand(ViscaCommands::Zoom::setValue(remappedZoom),m_viscaWaitTime,"zoom");
 }
 
 bool Controller::setExposureMode(ViscaCommands::Exposure::Mode mode)
 {
-    return m_visca.executeCommand(ViscaCommands::Exposure::setMode(mode),400,"exposure mode");
+    return m_visca.executeCommand(ViscaCommands::Exposure::setMode(mode),m_viscaWaitTime,"exposure mode");
 }
 
 bool Controller::setShutter(u_int8_t value)
 {
-    return m_visca.executeCommand(ViscaCommands::Exposure::Shutter::setValue(value),400,"shutter");
+    return m_visca.executeCommand(ViscaCommands::Exposure::Shutter::setValue(value),m_viscaWaitTime,"shutter");
 }
 
 bool Controller::setIris(uint8_t value)
 {
-    return m_visca.executeCommand(ViscaCommands::Exposure::Iris::setValue(value),400,"iris");
+    return m_visca.executeCommand(ViscaCommands::Exposure::Iris::setValue(value),m_viscaWaitTime,"iris");
 }
 
 bool Controller::setGain(int value)
 {
     uint8_t remappedValue = ViscaCommands::mapToNewRange<uint8_t, int>(value, -3, 33,  0, 0x0C);
-    return m_visca.executeCommand(ViscaCommands::Exposure::Gain::setValue(remappedValue),400,"gain");
+    return m_visca.executeCommand(ViscaCommands::Exposure::Gain::setValue(remappedValue),m_viscaWaitTime,"gain");
 }
 
 bool Controller::setExposureCompensation(uint8_t value) {
     // TODO Do i need to set state before that?
-    return m_visca.executeCommand(ViscaCommands::Exposure::Compensation::setValue(value),400,"exposure compensation");
+    return m_visca.executeCommand(ViscaCommands::Exposure::Compensation::setValue(value),m_viscaWaitTime,"exposure compensation");
 }
 
 bool Controller::setRtp(bool state)
@@ -96,22 +101,40 @@ bool Controller::setHDMI(bool state)
     return m_gstreamer.setState(GsFacade::RAW_DISPLAY, state);
 }
 
-bool Controller::setResolution(ViscaCommands::Hdmi::Format format)
+bool Controller::setFormat(ViscaCommands::Hdmi::Format format)
 {
-    m_visca.executeCommand(ViscaCommands::Power::setState(ViscaCommands::State::OFF), 2000, "shutting of");
-    m_visca.executeCommand(ViscaCommands::Hdmi::setFormat(format), 2000, "Setting res", false);
-    m_visca.executeCommand(ViscaCommands::Power::setState(ViscaCommands::State::ON), 2000, "starting");
-
-    return true;
+    return m_visca.executeCommand(ViscaCommands::Hdmi::setFormat(format), 2000, "Setting res");
 }
 
-bool Controller::setColor(ViscaCommands::Hdmi::Colorspace color)
+bool Controller::setColorspace(ViscaCommands::Hdmi::Colorspace color)
 {
-    m_visca.executeCommand(ViscaCommands::Power::setState(ViscaCommands::State::OFF), 2000, "shutting of");
-    m_visca.executeCommand(ViscaCommands::Hdmi::setColorspace(color), 2000, "Setting color", false);
-    m_visca.executeCommand(ViscaCommands::Power::setState(ViscaCommands::State::ON), 2000, "starting");
+    return m_visca.executeCommand(ViscaCommands::Hdmi::setColorspace(color), 2000, "Setting colorspace");
+}
 
-    return true;
+bool Controller::setWhitebalance(ViscaCommands::Color::WhiteBalance::Mode mode)
+{
+    return m_visca.executeCommand(ViscaCommands::Color::WhiteBalance::setMode(mode), m_viscaWaitTime, "White balance");
+}
+
+bool Controller::setAutofocus(bool state)
+{
+    return m_visca.executeCommand(ViscaCommands::Focus::setFocusMode(state? ViscaCommands::Focus::FocusMode::AUTO : ViscaCommands::Focus::FocusMode::MANUAL), m_viscaWaitTime, "Focus");
+}
+
+bool Controller::setFocusDistance(uint16_t distanceValue)
+{
+    return m_visca.executeCommand(ViscaCommands::Focus::setValue(distanceValue));
+}
+
+bool Controller::setPower(ViscaCommands::State state)
+{
+    return m_visca.executeCommand(ViscaCommands::Power::setState(state), 2000, "Power");
+}
+
+bool Controller::setPower(bool boolState)
+{
+    ViscaCommands::State state = boolState ? ViscaCommands::State::ON : ViscaCommands::State::OFF;
+    return m_visca.executeCommand(ViscaCommands::Power::setState(state), 2000, "Power", false);
 }
 
 

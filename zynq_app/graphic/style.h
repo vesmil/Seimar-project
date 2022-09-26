@@ -29,6 +29,11 @@ public:
         QString emptyItemList = "background : rgb(80,10,10);"
                                 "color : white;"
                                 "padding: 10px;";
+
+        QString hiddenItem = "background : gray;"
+                             "color : rgb(90,90,90);"
+                             "padding: 10px;";
+
     } menu;
 
 private:

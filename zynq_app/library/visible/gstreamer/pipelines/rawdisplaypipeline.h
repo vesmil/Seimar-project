@@ -13,7 +13,16 @@ public:
     ~RawDisplayPipeline();
 
 private:
+    struct
+    {
+        GstElement *videoconvert = nullptr, *videoscale = nullptr;
+    } m_displayData;
+
+    void setVideoconvert();
+    void setVideoscale();
+    void setMixerCaps();
     void setKmssink();
+    void completePipeline(const gchar *name);
 };
 
 #endif // RAWDISPLAYPIPELINE_H

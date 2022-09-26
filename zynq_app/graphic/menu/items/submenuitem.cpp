@@ -110,11 +110,9 @@ void SubmenuItem::display(QLayout* layout)
 
     for (auto &&item : m_itemList)
     {
-        if (!item->isHidden())
-        {
-            item->setVisible(true);
-            layout->addWidget(item.get());
-        }
+        item->setVisible(true);
+        layout->addWidget(item.get());
+        item->setStyleSheet(item->isHidden()? Style::getInstance().menu.hiddenItem : Style::getInstance().menu.item);
     }
 
     m_itemList[m_currentElement]->onSelect();
