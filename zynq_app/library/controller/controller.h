@@ -29,23 +29,25 @@ public:
 
     BoolValue<Controller> standby {true, &Controller::setPower, this};
 
-    // NOTE probably should be saved somewhere
+    // NOTE this settings wont be visible to user
     ArrValue<ViscaCommands::Hdmi::Format, Controller, ViscaCommands::Hdmi::FormatCount> format{&ViscaCommands::Hdmi::FormatArray, &Controller::setFormat, this};
     ArrValue<ViscaCommands::Hdmi::Colorspace, Controller, ViscaCommands::Hdmi::ColorspaceCount> colorspace{&ViscaCommands::Hdmi::ColorSpaceArray, &Controller::setColorspace, this};
 
     ArrValue<ViscaCommands::Color::WhiteBalance::Mode, Controller, ViscaCommands::Color::WhiteBalance::ModeCount> whiteBalance{&ViscaCommands::Color::WhiteBalance::ModeArray, &Controller::setWhitebalance, this};
-    ValueSetter<uint8_t, uint8_t, Controller> rGain {0, 0, 0xFF, &Controller::setRGain, this, ""};
-    ValueSetter<uint8_t, uint8_t, Controller> bGain {0, 0, 0xFF, &Controller::setBGain, this, ""};
+    ValueSetter<uint8_t, uint8_t, Controller> rGain {200, 0, 0xFF, &Controller::setRGain, this, ""};
+    ValueSetter<uint8_t, uint8_t, Controller> bGain {200, 0, 0xFF, &Controller::setBGain, this, ""};
 
     BoolValue<Controller> focusMode {true, &Controller::setAutofocus, this, "Auto", "Manual"};
     ValueSetter<uint16_t, uint16_t, Controller> focusDistance {0xB, 0x1, 0xF, &Controller::setFocusDistance, this, ""}; // 1000 (∞) to F000 (80 mm), Initial setting: B000h (35 cm)
 
     BoolValue<Controller> visibilityEnhancer {false, &Controller::setvisibilityEnhancer, this};
+    // visibilityLevel
+
     BoolValue<Controller> backLight {false, &Controller::setbackLightCompensation, this};
 
-    // Color...
+    // TODO others...
 
-    BoolValue<Controller> rtp_stream {true, &Controller::setRtp, this};
+    BoolValue<Controller> rtp_stream {false, &Controller::setRtp, this};
     BoolValue<Controller> file_stream {false, &Controller::setFile, this};
     BoolValue<Controller> hdmi_stream {false, &Controller::setHDMI, this};
 

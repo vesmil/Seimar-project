@@ -103,12 +103,12 @@ bool Controller::setHDMI(bool state)
 
 bool Controller::setFormat(ViscaCommands::Hdmi::Format format)
 {
-    return m_visca.executeCommand(ViscaCommands::Hdmi::setFormat(format), 2000, "Setting res");
+    return m_visca.executeCommand(ViscaCommands::Hdmi::setFormat(format), 2000, "Setting res", false);
 }
 
 bool Controller::setColorspace(ViscaCommands::Hdmi::Colorspace color)
 {
-    return m_visca.executeCommand(ViscaCommands::Hdmi::setColorspace(color), 2000, "Setting colorspace");
+    return m_visca.executeCommand(ViscaCommands::Hdmi::setColorspace(color), 2000, "Setting colorspace", false);
 }
 
 bool Controller::setWhitebalance(ViscaCommands::Color::WhiteBalance::Mode mode)

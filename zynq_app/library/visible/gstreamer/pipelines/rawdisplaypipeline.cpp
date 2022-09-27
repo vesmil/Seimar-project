@@ -8,7 +8,7 @@ RawDisplayPipeline::RawDisplayPipeline()
     setQueue("display-queue");
     setVideoconvert();
     setVideoscale();
-    setMixerCaps();
+    setDefaultCapsFilter("display-caps");
     setKmssink();
     completePipeline("display-pipeline");
 }
@@ -35,6 +35,7 @@ void RawDisplayPipeline::setVideoscale()
     m_displayData.videoscale = GsFacade::makeElement("videoscale", "videoscale");
 }
 
+/*
 void RawDisplayPipeline::setMixerCaps()
 {
     m_data.videoCaps = gst_caps_new_simple("video/x-raw",
@@ -47,6 +48,7 @@ void RawDisplayPipeline::setMixerCaps()
     g_object_set(m_data.capsFilter, "caps", m_data.videoCaps, NULL);
     gst_caps_unref(m_data.videoCaps);
 }
+*/
 
 void RawDisplayPipeline::completePipeline(const gchar *name)
 {

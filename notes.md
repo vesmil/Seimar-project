@@ -308,7 +308,7 @@ gst-launch-1.0 v4l2src device=/dev/video0 ! video/x-raw,width=1280,height=720,fr
 **TODO** nastavit kmssink na base vrstvu
 
 ```bash
-gst-launch-1.0 v4l2src device=/dev/video0 io-mode=4 ! queue ! videoconvert ! videoscale ! video/x-raw,width=1920,height=1080,framerate=30/1,format=RGB ! kmssink bus-id="a0000000.v_mix" plane-id=37 fullscreen-overlay=false sync=false
+gst-launch-1.0 v4l2src device=/dev/video0 io-mode=4 ! queue ! videoconvert ! videoscale ! video/x-raw,width=1920,height=1080,framerate=60/1,format=RGB ! kmssink bus-id="a0000000.v_mix" plane-id=37 fullscreen-overlay=false sync=false
 ```
 
 ---
@@ -337,6 +337,9 @@ export QT_QPA_PLATFORM=eglfs
 export QT_QPA_EGLFS_INTEGRATION=none
 
 export QT_QPA_EGLFS_KMS_CONFIG=/opt/eglfsconfig.json
+export QT_DEBUG_PLUGINS=1
+export QT_QPA_EGLFS_ALWAYS_SET_MODE=1
+
 ```
 
 **eglfsconfig.json:**

@@ -20,7 +20,7 @@ private:
 
     void setVideoconvert();
     void setVideoscale();
-    void setMixerCaps();
+    // void setMixerCaps();
     void setKmssink();
     void completePipeline(const gchar *name);
 };

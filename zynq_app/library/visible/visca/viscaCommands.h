@@ -309,8 +309,8 @@ namespace ViscaCommands
         static constexpr std::size_t ColorspaceCount = 2;
         enum Colorspace : uint8_t {YUV = 0, RGB = 1};
         static const std::array<std::pair<ViscaCommands::Hdmi::Colorspace, QString>, 2> ColorSpaceArray {
-            std::pair<ViscaCommands::Hdmi::Colorspace, QString>{ViscaCommands::Hdmi::Colorspace::YUV, QString("YUV")},
-            std::pair<ViscaCommands::Hdmi::Colorspace, QString>{ViscaCommands::Hdmi::Colorspace::RGB, QString("RGB")}};
+            std::pair<ViscaCommands::Hdmi::Colorspace, QString>{ViscaCommands::Hdmi::Colorspace::RGB, QString("RGB")},
+            std::pair<ViscaCommands::Hdmi::Colorspace, QString>{ViscaCommands::Hdmi::Colorspace::YUV, QString("YUV")}};
 
         static constexpr byteArray<7> setFormat(Format format)             { return {0x01, 0x04, 0x24, 0x72, parseParam(format, 1), parseParam(format, 0), 0xFF}; }
         static constexpr byteArray<7> setColorspace(Colorspace colorSpace) { return {0x01, 0x04, 0x24, 0x60, 0x00, colorSpace, 0xFF}; }

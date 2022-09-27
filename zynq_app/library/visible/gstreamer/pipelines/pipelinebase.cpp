@@ -67,7 +67,7 @@ void PipelineBase::setDefaultCapsFilter(const gchar* name)
 {
     m_data.videoCaps = gst_caps_new_simple("video/x-raw",
                                       "framerate", GST_TYPE_FRACTION, 30, 1,
-                                      "format", G_TYPE_STRING, "UYVY",
+                                      "format", G_TYPE_STRING, "RGB",
                                       "width", G_TYPE_INT, WIDTH,
                                       "height", G_TYPE_INT, HEIGHT, NULL);
 
