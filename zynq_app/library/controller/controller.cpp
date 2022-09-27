@@ -5,9 +5,9 @@ Controller::Controller(Visca& visca, GsFacade& gstreamer) : m_visca(visca), m_gs
     shutter.addDependency(&m_validShutter);
     iris.addDependency(&m_validIris);
     gain.addDependency(&m_validGain);
-
-    colorspace.addDependency(&m_cameraOff);
-    format.addDependency(&m_cameraOff);
+    focusDistance.addDependency(&m_autofocus);
+    rGain.addDependency(&m_manualWB);
+    bGain.addDependency(&m_manualWB);
 
     setDefault();
 }
@@ -116,6 +116,16 @@ bool Controller::setWhitebalance(ViscaCommands::Color::WhiteBalance::Mode mode)
     return m_visca.executeCommand(ViscaCommands::Color::WhiteBalance::setMode(mode), m_viscaWaitTime, "White balance");
 }
 
+bool Controller::setRGain(uint8_t value)
+{
+    return m_visca.executeCommand(ViscaCommands::Color::RGain::setValue(value), m_viscaWaitTime, "RGain");
+}
+
+bool Controller::setBGain(uint8_t value)
+{
+    return m_visca.executeCommand(ViscaCommands::Color::BGain::setValue(value), m_viscaWaitTime, "BGain");
+}
+
 bool Controller::setAutofocus(bool state)
 {
     return m_visca.executeCommand(ViscaCommands::Focus::setFocusMode(state? ViscaCommands::Focus::FocusMode::AUTO : ViscaCommands::Focus::FocusMode::MANUAL), m_viscaWaitTime, "Focus");
@@ -123,7 +133,17 @@ bool Controller::setAutofocus(bool state)
 
 bool Controller::setFocusDistance(uint16_t distanceValue)
 {
-    return m_visca.executeCommand(ViscaCommands::Focus::setValue(distanceValue));
+    return m_visca.executeCommand(ViscaCommands::Focus::setValue(0x1000 * distanceValue));
+}
+
+bool Controller::setbackLightCompensation(bool state)
+{
+    return m_visca.executeCommand(ViscaCommands::Exposure::backLightCompensation(state? ViscaCommands::State::ON : ViscaCommands::State::OFF));
+}
+
+bool Controller::setvisibilityEnhancer(bool state)
+{
+    return m_visca.executeCommand(ViscaCommands::Exposure::visibilityEnhancer(state? ViscaCommands::State::ON : ViscaCommands::State::OFF));
 }
 
 bool Controller::setPower(ViscaCommands::State state)

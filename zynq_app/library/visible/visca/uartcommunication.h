@@ -77,7 +77,7 @@ public:
         fd_set descriptorSet;
 
         struct timeval tv;
-        tv.tv_sec = 10;
+        tv.tv_sec = 0;
         tv.tv_usec = waitMs * 1000;
 
         int read_count = 0;

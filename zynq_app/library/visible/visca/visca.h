@@ -101,7 +101,7 @@ private:
     UartCommunication m_uart;
     uint8_t m_camAddr;
 
-    static const int INIT_TRIES_COUNT = 10;
+    static const int INIT_TRIES_COUNT = 3;
     static const int DEFAULT_USLEEP_WAIT = 50000;
 
     static const int BASE_WAIT_TIME_MS = 200;

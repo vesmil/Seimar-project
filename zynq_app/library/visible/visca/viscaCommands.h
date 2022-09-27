@@ -83,7 +83,7 @@ namespace ViscaCommands
     {
         static constexpr byteArray<5> setState(State state) { return {CTRL, 0x04, 0x00, state, 0xFF}; }
         static constexpr byteArray<4> getState()            { return {INQ, 0x04, 0x00, 0xFF}; }
-        [[maybe_unused]] static State stateFromReply(byteArray<4> reply) { return (State) reply[2];}
+        static constexpr State stateFromReply(byteArray<4> reply) { return (State) reply[2];}
     }
 
     namespace Exposure
@@ -98,7 +98,7 @@ namespace ViscaCommands
 
         static constexpr byteArray<5> setMode(Mode mode)  { return { CTRL, 0x04, 0x39, mode, 0xFF}; }
         static constexpr byteArray<4> getMode()           { return { INQ, 0x04, 0x39, 0xFF}; }
-        [[maybe_unused]] static Mode modeFromReply(byteArray<4> reply) { return (Mode) reply[2];}
+        static constexpr Mode modeFromReply(byteArray<4> reply) { return (Mode) reply[2];}
 
         namespace Iris
         {
@@ -108,7 +108,7 @@ namespace ViscaCommands
                 return { CTRL, 0x04, 0x4B, 0x00, 0x00, parseParam(fixedValue, 1), parseParam(fixedValue, 0), 0xFF};
             }
             static constexpr byteArray<4> getValue()              { return { INQ, 0x04, 0x4B, 0xFF}; }
-            [[maybe_unused]] static uint8_t valueFromReply(byteArray<7> reply) { return reverseParse(reply[4], reply[5]); }
+            static constexpr uint8_t valueFromReply(byteArray<7> reply) { return reverseParse(reply[4], reply[5]); }
         }
 
         namespace Gain
@@ -116,7 +116,7 @@ namespace ViscaCommands
             //! \brief returns command packet for setting gain - value is in range 0x00 (–3dB) - 0x0C (33 dB)
             static constexpr byteArray<8> setValue(uint8_t value) { return { CTRL, 0x04, 0x4C, 0x00, 0x00, 0, ensureMaxU8(value, 0x0C), 0xFF}; }
             static constexpr byteArray<4> getValue()              { return { INQ, 0x04, 0x4C, 0xFF}; }
-            [[maybe_unused]] static uint8_t valueFromReply(byteArray<7> reply) { return reverseParse(reply[4], reply[5]); }
+            static constexpr uint8_t valueFromReply(byteArray<7> reply) { return reverseParse(reply[4], reply[5]); }
 
             //! \brief returns command packet for setting gain limit - value is in range 0x04 (9dB) - 0x09 (24dB)
             static constexpr byteArray<5> limit(uint8_t value) { return {CTRL, 0x04, 0x2C,
@@ -135,7 +135,7 @@ namespace ViscaCommands
             //! \brief returns command packet for setting shutter - value is in range 0x01 - 0x15
             static constexpr byteArray<8> setValue(uint8_t value) { return { CTRL, 0x04, 0x4A, 0x00, 0x00, parseParam(value, 1), parseParam(value, 0), 0xFF}; }
             static constexpr byteArray<4> getValue()              { return { INQ, 0x04, 0x4A, 0xFF}; }
-            [[maybe_unused]] static uint8_t valueFromReply(byteArray<7> reply) { return reverseParse(reply[4], reply[5]); }
+            static constexpr uint8_t valueFromReply(byteArray<7> reply) { return reverseParse(reply[4], reply[5]); }
         }
 
         namespace Compensation
@@ -184,7 +184,7 @@ namespace ViscaCommands
                                                                                     std::pair<Mode, QString>{SODIUM_LAMP_AUTO, QString("Sodium lamp auto")},
                                                                                     std::pair<Mode, QString>{SODIUM_AUTO, QString("Sodium auto")}};
 
-            static constexpr byteArray<5> setMode(Mode mode) { return {0x01, 0x04, 0x35, mode, 0xFF}; }
+            static constexpr byteArray<5> setMode(Mode mode) { return {0x01, 0x04, 0x35, mode, 0xFF}; }        
         }
 
         namespace RGain
@@ -249,24 +249,24 @@ namespace ViscaCommands
 
     namespace Zoom
     {
-        [[maybe_unused]] static byteArray<5> teleStandard() { return {CTRL, 0x04, 0x07, 0x02,  0xFF}; }
-        [[maybe_unused]] static byteArray<5> wideStandard() { return {CTRL, 0x04, 0x07, 0x03,  0xFF}; }
-        [[maybe_unused]] static byteArray<5> stop()         { return {CTRL, 0x04, 0x07, 0x00,  0xFF}; }
+        static constexpr byteArray<5> teleStandard() { return {CTRL, 0x04, 0x07, 0x02,  0xFF}; }
+        static constexpr byteArray<5> wideStandard() { return {CTRL, 0x04, 0x07, 0x03,  0xFF}; }
+        static constexpr byteArray<5> stop()         { return {CTRL, 0x04, 0x07, 0x00,  0xFF}; }
 
         //! \brief speed is in range 0x00 - 0x07 (from slowest to fastest)
-        [[maybe_unused]] static byteArray<5> teleVariable(uint8_t speed) { return {CTRL, 0x04, 0x07, (uint8_t) (0x20|(ensureMaxU8(speed, 7U))),  0xFF}; }
+        static constexpr byteArray<5> teleVariable(uint8_t speed) { return {CTRL, 0x04, 0x07, (uint8_t) (0x20|(ensureMaxU8(speed, 7U))),  0xFF}; }
         //! \brief speed is in range 0x00 - 0x07 (from slowest to fastest)
-        [[maybe_unused]] static byteArray<5> wideVariable(uint8_t speed) { return {CTRL, 0x04, 0x07, (uint8_t) (0x30|(ensureMaxU8(speed, 7U))),  0xFF}; }
+        static constexpr byteArray<5> wideVariable(uint8_t speed) { return {CTRL, 0x04, 0x07, (uint8_t) (0x30|(ensureMaxU8(speed, 7U))),  0xFF}; }
 
         //! \brief value is in range 0x00 - 0x4000 (from wide to tele)
-        [[maybe_unused]] static byteArray<8> setValue(uint16_t value)
+        static constexpr byteArray<8> setValue(uint16_t value)
         {
             uint16_t fixedValue = ensureMaxU16(value, 0x4000);
             return {CTRL, 0x04, 0x47, parseParam(fixedValue, 3), parseParam(fixedValue, 2), parseParam(fixedValue, 1), parseParam(fixedValue, 0), 0xFF};
         }
 
         static constexpr byteArray<4> getValue() { return { INQ, 0x04, 0x47, 0xFF}; }
-        [[maybe_unused]] static uint16_t valueFromReply(byteArray<7> reply) {
+        static constexpr uint16_t valueFromReply(byteArray<7> reply) {
             return reverseParse<uint16_t>(reply[2], reply[3], reply[4], reply[5]); }
     }
 
@@ -284,14 +284,14 @@ namespace ViscaCommands
         static constexpr byteArray<5> infinity() { return { CTRL, 0x04, 0x18, 0x02, 0xFF}; }
 
         //! \brief  returns command packet for setting focus distance - value is in range F000 (Near) - 0000 (Far)
-        [[maybe_unused]] static byteArray<8> setValue(uint16_t value)
+        static constexpr byteArray<8> setValue(uint16_t value)
         {
             uint16_t limitedValue = ensureMaxU16(value, 0xF000);
             return {CTRL, 0x04, 0x48, parseParam(limitedValue, 3), parseParam(limitedValue, 2), parseParam(limitedValue, 1), parseParam(limitedValue, 0), 0xFF};
         }
 
         static constexpr byteArray<4> getValue() { return { INQ, 0x04, 0x48, 0xFF}; }
-        [[maybe_unused]] static uint8_t valueFromReply(byteArray<7> reply) { return reverseParse<uint16_t>(reply[2], reply[3], reply[4], reply[5]); }
+        static constexpr uint8_t valueFromReply(byteArray<7> reply) { return reverseParse<uint16_t>(reply[2], reply[3], reply[4], reply[5]); }
     }
 
     namespace Hdmi
@@ -316,12 +316,12 @@ namespace ViscaCommands
         static constexpr byteArray<7> setColorspace(Colorspace colorSpace) { return {0x01, 0x04, 0x24, 0x60, 0x00, colorSpace, 0xFF}; }
 
         static constexpr byteArray<5> getColorspace() { return { INQ, 0x04, 0x24, 0x60, 0xFF}; }
-        [[maybe_unused]] static uint8_t valueFromReply(byteArray<4> reply) { return reverseParse<uint16_t>(reply[2], reply[3]); }
+        static constexpr uint8_t valueFromReply(byteArray<4> reply) { return reverseParse<uint16_t>(reply[2], reply[3]); }
     }
 
-    [[maybe_unused]] static constexpr byteArray<5> horizontalFlip(State state) { return {CTRL, 0x04, 0x61, state, 0xFF}; }
-    [[maybe_unused]] static constexpr byteArray<5> verticalFlip(State state)   { return {CTRL, 0x04, 0x66, state, 0xFF}; }
-    [[maybe_unused]] static constexpr byteArray<5> freeze(State state) { return {CTRL, 0x04, 0x62, state, 0xFF}; }
+    static constexpr byteArray<5> horizontalFlip(State state) { return {CTRL, 0x04, 0x61, state, 0xFF}; }
+    static constexpr byteArray<5> verticalFlip(State state)   { return {CTRL, 0x04, 0x66, state, 0xFF}; }
+    static constexpr byteArray<5> freeze(State state) { return {CTRL, 0x04, 0x62, state, 0xFF}; }
 }
 
 #endif // VISCACOMMANDS_H

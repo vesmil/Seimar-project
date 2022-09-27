@@ -18,6 +18,7 @@ std::unique_ptr<SubmenuItem> MenuBuilder::buildFunctions(SubmenuItem* parentMenu
 {
     auto functionMenu = std::make_unique<SubmenuItem>("Functions", parentMenu, parentWidget);
 
+    // TODO split into submenus
     functionMenu->addItem(std::make_unique<ValueItem>("Zoom", controller->zoom, functionMenu.get(), parentWidget, true));
     functionMenu->addItem(std::make_unique<ValueItem>("Focus mode", controller->focusMode, functionMenu.get(), parentWidget, true));
     functionMenu->addItem(std::make_unique<ValueItem>("Focus distance", controller->focusDistance, functionMenu.get(), parentWidget, true));
@@ -26,6 +27,13 @@ std::unique_ptr<SubmenuItem> MenuBuilder::buildFunctions(SubmenuItem* parentMenu
     functionMenu->addItem(std::make_unique<ValueItem>("Shutter", controller->shutter, functionMenu.get(), parentWidget));
     functionMenu->addItem(std::make_unique<ValueItem>("Iris", controller->iris, functionMenu.get(), parentWidget));
     functionMenu->addItem(std::make_unique<ValueItem>("Gain", controller->gain, functionMenu.get(), parentWidget));
+
+    functionMenu->addItem(std::make_unique<ValueItem>("White balance", controller->whiteBalance, functionMenu.get(), parentWidget));
+    functionMenu->addItem(std::make_unique<ValueItem>("R Gain", controller->rGain, functionMenu.get(), parentWidget));
+    functionMenu->addItem(std::make_unique<ValueItem>("B Gain", controller->bGain, functionMenu.get(), parentWidget));
+
+    functionMenu->addItem(std::make_unique<ValueItem>("Visibility enhancer", controller->visibilityEnhancer, functionMenu.get(), parentWidget));
+    functionMenu->addItem(std::make_unique<ValueItem>("Backlight Compensation", controller->backLight, functionMenu.get(), parentWidget));
 
     return functionMenu;
 }
@@ -51,9 +59,7 @@ std::unique_ptr<SubmenuItem> MenuBuilder::buildAdvanced(SubmenuItem* parentMenu,
 
     // TODO remove this dangling pointers and create proper widget
     ControlableWidget* widget = new ControlableWidget("...", parentWidget);
-
     advMenu->addItem(std::make_unique<PopupItem>("IP address for RTP", widget, advMenu.get(), parentWidget));
-    advMenu->addItem(std::make_unique<PopupItem>("Camera resolution", widget, advMenu.get(), parentWidget));
 
     return advMenu;
 }
