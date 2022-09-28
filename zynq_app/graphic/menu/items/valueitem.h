@@ -3,7 +3,7 @@
 
 #include <QLabel>
 
-#include "library/controller/value.h"
+#include "library/controller/elements/setter.h"
 #include "graphic/menu/items/itembase.h"
 
 //! \brief Item which after confirmation will set some value using passed function
@@ -17,7 +17,7 @@ public:
      * @param parentWidget Parent widget as for all Qt widgets
      * @param live Determines if value should be updated after every change
      */
-    ValueItem(const QString& text, IValueSetter& value, SubmenuItem* parentMenu, QWidget* parentWidget = nullptr, bool live = false);
+    ValueItem(const QString& text, ISetter* value, SubmenuItem* parentMenu, QWidget* parentWidget = nullptr, bool live = false);
 
     void execute() override;
     void control(QKeyEvent* event) override;
@@ -32,7 +32,7 @@ private:
     QLabel m_textLabel{};
     QLabel m_valueLabel{};
 
-    IValueSetter& m_value;
+    ISetter* m_value;
 
     bool m_liveView;
 };

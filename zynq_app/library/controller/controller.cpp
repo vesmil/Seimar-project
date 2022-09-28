@@ -2,13 +2,14 @@
 
 Controller::Controller(Visca& visca, GsFacade& gstreamer) : m_visca(visca), m_gstreamer(gstreamer)
 {
-    shutter.addDependency(&m_validShutter);
+    /*
+    shutter->addDependency(&m_validShutter);
     iris.addDependency(&m_validIris);
     gain.addDependency(&m_validGain);
     focusDistance.addDependency(&m_autofocus);
     rGain.addDependency(&m_manualWB);
     bGain.addDependency(&m_manualWB);
-
+*/
     setDefault();
 }
 
@@ -24,19 +25,14 @@ void Controller::addCommandToQueue(std::unique_ptr<IControllerCommand> command)
 
 bool Controller::setDefault()
 {
-    zoom.setDefault();
-    exposureMode.setDefault();
+    zoom->setDefault();
+    exposureMode->setDefault();
 
-    rtp_stream.setDefault();
-    file_stream.setDefault();
-    hdmi_stream.setDefault();
+    rtp_stream->setDefault();
+    file_stream->setDefault();
+    hdmi_stream->setDefault();
 
-    focusMode.setDefault();
-
-    // setResolution(ViscaCommands::Hdmi::_1920x1080_59_94HZ);
-    // setColor(ViscaCommands::Hdmi::RGB);
-
-    // qCInfo(viscaLog) << "Color" << m_visca.inquireCommand(ViscaCommands::Hdmi::getColorspace(), ViscaCommands::Hdmi::valueFromReply, 600);
+    autofocus->setDefault();
 
     return true;
 }
@@ -47,6 +43,7 @@ void Controller::startExecutingCommandQueue()
 
     while (!m_commandQueue.empty())
     {
+        qCInfo(uiLog()) << "Command";
         m_commandQueue.front()->execute();
         m_commandQueue.pop();
     }
@@ -116,12 +113,12 @@ bool Controller::setWhitebalance(ViscaCommands::Color::WhiteBalance::Mode mode)
     return m_visca.executeCommand(ViscaCommands::Color::WhiteBalance::setMode(mode), m_viscaWaitTime, "White balance");
 }
 
-bool Controller::setRGain(uint8_t value)
+bool Controller::setRGain(uint16_t value)
 {
     return m_visca.executeCommand(ViscaCommands::Color::RGain::setValue(value), m_viscaWaitTime, "RGain");
 }
 
-bool Controller::setBGain(uint8_t value)
+bool Controller::setBGain(uint16_t value)
 {
     return m_visca.executeCommand(ViscaCommands::Color::BGain::setValue(value), m_viscaWaitTime, "BGain");
 }

@@ -18,7 +18,9 @@ class Menu  : public QWidget
 public:
     static Menu& getInstance();
 
+    //! \brief Displays the menu on the screen and starts receiving key events
     void open();
+    //! \brief Hides the menu and stops receiving key events
     void close();
 
     void keyPressEvent(QKeyEvent *event);
@@ -37,12 +39,11 @@ private:
     Menu();
     bool m_active = false;
 
-    //! \brief Stores the whole menu in tree structure
+    //! \brief Stores the whole menu in treelike structure
     std::unique_ptr<SubmenuItem> m_root = nullptr;
 
     //! \brief Item in charge of menu controls
     ItemBase *m_currentItem = nullptr;
-
     //! \brief Submenu from which the elements are displayed
     SubmenuItem *m_currentSubmenu = nullptr;
 };

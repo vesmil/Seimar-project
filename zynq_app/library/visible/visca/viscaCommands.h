@@ -3,9 +3,9 @@
 
 #include <array>
 #include <cstdint>
-#include <utility>
 
 #include "global/logcategories.h"
+#include "global/utility.h"
 
 // Duplicates could probably be avoided using builder pattern
 //  ...but it would unnecessarily increase the complexity and would be slower
@@ -46,6 +46,7 @@ namespace {
 
 /*!
  * \brief Namespace containing all necessary Visca commands with configurable parameters
+ * \note Before the command is sent, it must be prepended with address of the camera
  */
 namespace ViscaCommands
 {
@@ -55,9 +56,7 @@ namespace ViscaCommands
     enum CommandType : uint8_t { CTRL = 0x01, INQ = 0x09 };
     enum State       : uint8_t { ON = 0x02, OFF = 0x03 };
 
-    /*!
-     * \brief Used to remap values from one range to another
-     */
+    //!  \brief Used to remap values from one range to another
     template <typename TNew, typename TOld>
     constexpr TNew mapToNewRange(TOld value, TOld oldMin, TOld oldMax, TNew newMin, TNew newMax)
     {
@@ -66,10 +65,12 @@ namespace ViscaCommands
 
     namespace Init
     {
+        //! \brief returns command body for setting address - this needs to be broadcasted and address from reply needs to be noted
         static constexpr byteArray<3> addressSet() { return { 0x30, 0x01, 0xFF}; }
+        //! \brief returns command body for clearing command buffer
         static constexpr byteArray<4> ifClear()    { return { CTRL, 0x00, 0x01, 0xFF}; }
 
-        static constexpr byteArray<4> getVersionInfo() { return { INQ, 0x00, 0x02, 0xFF}; }
+        [[maybe_unused]]static constexpr byteArray<4> getVersionInfo() { return { INQ, 0x00, 0x02, 0xFF}; }
         [[maybe_unused]] static void printVersionInfo(byteArray<10> reply)
         {
             qCInfo(viscaLog()) << "Vendor ID:" << Qt::hex << (((uint16_t) reply[2] << 8) + reply[3]);
@@ -82,15 +83,15 @@ namespace ViscaCommands
     namespace Power
     {
         static constexpr byteArray<5> setState(State state) { return {CTRL, 0x04, 0x00, state, 0xFF}; }
+
         static constexpr byteArray<4> getState()            { return {INQ, 0x04, 0x00, 0xFF}; }
         static constexpr State stateFromReply(byteArray<4> reply) { return (State) reply[2];}
     }
 
     namespace Exposure
-    {
-        static constexpr std::size_t ModeCount = 5;
+    {    
         enum Mode : uint8_t {FULL_AUTO = 0x00, MANUAL = 0x03, SHUTTER_PRI = 0x0A, IRIS_PRI = 0x0B, GAIN_PRI = 0x0E };
-        static const std::array<std::pair<Mode, QString>,ModeCount> ModeArray { std::pair<Mode, QString>{FULL_AUTO, QString("Full auto")},
+        static const std::array ModeArray { std::pair<Mode, QString>{FULL_AUTO, QString("Full auto")},
                                                                                 std::pair<Mode, QString>{MANUAL, QString("Manual")},
                                                                                 std::pair<Mode, QString>{SHUTTER_PRI, QString("Shutter")},
                                                                                 std::pair<Mode, QString>{IRIS_PRI, QString("Iris priority")},
@@ -102,7 +103,7 @@ namespace ViscaCommands
 
         namespace Iris
         {
-            //! \brief returns command packet for setting iris - value is in range 0x05 - 0x15
+            //! \brief returns command body for setting iris - value is in range 0x05 - 0x15
             static constexpr byteArray<8> setValue(uint8_t value) {
                 uint8_t fixedValue = ensureConstrainsU8(value, 0x05, 0x15);
                 return { CTRL, 0x04, 0x4B, 0x00, 0x00, parseParam(fixedValue, 1), parseParam(fixedValue, 0), 0xFF};
@@ -113,26 +114,26 @@ namespace ViscaCommands
 
         namespace Gain
         {
-            //! \brief returns command packet for setting gain - value is in range 0x00 (–3dB) - 0x0C (33 dB)
+            //! \brief returns command body for setting gain - value is in range 0x00 (–3dB) - 0x0C (33 dB)
             static constexpr byteArray<8> setValue(uint8_t value) { return { CTRL, 0x04, 0x4C, 0x00, 0x00, 0, ensureMaxU8(value, 0x0C), 0xFF}; }
             static constexpr byteArray<4> getValue()              { return { INQ, 0x04, 0x4C, 0xFF}; }
             static constexpr uint8_t valueFromReply(byteArray<7> reply) { return reverseParse(reply[4], reply[5]); }
 
-            //! \brief returns command packet for setting gain limit - value is in range 0x04 (9dB) - 0x09 (24dB)
+            //! \brief returns command body for setting gain limit - value is in range 0x04 (9dB) - 0x09 (24dB)
             static constexpr byteArray<5> limit(uint8_t value) { return {CTRL, 0x04, 0x2C,
                                                                          ensureConstrainsU8(value, 4, 9), 0xFF}; }
             static constexpr byteArray<5> limitOff()           { return { CTRL, 0x04, 0x2C, 0x0F, 0xFF}; }
 
-            //! \brief returns command packet for setting gain point
+            //! \brief returns command body for setting gain point
             static constexpr byteArray<5> point(State state) { return { CTRL, 0x05, 0x0C, state, 0xFF}; }
 
-            //! \brief returns command packet for setting gain point position - value is in range 0x01 (0dB) - 0x09 (24dB)
+            //! \brief returns command body for setting gain point position - value is in range 0x01 (0dB) - 0x09 (24dB)
             static constexpr byteArray<6> pointPosition(uint8_t value) { return { CTRL, 0x05, 0x4C, 0x00, ensureMaxU8(value, 0x09), 0xFF}; }
         }
 
         namespace Shutter
         {
-            //! \brief returns command packet for setting shutter - value is in range 0x01 - 0x15
+            //! \brief returns command body for setting shutter - value is in range 0x01 - 0x15
             static constexpr byteArray<8> setValue(uint8_t value) { return { CTRL, 0x04, 0x4A, 0x00, 0x00, parseParam(value, 1), parseParam(value, 0), 0xFF}; }
             static constexpr byteArray<4> getValue()              { return { INQ, 0x04, 0x4A, 0xFF}; }
             static constexpr uint8_t valueFromReply(byteArray<7> reply) { return reverseParse(reply[4], reply[5]); }
@@ -142,7 +143,7 @@ namespace ViscaCommands
         {
             static constexpr byteArray<5> setState(State state) { return { CTRL, 0x04, 0x3E, state, 0xFF}; }
 
-            //! \brief returns command packet for setting exposure compensation - value is in range 0x00 - 0x0E
+            //! \brief returns command body for setting exposure compensation - value is in range 0x00 - 0x0E
             static constexpr byteArray<8> setValue(uint8_t value)
             {
                 uint8_t fixedValue = ensureMaxU8(value, 0x0E);
@@ -158,7 +159,7 @@ namespace ViscaCommands
         enum CompensationEnum : uint8_t {LOW = 0x00, MID = 0x01, HIGH = 0x02};
 
         /*!
-         * \brief returns command packet for setting brightness compensation
+         * \brief returns command body for setting brightness compensation
          * \param effectLevel : 0 (Dark) - 6 (Bright)
          * \param brightnessCompensation is defined by enum : 0 (Very dark), 1 (Dark),2 (Standard), 3 (Bright)
          * \param compensationLevel is defined by enum : 0 (Low), 1 (Mid), 2 (High)
@@ -189,13 +190,13 @@ namespace ViscaCommands
 
         namespace RGain
         {        
-            //! \brief returns command packet for setting red gain - value is in range 0x00 (–128) - 0x80 (0) - 0xFF (128)
+            //! \brief returns command body for setting red gain - value is in range 0x00 (–128) - 0x80 (0) - 0xFF (128)
             static constexpr byteArray<8> setValue(uint8_t value) { return { CTRL, 0x04, 0x43, 0x00, 0x00, parseParam(value, 1), parseParam(value, 0), 0xFF}; }
         }
 
         namespace BGain
         {
-            //! \brief returns command packet for setting blue gain - value is in range 0x00 (–128) - 0x80 (0) - 0xFF (128)
+            //! \brief returns command body for setting blue gain - value is in range 0x00 (–128) - 0x80 (0) - 0xFF (128)
             static constexpr byteArray<8> setValue(uint8_t value) { return { CTRL, 0x04, 0x44, 0x00, 0x00, parseParam(value, 1), parseParam(value, 0), 0xFF}; }
         }
 
@@ -206,11 +207,11 @@ namespace ViscaCommands
 
     namespace Aperture
     {
-        //! \brief returns command packet for setting aperture gain - value is in range 0x00 - 0x0F
+        //! \brief returns command body for setting aperture gain - value is in range 0x00 - 0x0F
         static constexpr byteArray<8> setValue(uint8_t value) { return { CTRL, 0x04, 0x42, 0x00, 0x00, parseParam(value, 1), parseParam(value, 0), 0xFF}; }
 
         enum Mode : uint8_t { AUTO=0x00, MANUAL=0x01};
-        //! \brief returns command packet for setting aperture mode - value is defined by enum : 0 (Auto), 1 (Manual)
+        //! \brief returns command body for setting aperture mode - value is defined by enum : 0 (Auto), 1 (Manual)
         static constexpr byteArray<7> setMode(Mode mode) { return { CTRL, 0x04, 0x05, 0x42, 0x01, mode, 0xFF}; }
     }
 
@@ -221,7 +222,7 @@ namespace ViscaCommands
 
         enum Polarity : uint8_t {POSITIVE = 0, NEGATIVE = 1};
 
-        //! \brief returns command packet for setting gamma offset - polarity is defined by enum and value is in range 0x00 - 0x40
+        //! \brief returns command body for setting gamma offset - polarity is defined by enum and value is in range 0x00 - 0x40
         static constexpr byteArray<10> setOffset(Polarity polarity, uint8_t width) {
             uint8_t fixedWidth = ensureMaxU8(width, 40);
             return { CTRL, 0x04, 0x1E, 0x00, 0x00, 0x00, polarity, parseParam(fixedWidth, 1), parseParam(fixedWidth, 0), 0xFF};
@@ -231,7 +232,7 @@ namespace ViscaCommands
 
         struct BlackLevel
         {
-            //! \brief returns command packet for changing gamma black level - value is in range 0x00 (–48) - 0x60 (48)
+            //! \brief returns command body for changing gamma black level - value is in range 0x00 (–48) - 0x60 (48)
             static byteArray<7> direct(uint16_t value)
             {
                 uint16_t limitedValue = ensureMaxU16(value, 0x60);
@@ -240,15 +241,20 @@ namespace ViscaCommands
         };
     }
 
-    //! \brief returns command packet for changing noise reduction - value is in range 0x01 (Weak) - 0x05 (Strong)
+    //! \brief returns command body for changing noise reduction - value is in range 0x01 (Weak) - 0x05 (Strong)
     static constexpr byteArray<5> flickerReduction(State state) { return { CTRL, 0x04, 0x32, state, 0xFF}; }
 
-    //! \brief returns command packet for changing noise reduction - value is in range 0x01 (Weak) - 0x05 (Strong)
+    //! \brief returns command body for changing noise reduction - value is in range 0x01 (Weak) - 0x05 (Strong)
     static constexpr byteArray<5> noiseReduction(uint8_t value) { return {CTRL, 0x04, 0x53, ensureMaxU8(value, 05), 0xFF}; }
     static constexpr byteArray<5> vibrationCompensation(State state) { return {CTRL, 0x04, 0x34, state, 0xFF}; }
 
     namespace Zoom
     {
+
+        static const std::array<std::pair<float, QString>, 6> zoomArray { std::pair<float, QString>{1, QString("1x")}, std::pair<float, QString>{1.2, QString("1.2x")},
+                                                                          std::pair<float, QString>{1.5, QString("1.5x")}, std::pair<float, QString>{2, QString("2x")},
+                                                                          std::pair<float, QString>{5, QString("5x")}, std::pair<float, QString>{10, QString("10x")}};
+
         static constexpr byteArray<5> teleStandard() { return {CTRL, 0x04, 0x07, 0x02,  0xFF}; }
         static constexpr byteArray<5> wideStandard() { return {CTRL, 0x04, 0x07, 0x03,  0xFF}; }
         static constexpr byteArray<5> stop()         { return {CTRL, 0x04, 0x07, 0x00,  0xFF}; }
@@ -277,13 +283,13 @@ namespace ViscaCommands
 
         enum Distance : uint8_t { FAR=0x02, NEAR=0x03 };
         static constexpr byteArray<5> setDistance(Distance focus) { return {CTRL, 0x04, 0x38, focus, 0xFF}; }
-        //! \brief returns command packet for setting distance with variable speed - speed is in range 0x00 - 0x07 (from slowest to fastest)
+        //! \brief returns command body for setting distance with variable speed - speed is in range 0x00 - 0x07 (from slowest to fastest)
         static constexpr byteArray<5> setDistanceVarSpeed(Distance focus, uint8_t speed)
         { return {CTRL, 0x04, 0x38, (uint8_t) (focus << 4 & speed), 0xFF}; }
 
         static constexpr byteArray<5> infinity() { return { CTRL, 0x04, 0x18, 0x02, 0xFF}; }
 
-        //! \brief  returns command packet for setting focus distance - value is in range F000 (Near) - 0000 (Far)
+        //! \brief  returns command body for setting focus distance - value is in range F000 (Near) - 0000 (Far)
         static constexpr byteArray<8> setValue(uint16_t value)
         {
             uint16_t limitedValue = ensureMaxU16(value, 0xF000);

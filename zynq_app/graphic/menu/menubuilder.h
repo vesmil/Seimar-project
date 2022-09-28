@@ -8,6 +8,7 @@
 class MenuBuilder
 {
 public:
+    //! \brief Sequentially creates items in menu and connects them to the controller
     static void buildMenuTree(Menu& menu, Controller* controller);
 
 private:

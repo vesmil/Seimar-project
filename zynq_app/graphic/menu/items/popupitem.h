@@ -3,7 +3,7 @@
 
 #include <QKeyEvent>
 
-#include "library/controller/popup.h"
+#include "library/controller/elements/popup.h"
 #include "itembase.h"
 
 //! \brief Item which will open a new window upon confirmation

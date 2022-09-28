@@ -4,52 +4,51 @@
 #include "library/visible/visca/visca.h"
 #include "library/visible/visca/viscaCommands.h"
 #include "library/visible/gstreamer/gsfacade.h"
-
-#include "library/controller/value.h"
-#include "library/controller/controllercommand.h"
+#include "library/controller/elements/setter.h"
+#include "library/controller/elements/controllercommand.h"
+#include "global/utility.h"
 
 #include <QFuture>
 #include <QtConcurrent/QtConcurrent>
 #include <queue>
 
+// NOTE controller becomes sort of an anti-pattern herebut I need some part linking all modules together
+
 //! \brief Proxy that links all modules together
 class Controller
 {
+    using ValuePtr = std::unique_ptr<ISetter>;
+
 public:
     Controller(Visca& visca, GsFacade& gstreamer);
     void addCommandToQueue(std::unique_ptr<IControllerCommand> command);
 
-    using ModeValue = ArrValue<ViscaCommands::Exposure::Mode, Controller, 5U>;
-    ModeValue exposureMode{&ViscaCommands::Exposure::ModeArray, &Controller::setExposureMode, this};
+    ValuePtr zoom = makeArrValue(ViscaCommands::Zoom::zoomArray, &Controller::setZoom, this);
 
-    ArrValue<float, Controller, 6> zoom{&m_zoomArray, &Controller::setZoom, this};
-    ValueSetter<uint8_t, uint8_t, Controller> shutter {0, 0, 10, &Controller::setShutter, this, ""};
-    ValueSetter<uint8_t, uint8_t, Controller> iris {0x10, 0x5, 0x15, &Controller::setIris, this, ""};
-    ValueSetter<int, int, Controller> gain {0, -3, 33, &Controller::setGain, this, "dB"};
+    ValuePtr exposureMode = makeArrValue(ViscaCommands::Exposure::ModeArray, &Controller::setExposureMode, this);
+    ValuePtr shutter = makeIntValue<uint8_t>(0, 0, 10, &Controller::setShutter, this);
+    ValuePtr iris = makeIntValue<uint8_t>(0x10, 0x5, 0x15, &Controller::setIris, this);
+    ValuePtr gain = makeIntValue<int>(0, -3, 33, &Controller::setGain, this, "dB");
 
-    BoolValue<Controller> standby {true, &Controller::setPower, this};
+    ValuePtr power = makeBoolValue(true, &Controller::setPower, this);
 
-    // NOTE this settings wont be visible to user
-    ArrValue<ViscaCommands::Hdmi::Format, Controller, ViscaCommands::Hdmi::FormatCount> format{&ViscaCommands::Hdmi::FormatArray, &Controller::setFormat, this};
-    ArrValue<ViscaCommands::Hdmi::Colorspace, Controller, ViscaCommands::Hdmi::ColorspaceCount> colorspace{&ViscaCommands::Hdmi::ColorSpaceArray, &Controller::setColorspace, this};
+    ValuePtr format = makeArrValue(ViscaCommands::Hdmi::FormatArray, &Controller::setFormat, this);
+    ValuePtr colorspace = makeArrValue(ViscaCommands::Hdmi::ColorSpaceArray, &Controller::setColorspace, this);
 
-    ArrValue<ViscaCommands::Color::WhiteBalance::Mode, Controller, ViscaCommands::Color::WhiteBalance::ModeCount> whiteBalance{&ViscaCommands::Color::WhiteBalance::ModeArray, &Controller::setWhitebalance, this};
-    ValueSetter<uint8_t, uint8_t, Controller> rGain {200, 0, 0xFF, &Controller::setRGain, this, ""};
-    ValueSetter<uint8_t, uint8_t, Controller> bGain {200, 0, 0xFF, &Controller::setBGain, this, ""};
+    ValuePtr whiteBalance = makeArrValue(ViscaCommands::Color::WhiteBalance::ModeArray, &Controller::setWhitebalance, this);
+    ValuePtr rGain = makeIntValue<uint16_t>(200, 0, 0xFF, &Controller::setRGain, this);
+    ValuePtr bGain = makeIntValue<uint16_t>(200, 0, 0xFF, &Controller::setBGain, this);
 
-    BoolValue<Controller> focusMode {true, &Controller::setAutofocus, this, "Auto", "Manual"};
-    ValueSetter<uint16_t, uint16_t, Controller> focusDistance {0xB, 0x1, 0xF, &Controller::setFocusDistance, this, ""}; // 1000 (∞) to F000 (80 mm), Initial setting: B000h (35 cm)
+    ValuePtr autofocus = makeBoolValue(true, &Controller::setAutofocus, this, "Auto", "Manual");
+    ValuePtr focusDistance = makeIntValue<uint16_t>(0xB, 0x1, 0xF, &Controller::setFocusDistance, this);
 
-    BoolValue<Controller> visibilityEnhancer {false, &Controller::setvisibilityEnhancer, this};
-    // visibilityLevel
+    ValuePtr visibilityEnhancer = makeBoolValue(false, &Controller::setvisibilityEnhancer, this, "Auto", "Manual");
+    // TODO visibilityLevel
+    ValuePtr backLight = makeBoolValue(false, &Controller::setbackLightCompensation, this, "Auto", "Manual");
 
-    BoolValue<Controller> backLight {false, &Controller::setbackLightCompensation, this};
-
-    // TODO others...
-
-    BoolValue<Controller> rtp_stream {false, &Controller::setRtp, this};
-    BoolValue<Controller> file_stream {false, &Controller::setFile, this};
-    BoolValue<Controller> hdmi_stream {false, &Controller::setHDMI, this};
+    ValuePtr rtp_stream = makeBoolValue(true, &Controller::setRtp, this);
+    ValuePtr file_stream = makeBoolValue(false, &Controller::setFile, this);
+    ValuePtr hdmi_stream = makeBoolValue(true, &Controller::setHDMI, this);
 
 private:
     void startExecutingCommandQueue();
@@ -75,8 +74,8 @@ private:
     bool setPower(bool boolState);
 
     bool setWhitebalance(ViscaCommands::Color::WhiteBalance::Mode mode);
-    bool setRGain(uint8_t value);
-    bool setBGain(uint8_t value);
+    bool setRGain(uint16_t value);
+    bool setBGain(uint16_t value);
 
     bool setAutofocus(bool state);
     bool setFocusDistance(uint16_t distance);
@@ -96,14 +95,13 @@ private:
 
     std::queue<std::unique_ptr<IControllerCommand>> m_commandQueue;
 
-    std::array<std::pair<float, QString>, 6> m_zoomArray { std::pair<float, QString>{1, QString("1x")}, std::pair<float, QString>{1.2, QString("1.2x")}, std::pair<float, QString>{1.5, QString("1.5x")},
-                                                         std::pair<float, QString>{2, QString("2x")}, std::pair<float, QString>{5, QString("5x")}, std::pair<float, QString>{10, QString("10x")}};
-
-    Dependency<decltype(exposureMode), ViscaCommands::Exposure::Mode, ViscaCommands::Exposure::Mode::MANUAL, ViscaCommands::Exposure::Mode::SHUTTER_PRI> m_validShutter{exposureMode};
-    Dependency<decltype(exposureMode), ViscaCommands::Exposure::Mode, ViscaCommands::Exposure::Mode::MANUAL, ViscaCommands::Exposure::Mode::IRIS_PRI> m_validIris{exposureMode};
-    Dependency<decltype(exposureMode), ViscaCommands::Exposure::Mode, ViscaCommands::Exposure::Mode::MANUAL, ViscaCommands::Exposure::Mode::GAIN_PRI> m_validGain{exposureMode};
-    Dependency<decltype(whiteBalance), ViscaCommands::Color::WhiteBalance::Mode, ViscaCommands::Color::WhiteBalance::Mode::MANUAL> m_manualWB{whiteBalance};
-    Dependency<BoolValue<Controller>, bool, false> m_autofocus{focusMode};
+    /*
+    Dependency<ValuePtr, ViscaCommands::Exposure::Mode, ViscaCommands::Exposure::Mode::MANUAL, ViscaCommands::Exposure::Mode::SHUTTER_PRI> m_validShutter{exposureMode.get()};
+    Dependency<ValuePtr, ViscaCommands::Exposure::Mode, ViscaCommands::Exposure::Mode::MANUAL, ViscaCommands::Exposure::Mode::IRIS_PRI> m_validIris{exposureMode.get()};
+    Dependency<ValuePtr, ViscaCommands::Exposure::Mode, ViscaCommands::Exposure::Mode::MANUAL, ViscaCommands::Exposure::Mode::GAIN_PRI> m_validGain{exposureMode.get()};
+    Dependency<ValuePtr, ViscaCommands::Color::WhiteBalance::Mode, ViscaCommands::Color::WhiteBalance::Mode::MANUAL> m_manualWB{whiteBalance.get()};
+    Dependency<ValuePtr, bool, false> m_autofocus{autofocus.get()};
+    */
 };
 
 #endif // CONTROLLER_H

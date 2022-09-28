@@ -316,13 +316,13 @@ gst-launch-1.0 v4l2src device=/dev/video0 io-mode=4 ! queue ! videoconvert ! vid
 ### Pipeline pro odesílání po RTP
 
 ```bash
-gst-launch-1.0 v4l2src device=/dev/video0 ! video/x-raw,width=1280,height=720,framerate=30/1 ! queue ! rtpvrawpay mtu=60000 ! udpsink host=10.15.1.77 port=5000 sync=false async=false
+gst-launch-1.0 v4l2src device=/dev/video0 ! video/x-raw,width=1920,height=1080, framerate=60/1 ! queue ! rtpvrawpay mtu=60000 ! udpsink host=10.15.1.77 port=5000 sync=false async=false
 ```
 
 #### A následné přijímání
 
 ```bash
-gst-launch-1.0 udpsrc port=5000 caps = "application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)RAW, sampling=(string)YCbCr-4:2:2, depth=(string)8, width=(string)1920, height=(string)1080, colorimetry=(string)BT709-2, payload=(int)96, ssrc=(uint)3215240456, timestamp-offset=(uint)2448946101, seqnum-offset=(uint)2026, a-framerate=(string)30, format=(string)YUVY" ! queue ! rtpvrawdepay ! videoconvert ! queue ! autovideosink
+gst-launch-1.0 udpsrc port=5000 caps = "video/x-raw, width=(int)1920, height=(int)1080, framerate=(fraction)60/1, format=(string)BGR, interlace-mode=(string)progressive, colorimetry=(string)RGB" ! rtpvrawdepay ! queue ! videoconvert ! autovideosink
 ```
 
 ---

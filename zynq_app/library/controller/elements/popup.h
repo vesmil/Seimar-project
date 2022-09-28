@@ -3,7 +3,7 @@
 
 #include <QLabel>
 
-//NOTE this needs to be more versatile
+// NOTE this needs to be more versatile
 
 //! \brief QWidget with added controls
 class ControlableWidget : public QLabel

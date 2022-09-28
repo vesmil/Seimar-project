@@ -14,7 +14,7 @@ public:
      * \brief Initilize all necessary components for VISCA communication
      * \param portName - name of serial port (path to device)
      */
-    explicit Visca(const char *device_path);
+    Visca(const char *device_path);
 
     /*!
      * \brief Send VISCA command to camera

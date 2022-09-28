@@ -7,7 +7,7 @@ PKGCONFIG += gstreamer-1.0 gstreamer-video-1.0
 
 SOURCES += \
     global/logcategories.cpp \
-    graphic/mainWindow.cpp \
+    global/utility.cpp \
     graphic/menu/items/itembase.cpp \
     graphic/menu/items/popupitem.cpp \
     graphic/menu/items/submenuitem.cpp \
@@ -17,7 +17,8 @@ SOURCES += \
     graphic/style.cpp \
     library/application/settings.cpp \
     library/controller/controller.cpp \
-    library/controller/popup.cpp \
+    library/controller/elements/iterable.cpp \
+    library/controller/elements/popup.cpp \
     library/visible/gstreamer/gsfacade.cpp \
     library/visible/gstreamer/pipelines/internalpipeline.cpp \
     library/visible/gstreamer/pipelines/pipelinebase.cpp \
@@ -36,9 +37,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
         global/logcategories.h \
-        graphic/mainWindow.h \
+        global/utility.h \
         graphic/menu/items/itembase.h \
-        graphic/menu/items/ivalue.h \
         graphic/menu/items/popupitem.h \
         graphic/menu/items/submenuitem.h \
         graphic/menu/items/valueitem.h \
@@ -47,10 +47,12 @@ HEADERS += \
         graphic/style.h \
         library/application/settings.h \
         library/controller/controller.h \
-        library/controller/controllercommand.h \
-        library/controller/dependency.h \
-        library/controller/popup.h \
-        library/controller/value.h \
+        library/controller/elements/controllercommand.h \
+        library/controller/elements/dependency.h \
+        library/controller/elements/idependency.h \
+        library/controller/elements/iterable.h \
+        library/controller/elements/popup.h \
+        library/controller/elements/setter.h \
         library/visible/gstreamer/gsfacade.h \
         library/visible/gstreamer/pipelines/internalpipeline.h \
         library/visible/gstreamer/pipelines/pipelinebase.h \

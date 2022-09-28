@@ -33,7 +33,6 @@ public:
         QString hiddenItem = "background : gray;"
                              "color : rgb(90,90,90);"
                              "padding: 10px;";
-
     } menu;
 
 private:

@@ -16,7 +16,7 @@
 class UartCommunication
 {
 public:
-    explicit UartCommunication(const char* device_path);
+    UartCommunication(const char* device_path);
     ~UartCommunication();
 
     /*!

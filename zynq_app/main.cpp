@@ -8,7 +8,6 @@
 
 #include "library/visible/gstreamer/gsfacade.h"
 #include "library/visible/visca/visca.h"
-#include "graphic/mainWindow.h"
 
 void nonEssentialSetup()
 {

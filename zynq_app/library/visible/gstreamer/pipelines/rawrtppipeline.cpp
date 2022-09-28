@@ -16,7 +16,7 @@ RawRtpPipeline::RawRtpPipeline() : PipelineBase()
 void RawRtpPipeline::setRtpPayload()
 {
     m_rtp_data.rtpvrawpay = GsFacade::makeElement("rtpvrawpay", "rtp-pay");
-    g_object_set(m_data.sink, "mtu", 60000, nullptr);
+    g_object_set(m_rtp_data.rtpvrawpay, "mtu", 60000, nullptr);
 }
 
 void RawRtpPipeline::setUdpsink()
