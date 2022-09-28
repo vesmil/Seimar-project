@@ -1,4 +1,4 @@
-# Development notes
+# [Průběžná] Dokumentace
 
 ---
 
@@ -299,13 +299,7 @@ classDiagram
 
 ## 4. část - přizpůsobení na ZCU104 a finální kameru
 
-### Pipeline pro výstup na display port:
-
-```bash
-gst-launch-1.0 v4l2src device=/dev/video0 ! video/x-raw,width=1280,height=720,framerate=60/1 ! queue ! kmssink bus-id=fd4a0000.display fullscreen-overlay=1
-```
-
-**TODO** nastavit kmssink na base vrstvu
+### Pipeline pro výstup do videomixeru:
 
 ```bash
 gst-launch-1.0 v4l2src device=/dev/video0 io-mode=4 ! queue ! videoconvert ! videoscale ! video/x-raw,width=1920,height=1080,framerate=60/1,format=RGB ! kmssink bus-id="a0000000.v_mix" plane-id=37 fullscreen-overlay=false sync=false
@@ -325,7 +319,7 @@ gst-launch-1.0 v4l2src device=/dev/video0 ! video/x-raw,width=1920,height=1080, 
 gst-launch-1.0 udpsrc port=5000 caps = "application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)RAW, sampling=(string)RGB, depth=(string)8, width=(string)1920, height=(string)1080, colorimetry=(string)SMPTE240M, payload=(int)96, ssrc=(uint)2795573110, timestamp-offset=(uint)1410027821, seqnum-offset=(uint)15167, a-framerate=(string)60" ! rtpvrawdepay ! queue ! videoconvert ! autovideosink
 ```
 
-#### Náhled videa
+#### ...náhled videa
 
 ```
 gst-launch-1.0 filesrc location=video-res ! rawvideoparse width=1920 height=1080 format=15 framerate=60/1 ! autovideoconvert ! autovideosink
@@ -335,7 +329,7 @@ gst-launch-1.0 filesrc location=video-res ! rawvideoparse width=1920 height=1080
 
 ### Použití video mixéru
 
-*note done yet*
+...
 
 
 ``` bash
@@ -347,8 +341,6 @@ export QT_DEBUG_PLUGINS=1
 export QT_QPA_EGLFS_ALWAYS_SET_MODE=1
 
 ```
-
-
 
 **eglfsconfig.json:**
 
@@ -362,5 +354,4 @@ export QT_QPA_EGLFS_ALWAYS_SET_MODE=1
   ]
 }
 ```
-
 
