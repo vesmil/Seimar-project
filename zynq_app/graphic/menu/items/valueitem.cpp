@@ -23,6 +23,14 @@ void ValueItem::execute()
 {
     ItemBase::execute();
     m_value->store();
+
+    if (m_value->isBinary())
+    {
+        increase();
+        m_valueLabel.setText(m_value->getQString());
+        m_value->setAsync();
+        Menu::getInstance().setOnSubmenu(m_parentMenu);
+    }
 }
 
 void ValueItem::control(QKeyEvent* event)

@@ -2,15 +2,16 @@
 
 Controller::Controller(Visca& visca, GsFacade& gstreamer) : m_visca(visca), m_gstreamer(gstreamer)
 {
-    /*
-    shutter->addDependency(&m_validShutter);
-    iris.addDependency(&m_validIris);
-    gain.addDependency(&m_validGain);
-    focusDistance.addDependency(&m_autofocus);
-    rGain.addDependency(&m_manualWB);
-    bGain.addDependency(&m_manualWB);
-*/
-    setDefault();
+    shutter->addDependency<Controller, ViscaCommands::Exposure::Mode, ViscaCommands::Exposure::Mode::MANUAL, ViscaCommands::Exposure::Mode::SHUTTER_PRI>(exposureMode.get());
+    iris->addDependency<Controller, ViscaCommands::Exposure::Mode, ViscaCommands::Exposure::Mode::MANUAL, ViscaCommands::Exposure::Mode::IRIS_PRI>(exposureMode.get());
+    gain->addDependency<Controller, ViscaCommands::Exposure::Mode, ViscaCommands::Exposure::Mode::MANUAL, ViscaCommands::Exposure::Mode::GAIN_PRI>(exposureMode.get());
+
+    focusDistance->addDependency<Controller, bool, false>(autofocus.get());
+
+    rGain->addDependency<Controller, ViscaCommands::Color::WhiteBalance::Mode, ViscaCommands::Color::WhiteBalance::Mode::MANUAL>(whiteBalance.get());
+    bGain->addDependency<Controller, ViscaCommands::Color::WhiteBalance::Mode, ViscaCommands::Color::WhiteBalance::Mode::MANUAL>(whiteBalance.get());
+
+    setAllDefault();
 }
 
 void Controller::addCommandToQueue(std::unique_ptr<IControllerCommand> command)
@@ -23,14 +24,14 @@ void Controller::addCommandToQueue(std::unique_ptr<IControllerCommand> command)
     }
 }
 
-bool Controller::setDefault()
+bool Controller::setAllDefault()
 {
     zoom->setDefault();
     exposureMode->setDefault();
 
+    hdmi_stream->setDefault();
     rtp_stream->setDefault();
     file_stream->setDefault();
-    hdmi_stream->setDefault();
 
     autofocus->setDefault();
 
@@ -39,11 +40,14 @@ bool Controller::setDefault()
 
 void Controller::startExecutingCommandQueue()
 {
-    queueExecuting = true;
+    if(queueExecuting)
+    {
+        return;
+    }
 
+    queueExecuting = true;
     while (!m_commandQueue.empty())
     {
-        qCInfo(uiLog()) << "Command";
         m_commandQueue.front()->execute();
         m_commandQueue.pop();
     }
@@ -109,7 +113,13 @@ bool Controller::setColorspace(ViscaCommands::Hdmi::Colorspace color)
 }
 
 bool Controller::setWhitebalance(ViscaCommands::Color::WhiteBalance::Mode mode)
-{
+{    /*
+    Dependency<ValuePtr, ViscaCommands::Exposure::Mode, ViscaCommands::Exposure::Mode::MANUAL, ViscaCommands::Exposure::Mode::SHUTTER_PRI> m_validShutter{exposureMode.get()};
+    Dependency<ValuePtr, ViscaCommands::Exposure::Mode, ViscaCommands::Exposure::Mode::MANUAL, ViscaCommands::Exposure::Mode::IRIS_PRI> m_validIris{exposureMode.get()};
+    Dependency<ValuePtr, ViscaCommands::Exposure::Mode, ViscaCommands::Exposure::Mode::MANUAL, ViscaCommands::Exposure::Mode::GAIN_PRI> m_validGain{exposureMode.get()};
+    Dependency<ValuePtr, ViscaCommands::Color::WhiteBalance::Mode, ViscaCommands::Color::WhiteBalance::Mode::MANUAL> m_manualWB{whiteBalance.get()};
+    Dependency<ValuePtr, bool, false> m_autofocus{autofocus.get()};
+    */
     return m_visca.executeCommand(ViscaCommands::Color::WhiteBalance::setMode(mode), m_viscaWaitTime, "White balance");
 }
 
@@ -130,17 +140,17 @@ bool Controller::setAutofocus(bool state)
 
 bool Controller::setFocusDistance(uint16_t distanceValue)
 {
-    return m_visca.executeCommand(ViscaCommands::Focus::setValue(0x1000 * distanceValue));
+    return m_visca.executeCommand(ViscaCommands::Focus::setValue(0x1000 * distanceValue), m_viscaWaitTime, "Focus distance");
 }
 
 bool Controller::setbackLightCompensation(bool state)
 {
-    return m_visca.executeCommand(ViscaCommands::Exposure::backLightCompensation(state? ViscaCommands::State::ON : ViscaCommands::State::OFF));
+    return m_visca.executeCommand(ViscaCommands::Exposure::backLightCompensation(state? ViscaCommands::State::ON : ViscaCommands::State::OFF), m_viscaWaitTime, "Backlight");
 }
 
 bool Controller::setvisibilityEnhancer(bool state)
 {
-    return m_visca.executeCommand(ViscaCommands::Exposure::visibilityEnhancer(state? ViscaCommands::State::ON : ViscaCommands::State::OFF));
+    return m_visca.executeCommand(ViscaCommands::Exposure::visibilityEnhancer(state? ViscaCommands::State::ON : ViscaCommands::State::OFF), m_viscaWaitTime, "Visibility enhancer");
 }
 
 bool Controller::setPower(ViscaCommands::State state)

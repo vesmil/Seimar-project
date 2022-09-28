@@ -26,6 +26,7 @@ int main(int argc, char *argv[])
     GsFacade gsFacade{};    // No stream starts by default, if you want - gsFacade.initAndStart(GsFacade::WIRIS_RTP | GsFacade::RAW_DISPLAY);
 
     Visca visca(Settings::getInstance().path.cameraUart.c_str());
+
     Controller controller(visca, gsFacade);
     MenuBuilder::buildMenuTree(menu, &controller);
 

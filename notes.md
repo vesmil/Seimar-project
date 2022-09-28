@@ -290,8 +290,8 @@ classDiagram
 	}
 	
 	class Value {
-		operator++()
-		operator--()
+		increase()
+		decrease()
 		set()
 		...()
 	}	
@@ -322,7 +322,13 @@ gst-launch-1.0 v4l2src device=/dev/video0 ! video/x-raw,width=1920,height=1080, 
 #### A následné přijímání
 
 ```bash
-gst-launch-1.0 udpsrc port=5000 caps = "video/x-raw, width=(int)1920, height=(int)1080, framerate=(fraction)60/1, format=(string)BGR, interlace-mode=(string)progressive, colorimetry=(string)RGB" ! rtpvrawdepay ! queue ! videoconvert ! autovideosink
+gst-launch-1.0 udpsrc port=5000 caps = "application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)RAW, sampling=(string)RGB, depth=(string)8, width=(string)1920, height=(string)1080, colorimetry=(string)SMPTE240M, payload=(int)96, ssrc=(uint)2795573110, timestamp-offset=(uint)1410027821, seqnum-offset=(uint)15167, a-framerate=(string)60" ! rtpvrawdepay ! queue ! videoconvert ! autovideosink
+```
+
+#### Náhled videa
+
+```
+gst-launch-1.0 filesrc location=video-res ! rawvideoparse width=1920 height=1080 format=15 framerate=60/1 ! autovideoconvert ! autovideosink
 ```
 
 ---
@@ -342,6 +348,8 @@ export QT_QPA_EGLFS_ALWAYS_SET_MODE=1
 
 ```
 
+
+
 **eglfsconfig.json:**
 
 ``` json
@@ -356,11 +364,3 @@ export QT_QPA_EGLFS_ALWAYS_SET_MODE=1
 ```
 
 
-
-
-
-
-
-```
-gst-launch-1.0 v4l2src device=/dev/video0 io-mode=4 ! video/x-raw, width=1920, height=1080, framerate=60/1, format=RGB ! queue ! kmssink bus-id="a0000000.v_mix" plane-id=37 
-```

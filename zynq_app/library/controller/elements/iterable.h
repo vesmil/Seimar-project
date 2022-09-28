@@ -31,7 +31,12 @@ public:
 
     virtual bool diffFromMarked()
     {
-        return m_marked == m_current;
+        return m_marked != m_current;
+    }
+
+    virtual bool isBinary()
+    {
+        return false;
     }
 
     virtual T get()
@@ -56,6 +61,7 @@ public:
 
     void next() override;
     void prev() override;
+    bool isBinary() override;
 
     QString text() override;
     bool get() override;
@@ -101,7 +107,12 @@ public:
 
     bool diffFromMarked() override
     {
-        return m_marked == m_current;
+        return m_marked != m_current;
+    }
+
+    bool isBinary() override
+    {
+        return m_array.size() == 2;
     }
 
     QString text()

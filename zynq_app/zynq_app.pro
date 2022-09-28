@@ -48,8 +48,6 @@ HEADERS += \
         library/application/settings.h \
         library/controller/controller.h \
         library/controller/elements/controllercommand.h \
-        library/controller/elements/dependency.h \
-        library/controller/elements/idependency.h \
         library/controller/elements/iterable.h \
         library/controller/elements/popup.h \
         library/controller/elements/setter.h \

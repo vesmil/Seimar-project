@@ -7,9 +7,9 @@
 #include <type_traits>
 
 #include "library/controller/elements/controllercommand.h"
-#include "library/controller/elements/idependency.h"
 #include "library/controller/elements/iterable.h"
 
+//! \brief Interface for a displayable value
 class ISetter
 {
 public:
@@ -21,13 +21,12 @@ public:
     virtual void setDefault() = 0;
 
     virtual bool hasChanged() = 0;
+    virtual bool isBinary() = 0;
 
     virtual QString getQString() = 0;
 
     virtual void increase() = 0;
     virtual void decrease() = 0;
-
-    virtual void addDependency(IDependency* dependency) = 0;
     virtual bool isHidden() = 0;
 };
 
@@ -47,17 +46,9 @@ public:
 
     }
 
-    virtual TValue getValue()
-    {
-        return m_iterator->get();
-    }
-
     void setAsync() override
     {
-        set();
-
-        // TODO
-        // m_context->addCommandToQueue(makeCommand(m_setFunc, m_context, getValue()));
+        m_context->addCommandToQueue(makeCommand(m_setFunc, m_context, getValue()));
     }
 
     void set() override
@@ -101,9 +92,9 @@ public:
         m_iterator->prev();
     }
 
-    void addDependency(IDependency* dependency) override
+    bool isBinary() override
     {
-        m_dependencies.emplace_back(dependency);
+        return m_iterator->isBinary();
     }
 
     bool isHidden() override
@@ -115,20 +106,59 @@ public:
                 return true;
             }
         }
-
         return false;
     }
 
-protected:
+    template<typename TCont, typename TVal, TVal ...TPossible>
+    void addDependency(Setter<TVal, TCont> *value)
+    {
+       m_dependencies.emplace_back(std::make_unique<Dependency<TCont, TVal, TPossible...>>(value));
+    }
+
+private:
+    virtual TValue getValue()
+    {
+        return m_iterator->get();
+    }
+
     std::unique_ptr<Iterable<TValue>> m_iterator;
 
     QString m_units;
     TContext* m_context;
 
     bool (TContext::*m_setFunc) (TValue);
-    std::vector<IDependency*> m_dependencies {};
-};
 
+    //! \brief Interface so I can store dependencies in a vector
+    class IDependency {
+    public:
+        virtual bool isValid() = 0;
+    };
+
+    //! \brief Class used to check whether dependency is valid - \a TValue is equal to some of \a TPossible
+    template<typename TCont, typename TVal, TVal ...TPossible>
+    class Dependency : public IDependency
+    {
+    public:
+        explicit Dependency(Setter<TVal, TCont>* value) : m_value(value) { }
+
+        bool isValid() override
+        {
+            for (auto&& possibility : {TPossible...})
+            {
+                if (m_value->getValue() == possibility)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+    private:
+        Setter<TVal, TCont>* m_value;
+    };
+
+    std::vector<std::unique_ptr<IDependency>> m_dependencies {};
+};
 
 template<typename TContext>
 static auto makeBoolValue(bool defaultValue, bool (TContext::*func) (bool), TContext* context, QString trueText = "On", QString falseText = "Off")

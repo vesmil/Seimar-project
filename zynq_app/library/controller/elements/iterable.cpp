@@ -18,6 +18,11 @@ void BoolIterable::prev()
     m_current = !m_current;
 }
 
+bool BoolIterable::isBinary()
+{
+    return true;
+}
+
 QString BoolIterable::text()
 {
     return m_current ? m_true : m_false;
