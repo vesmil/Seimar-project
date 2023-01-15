@@ -68,7 +68,7 @@ Dokončení vlastní desky ze strany ČVUT je odloženo na neurčito. Projekt te
   - [x] Vyplnit menu
       - [x] Práce se streamem - zapnout, vypnout jednotlivé pipelines
       - [x] Komunikace s kamerou
-- [ ] Upravit výsledek pro finální použití
+- [X] Upravit výsledek pro finální použití
     - [x] Visca - předělat na novou kameru
         - [x] Setup rozlišení
     - [x] Gstreamer
