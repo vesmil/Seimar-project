@@ -74,10 +74,9 @@ Dokončení vlastní desky ze strany ČVUT je odloženo na neurčito. Projekt te
     - [x] Gstreamer
         - [x] Předělat stávající pipelines pro novou kameru
         - [x] Využít videomixer
-    - [ ] Menu
-        - [ ] Zařídit odesílání na KMS sink pro kombinaci obrazu
-        - [ ] Detaily
-    - [ ] Dokumentace
+    - [X] Menu
+        - [X] Zařídit odesílání na KMS sink pro kombinaci obrazu
+    - [X] Dokumentace
 
 ## Uživatelská příručka
 
