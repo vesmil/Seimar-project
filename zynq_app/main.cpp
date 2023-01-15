@@ -1,8 +1,7 @@
-﻿#include <QApplication>
+#include <QApplication>
 
-#include <QMediaPlayer>
-#include <QVideoWidget>
-
+#include "graphic/menu/menu.h"
+#include "graphic/mainwindow.h"
 #include "graphic/menu/menubuilder.h"
 #include "library/application/settings.h"
 
@@ -20,15 +19,16 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
 
-    Menu &menu = Menu::getInstance();
-    menu.show();
+    // Menu::getInstance().show();
+    MainWindow main;
+    main.show();
 
-    GsFacade gsFacade{};    // No stream starts by default, if you want - gsFacade.initAndStart(GsFacade::WIRIS_RTP | GsFacade::RAW_DISPLAY);
+    GsFacade gsFacade{};
 
     Visca visca(Settings::getInstance().path.cameraUart.c_str());
 
     Controller controller(visca, gsFacade);
-    MenuBuilder::buildMenuTree(menu, &controller);
+    MenuBuilder::buildMenuTree(Menu::getInstance(), &controller);
 
     return a.exec();
 }

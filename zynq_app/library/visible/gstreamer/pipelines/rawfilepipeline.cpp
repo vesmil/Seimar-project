@@ -4,7 +4,7 @@
 #include "library/visible/gstreamer/gsfacade.h"
 #include "library/application/settings.h"
 
-RawFilePipeline::RawFilePipeline() : PipelineBase()
+RawFilePipeline::RawFilePipeline() : Pipelinebase()
 {
     setSrcFromInternalPipeline("inter-file-source");
     setDefaultCapsFilter("file-caps");

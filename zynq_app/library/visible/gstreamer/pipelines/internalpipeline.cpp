@@ -5,7 +5,7 @@
 
 const gchar* InternalPipeline::m_intervideoChannelName  = "interchannel";
 
-InternalPipeline::InternalPipeline() : PipelineBase()
+InternalPipeline::InternalPipeline() : Pipelinebase()
 {
     setSource("v4l2source");
     setDefaultCapsFilter("intercaps");

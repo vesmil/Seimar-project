@@ -8,22 +8,22 @@
 /*!
  * \brief Abstract Pipeline class with basic pipeline attributes
  */
-class PipelineBase
+class Pipelinebase
 {
 public:
     void start() const;
     void stop() const;
 
-    ~PipelineBase();
+    ~Pipelinebase();
 
     // Disable copy constructors for all pipelines (pipeline subclasses)
-    PipelineBase(const PipelineBase&) = delete;
-    PipelineBase& operator =(const PipelineBase&) = delete;
+    Pipelinebase(const Pipelinebase&) = delete;
+    Pipelinebase& operator =(const Pipelinebase&) = delete;
 
     bool isCompleted();
 
 protected:
-    PipelineBase() = default;
+    Pipelinebase() = default;
 
     void setDefaultCapsFilter(const gchar *name);
     void setQueue(const gchar *name);
@@ -62,8 +62,8 @@ protected:
         GstBus *bus = nullptr;
     } m_data;
 
-    static const int WIDTH = 1920;
-    static const int HEIGHT = 1080;
+    static const int WIDTH = 3840;
+    static const int HEIGHT = 2160;
 
     bool m_completed = false;
 };

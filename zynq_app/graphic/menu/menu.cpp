@@ -1,14 +1,13 @@
 ﻿#include "menu.h"
 
 #include "graphic/style.h"
-
 Menu& Menu::getInstance()
 {
     static Menu instance;
     return instance;
 }
 
-Menu::Menu() : QWidget()
+Menu::Menu() : QLabel()
 {
     m_root = std::make_unique<SubmenuItem>(QString{}, nullptr, this);
 
@@ -26,6 +25,11 @@ void Menu::keyPressEvent(QKeyEvent *event)
     else if (event->key() == Qt::Key_Right)
     {
         open();
+    }
+
+    if (event->key() == Qt::Key_F4)
+    {
+        exit(9);
     }
 }
 
@@ -53,11 +57,13 @@ SubmenuItem* Menu::getRoot()
 void Menu::open()
 {
     m_active = true;
+    setVisible(true);
     setOnSubmenu(m_root.get());
 }
 
 void Menu::close()
 {
     m_active = false;
+    setVisible(false);
     m_currentSubmenu->close(layout());
 }

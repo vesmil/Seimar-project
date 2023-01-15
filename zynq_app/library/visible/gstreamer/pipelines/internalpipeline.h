@@ -6,7 +6,7 @@
 /*!
  * \brief Singleton pipeline for transferring data from vl42src to intervideosink used by other pipelines (to allow spliting)
  */
-class InternalPipeline : public PipelineBase
+class InternalPipeline : public Pipelinebase
 {
 public:
     static InternalPipeline& getInstance();

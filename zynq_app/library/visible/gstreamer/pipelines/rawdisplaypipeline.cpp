@@ -16,12 +16,11 @@ RawDisplayPipeline::RawDisplayPipeline()
 void RawDisplayPipeline::setKmssink()
 {
     m_data.sink = GsFacade::makeElement("kmssink", "kmssink");
-    g_object_set(m_data.sink, "bus-id", "a0000000.v_mix", "plane-id", 37 ,"fullscreen-overlay", false, "sync", false, NULL);
+    g_object_set(m_data.sink, "bus-id", "a0000000.v_mix", "plane-id", 36 ,"fullscreen-overlay", false, "sync", false, NULL);
 }
 
 RawDisplayPipeline::~RawDisplayPipeline()
 {
-    // TODO unref...
     stop();
 }
 
@@ -34,21 +33,6 @@ void RawDisplayPipeline::setVideoscale()
 {
     m_displayData.videoscale = GsFacade::makeElement("videoscale", "videoscale");
 }
-
-/*
-void RawDisplayPipeline::setMixerCaps()
-{
-    m_data.videoCaps = gst_caps_new_simple("video/x-raw",
-                                      "framerate", GST_TYPE_FRACTION, 60, 1,
-                                      "format", G_TYPE_STRING, "RGB",
-                                      "width", G_TYPE_INT, 1920,
-                                      "height", G_TYPE_INT, 1080, NULL);
-
-    m_data.capsFilter = GsFacade::makeElement("capsfilter", "display-caps");
-    g_object_set(m_data.capsFilter, "caps", m_data.videoCaps, NULL);
-    gst_caps_unref(m_data.videoCaps);
-}
-*/
 
 void RawDisplayPipeline::completePipeline(const gchar *name)
 {

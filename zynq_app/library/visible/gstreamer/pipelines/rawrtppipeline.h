@@ -6,7 +6,7 @@
 /*!
  * \brief Complete pipeline - sending data from interpipelinesrc to IP address in config.h using RTP
  */
-class RawRtpPipeline : public PipelineBase
+class RawRtpPipeline : public Pipelinebase
 {
 public:
     RawRtpPipeline();

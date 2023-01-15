@@ -5,12 +5,13 @@
 #include <array>
 #include <vector>
 #include <type_traits>
+#include <QKeyEvent>
 
 #include "library/controller/elements/controllercommand.h"
 #include "library/controller/elements/iterable.h"
 
 //! \brief Interface for a displayable value
-class ISetter
+class IValueSetter
 {
 public:
     virtual void setAsync() = 0;
@@ -28,6 +29,9 @@ public:
     virtual void increase() = 0;
     virtual void decrease() = 0;
     virtual bool isHidden() = 0;
+
+    virtual bool isControlable() = 0;
+    virtual void control(QKeyEvent* event) = 0;
 };
 
 /*!
@@ -37,10 +41,10 @@ public:
  * @tparam TContext Context in which confirmation function is called
  */
 template<typename TValue, typename TContext>
-class Setter : public ISetter
+class ValueSetter : public IValueSetter
 {
 public:    
-    Setter(std::unique_ptr<Iterable<TValue>> iterator, bool (TContext::*setFunc) (TValue), TContext* context, QString units = "")
+    ValueSetter(std::unique_ptr<Iterable<TValue>> iterator, bool (TContext::*setFunc) (TValue), TContext* context, QString units = "")
         : m_iterator(std::move(iterator)), m_units(units), m_context(context), m_setFunc(setFunc)
     {
 
@@ -109,18 +113,24 @@ public:
         return false;
     }
 
-    template<typename TCont, typename TVal, TVal ...TPossible>
-    void addDependency(Setter<TVal, TCont> *value)
+    bool isControlable() override
     {
-       m_dependencies.emplace_back(std::make_unique<Dependency<TCont, TVal, TPossible...>>(value));
+        return false;
     }
+    void control(QKeyEvent*) override {}
 
-private:
     virtual TValue getValue()
     {
         return m_iterator->get();
     }
 
+    template<typename TCont, typename TVal, TVal ...TPossible>
+    void addDependency(ValueSetter<TVal, TCont> *value)
+    {
+       m_dependencies.emplace_back(std::make_unique<Dependency<TCont, TVal, TPossible...>>(value));
+    }
+
+private:
     std::unique_ptr<Iterable<TValue>> m_iterator;
 
     QString m_units;
@@ -139,7 +149,7 @@ private:
     class Dependency : public IDependency
     {
     public:
-        explicit Dependency(Setter<TVal, TCont>* value) : m_value(value) { }
+        explicit Dependency(ValueSetter<TVal, TCont>* value) : m_value(value) { }
 
         bool isValid() override
         {
@@ -154,29 +164,33 @@ private:
         }
 
     private:
-        Setter<TVal, TCont>* m_value;
+        ValueSetter<TVal, TCont>* m_value;
     };
 
     std::vector<std::unique_ptr<IDependency>> m_dependencies {};
 };
 
+//! \brief Creates unique pointer to bool ValueSetter - used to elimainate need for template args.
 template<typename TContext>
 static auto makeBoolValue(bool defaultValue, bool (TContext::*func) (bool), TContext* context, QString trueText = "On", QString falseText = "Off")
 {
-    return std::make_unique<Setter<bool, TContext>>( std::make_unique<BoolIterable>(defaultValue, trueText, falseText), func, context);
+    return std::make_unique<ValueSetter<bool, TContext>>( std::make_unique<BoolIterable>(defaultValue, trueText, falseText), func, context);
 }
 
+//! \brief Creates unique pointer to numeral ValueSetter - used to elimainate need for template args.
 template<typename TVal, typename TContext>
 static auto makeIntValue(TVal defaultValue, TVal minValue, TVal maxValue, bool (TContext::*func) (TVal), TContext* context, QString units="")
 {
-    return std::make_unique<Setter<TVal, TContext>>(std::make_unique<ValueIterable<TVal>>(defaultValue, minValue, maxValue), func, context, units);
+    return std::make_unique<ValueSetter<TVal, TContext>>(std::make_unique<ValueIterable<TVal>>(defaultValue, minValue, maxValue), func, context, units);
 }
 
+//! \brief Creates unique pointer to array ValueSetter - used to elimainate need for template args.
 template<typename TElem, size_t TSize, typename TContext>
 static auto makeArrValue(const std::array<std::pair<TElem, QString>, TSize>& array, bool (TContext::*func) (TElem), TContext* context)
 {
-    PairArrayIterable<TElem, TSize> arr(array);
-    return std::make_unique<Setter<TElem, TContext>>(std::make_unique<PairArrayIterable<TElem, TSize>>(array), func, context);
+    return std::make_unique<ValueSetter<TElem, TContext>>(std::make_unique<PairArrayIterable<TElem, TSize>>(array), func, context);
 }
 
 #endif // SETTER_H
+
+

@@ -3,7 +3,7 @@
 #include <QKeyEvent>
 #include "graphic/menu/menu.h"
 
-ValueItem::ValueItem(const QString& text, ISetter* value, SubmenuItem* parentMenu, QWidget* parentWidget, bool live)
+ValueItem::ValueItem(const QString& text, IValueSetter* value, SubmenuItem* parentMenu, QWidget* parentWidget, bool live)
     : ItemBase(parentWidget, parentMenu),
       m_value(value),
       m_liveView(live)
@@ -66,6 +66,10 @@ void ValueItem::control(QKeyEvent* event)
             break;
 
         default:
+            if (m_value->isControlable())
+            {
+                m_value->control(event);
+            }
             return;
     }
 

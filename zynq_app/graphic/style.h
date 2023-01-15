@@ -36,8 +36,10 @@ public:
     } menu;
 
 private:
-
     Style();
+
+    Style (const Style&) = delete;
+    Style& operator= (const Style&) = delete;
 };
 
 #endif // STYLE_H

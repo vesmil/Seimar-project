@@ -15,45 +15,29 @@ Grafický výstup bude na desce prostřednictvím DisplayPort.
 Program bude napsán v C++ a grafické rozhraní bude implementováno pomocí frameworku QT.  
 Videostream z kamery bude zobrazen pravděpodobně pomocí knihovny GStreamer.
 
-*Schéma grafického rozhraní:*
-
-<img src="README.assets/UI.png" alt="UI" style="zoom:60%;" />
-
 ## Hardware
 
-### MPSoC - [Zynq UltraScale+](https://www.xilinx.com/products/silicon-devices/soc/zynq-ultrascale-mpsoc.html)
+#### MPSoC - [Zynq UltraScale+](https://www.xilinx.com/products/silicon-devices/soc/zynq-ultrascale-mpsoc.html)
 
 Jedná se o MPSoC (Multiprocessor system on a chip) od společnosti Xilinx na kterém se nachází ARM procesor a programovatelné hradlové pole (FPGA).
 
-Bude použit jako jako součást modulu [Trenz TE820-04](https://wiki.trenz-electronic.de/display/PD/TE0820+TRM). Ten mimo jiné obsahuje 2GB RAM, 8 GB eMMC paměť, 128 MB flash paměť pro bootování a mnoho pinů a kontektorů.
+#### Nosná deska
 
-### Nosná deska
-
-*Dočasně [Trenz TE0701-06](https://wiki.trenz-electronic.de/display/PD/TE0701+TRM), následně vlastní deska ze spolupráce s ČVUT*
+*Dočasně [ZCU104](https://www.xilinx.com/products/boards-and-kits/zcu104.html), následně deska ze spolupráce s ČVUT*
 
 Nosná deska přidá k základnímu modulu SSD disk a veškeré potřebné rozhraní - především tedy DisplayPort, ethernet a port pro připojení kamery.
 
 #### 4k kamera - [Sony FCB-ER8550](https://www.image-sensing-solutions.eu/FCB-ER8550.html)
 
-Kamerá, která podporuje přes UART podporuje VISCA protokol, ten slouží pro nastavení vlastností jako optický zoom, ostření či a expozice.
+Kamera, která podporuje přes UART podporuje VISCA protokol, ten slouží pro nastavení vlastností jako optický zoom, ostření či a expozice.
 
 Kamera bude odesílat obraz ve formátu YCbCr.
 
-### HW schéma projektu:
+### Současný stav hardware
 
-<img src="README.assets/Scheme.png" alt="Scheme" style="zoom: 80%;" />
+Dokončení vlastní desky ze strany ČVUT je odloženo na neurčito. Projekt tedy bude finalizován na vývojové desce od Xylinx (ZCU104).
 
-## Provedení
-
-### Současný stav
-
-V současné chvíli nejsou ještě hotové dvě hardwarové věci - převodník výstupu kamery na desku a hradlové pole pro zprostředkování streamu pro procesor. To ale ovšem není pro postup potřeba, jelikož je na FPGA připraven test pattern generátor, který mi bude dočasně generovat náhodný obraz.
-
-Navíc se stále čeká na nosnou desku od ČVUT, která místo HDMI nabídne DisplayPort. HDMI u aktuální desky totiž nevysílá žádný obraz a pouze je k němu přístup z hradlového pole. V nejhorším případě mám ale k dispozici desku na které DisplayPort je a s úpravou prostředí by šla využít.
-
-*Edit: U ČVUTí desky se ukázal být problém SSD disk a bude pravděpodobně potřebovat předělat, demonstrace tedy bude nejspíše nutná na ZCU104.*
-
-### TODO
+## Realizace
 
 - [x] Setup
     - [x] Specifikace
@@ -77,26 +61,53 @@ Navíc se stále čeká na nosnou desku od ČVUT, která místo HDMI nabídne Di
     - [x] Všechny potřebné příkazy
         - [x] Command
         - [x] Inquiry
-- [ ] Menu
+- [x] Menu
   - [x] Kostra menu
     - [x] Základní položky - submenu, hodnotové položky
     - [x] Závislosti jednotlivých položek
-  - [ ] Vyplnit menu
+  - [x] Vyplnit menu
       - [x] Práce se streamem - zapnout, vypnout jednotlivé pipelines
-      - [ ] Komunikace s kamerou
-        - [x] Zoom, expozice
-        - [ ] ...
-  - [ ] Zařídit odesílání na KMS sink pro kombinaci obrazu
+      - [x] Komunikace s kamerou
 - [ ] Upravit výsledek pro finální použití
     - [x] Visca - předělat na novou kameru
         - [x] Setup rozlišení
     - [x] Gstreamer
         - [x] Předělat stávající pipelines pro novou kameru
-        - [ ] Přidat nastavení rozlišení
-        - [ ] Využít videomixer
-- [ ] Bonusy...
+        - [x] Využít videomixer
+    - [ ] Menu
+        - [ ] Zařídit odesílání na KMS sink pro kombinaci obrazu
+        - [ ] Detaily
+    - [ ] Dokumentace
+
+## Uživatelská příručka
+
+Vzhledem k tomu, že program není mířen na cílového zákazníka, tak uživatelský manuál popíšu více stručně.
+
+Po spuštění programu se zobrazí obraz z kamery. Jediná možnost je stisknutí šipky doleva či entru pro otevření menu.
+Navigace v menu je intuitivní - šipku nahoru pro pohyb, šipka doprava pro potvrzení a šipka doleva pro zrušení či posun o úroveň výše.
+
+V menu se nachází tři základní kategorie - **Functions**, **Stream** a **Advanced**.
+
+### Functions
+
+Nastavení všech podstatných vlastností kamery:
+
+* Zoom
+* Ostření
+* Expozice
+* Whitebalance
+* Visibility Enhancment
+* Backlight compoensation
+
+### Stream
+
+Vypínání a zapínání základních GStreamer pipeline - zobrazení na monitor, odeslání po RTP a uložení do souboru.
+
+### Advanced
+
+Nastavení rozlišení, barevného formátu (RGB vs YUV) a IP adresa na kterou se odesílají dat prostřednictvím RTP.
 
 ---
 
-**Ročníkový projekt na MFF v zimním semestru 2022/23**  
+**Ročníkový projekt na MFF v letním semestru 2021/2022 a zimním semestru 2022/23**  
 Autor Milan Veselý ve spolupráci s Workswell s.r.o.

@@ -33,14 +33,16 @@ public:
             return false;
         }
 
-        /* {
+        /*
+        {
             QString test = QString::number(addr, 16) + " ";
             for (auto&& b : message)
                 test += QString::number(b, 16) + " ";
 
             test.chop(1);
             qCInfo(viscaLog()).noquote() << test;
-        } */
+        }
+        */
 
         int sent_size = write(m_descriptor, &addr, 1);
         if (sent_size == -1)
@@ -129,8 +131,6 @@ public:
         qCInfo(viscaLog()).noquote() << "Throwing away" << read_count << "bytes";
     }
 
-    // NOTE function for simpler debug
-    /*
     template<typename... types>
     [[deprecated("Use only for debug")]]
     bool sendMessage(uint8_t address, types... data)
@@ -140,7 +140,6 @@ public:
 
         return sendMessage(address, message);
     }
-    */
 
 private:
     int m_descriptor;

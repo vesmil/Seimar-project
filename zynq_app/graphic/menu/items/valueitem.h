@@ -17,7 +17,7 @@ public:
      * @param parentWidget Parent widget as for all Qt widgets
      * @param live Determines if value should be updated after every change
      */
-    ValueItem(const QString& text, ISetter* value, SubmenuItem* parentMenu, QWidget* parentWidget = nullptr, bool live = false);
+    ValueItem(const QString& text, IValueSetter* value, SubmenuItem* parentMenu, QWidget* parentWidget = nullptr, bool live = false);
 
     void execute() override;
     void control(QKeyEvent* event) override;
@@ -32,7 +32,7 @@ private:
     QLabel m_textLabel{};
     QLabel m_valueLabel{};
 
-    ISetter* m_value;
+    IValueSetter* m_value;
 
     bool m_liveView;
 };

@@ -1,6 +1,7 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+#include <QString>
 #include <string>
 
 //! \brief Singleton used to store settings
@@ -12,7 +13,7 @@ public:
 
     struct
     {
-        std::string ip_address{"10.15.1.77"};
+        QString ip_address{"10.15.1.77"};
         int port = 5000;
     } rtp;
 
@@ -28,6 +29,7 @@ public:
         std::string cameraUart {"/dev/ttyUSB0"};
     } path;
 
+
     struct
     {
         // ...
@@ -36,6 +38,8 @@ public:
 private:
     Settings() = default;
 
+    Settings (const Settings&) = delete;
+    Settings& operator= (const Settings&) = delete;
 };
 
 #endif // SETTINGS_H

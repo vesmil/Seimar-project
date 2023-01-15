@@ -16,12 +16,12 @@ public:
      * \param parentMenu Parent menu to go to after confirmation
      * @param parentWidget Parent widget as for all Qt widgets
      */
-    PopupItem(const QString& text, ControlableWidget* popup, SubmenuItem* parentMenu, QWidget* parent);
+    PopupItem(const QString& text, IControlablePopup* popup, SubmenuItem* parentMenu, QWidget* parent);
 
     void execute() override;
     void control(QKeyEvent* event) override;
 
-    ControlableWidget* m_popupWidget;
+    IControlablePopup* m_popupWidget;
 };
 
 #endif // POPUPITEM_H

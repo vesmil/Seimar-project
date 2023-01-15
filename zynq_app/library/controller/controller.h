@@ -19,45 +19,43 @@
 class Controller
 {
     template<typename T>
-    using SetPtr = std::unique_ptr<Setter<T,Controller>>;
+    using ValPtr = std::unique_ptr<ValueSetter<T,Controller>>;
 
 public:
     Controller(Visca& visca, GsFacade& gstreamer);
     void addCommandToQueue(std::unique_ptr<IControllerCommand> command);
 
-    SetPtr<float> zoom = makeArrValue(ViscaCommands::Zoom::zoomArray, &Controller::setZoom, this);
+    ValPtr<float> zoom = makeArrValue(ViscaCommands::Zoom::zoomArray, &Controller::setZoom, this);
 
-    SetPtr<ViscaCommands::Exposure::Mode> exposureMode = makeArrValue(ViscaCommands::Exposure::ModeArray, &Controller::setExposureMode, this);
-    SetPtr<uint8_t> shutter = makeIntValue<uint8_t>(0, 0, 10, &Controller::setShutter, this);
-    SetPtr<uint8_t> iris = makeIntValue<uint8_t>(0x10, 0x5, 0x15, &Controller::setIris, this);
-    SetPtr<int> gain = makeIntValue<int>(0, -3, 33, &Controller::setGain, this, "dB");
+    ValPtr<ViscaCommands::Exposure::Mode> exposureMode = makeArrValue(ViscaCommands::Exposure::ModeArray, &Controller::setExposureMode, this);
+    ValPtr<uint8_t> shutter = makeIntValue<uint8_t>(0, 0, 10, &Controller::setShutter, this);
+    ValPtr<uint8_t> iris = makeIntValue<uint8_t>(0x10, 0x5, 0x15, &Controller::setIris, this);
+    ValPtr<int> gain = makeIntValue<int>(0, -3, 33, &Controller::setGain, this, "dB");
 
-    SetPtr<bool> power = makeBoolValue(true, &Controller::setPower, this);
+    ValPtr<bool> power = makeBoolValue(true, &Controller::setPower, this);
 
-    SetPtr<ViscaCommands::Hdmi::Format> format = makeArrValue(ViscaCommands::Hdmi::FormatArray, &Controller::setFormat, this);
-    SetPtr<ViscaCommands::Hdmi::Colorspace> colorspace = makeArrValue(ViscaCommands::Hdmi::ColorSpaceArray, &Controller::setColorspace, this);
+    ValPtr<ViscaCommands::Hdmi::Format> format = makeArrValue(ViscaCommands::Hdmi::FormatArray, &Controller::setFormat, this);
+    ValPtr<ViscaCommands::Hdmi::Colorspace> colorspace = makeArrValue(ViscaCommands::Hdmi::ColorSpaceArray, &Controller::setColorspace, this);
 
-    SetPtr<ViscaCommands::Color::WhiteBalance::Mode> whiteBalance = makeArrValue(ViscaCommands::Color::WhiteBalance::ModeArray, &Controller::setWhitebalance, this);
-    SetPtr<uint16_t> rGain = makeIntValue<uint16_t>(200, 0, 0xFF, &Controller::setRGain, this);
-    SetPtr<uint16_t> bGain = makeIntValue<uint16_t>(200, 0, 0xFF, &Controller::setBGain, this);
+    ValPtr<ViscaCommands::Color::WhiteBalance::Mode> whiteBalance = makeArrValue(ViscaCommands::Color::WhiteBalance::ModeArray, &Controller::setWhitebalance, this);
+    ValPtr<uint16_t> rGain = makeIntValue<uint16_t>(200, 0, 0xFF, &Controller::setRGain, this);
+    ValPtr<uint16_t> bGain = makeIntValue<uint16_t>(200, 0, 0xFF, &Controller::setBGain, this);
 
-    SetPtr<bool> autofocus = makeBoolValue(true, &Controller::setAutofocus, this, "Auto", "Manual");
-    SetPtr<uint16_t> focusDistance = makeIntValue<uint16_t>(0xB, 0x1, 0xF, &Controller::setFocusDistance, this);
+    ValPtr<bool> autofocus = makeBoolValue(true, &Controller::setAutofocus, this, "Auto", "Manual");
+    ValPtr<uint16_t> focusDistance = makeIntValue<uint16_t>(0xB, 0x1, 0xF, &Controller::setFocusDistance, this);
 
-    SetPtr<bool> visibilityEnhancer = makeBoolValue(false, &Controller::setvisibilityEnhancer, this);
-    SetPtr<bool> backLight = makeBoolValue(false, &Controller::setbackLightCompensation, this);
+    ValPtr<bool> visibilityEnhancer = makeBoolValue(false, &Controller::setvisibilityEnhancer, this);
+    ValPtr<bool> backLight = makeBoolValue(false, &Controller::setbackLightCompensation, this);
 
-    SetPtr<bool> rtp_stream = makeBoolValue(true, &Controller::setRtp, this);
-    SetPtr<bool> file_stream = makeBoolValue(false, &Controller::setFile, this);
-    SetPtr<bool> hdmi_stream = makeBoolValue(true, &Controller::setHDMI, this);
+    ValPtr<bool> rtp_stream = makeBoolValue(false, &Controller::setRtp, this);
+    ValPtr<bool> file_stream = makeBoolValue(false, &Controller::setFile, this);
+    ValPtr<bool> hdmi_stream = makeBoolValue(true, &Controller::setHDMI, this);
 
     bool setAllDefault();
 
 private:
     void startExecutingCommandQueue();
     std::atomic_bool queueExecuting{false};
-
-    // TODO many of the functions are not necesseary as it is copy paste of m_visca...
 
     bool setZoom(float value);
     bool setExposureMode(ViscaCommands::Exposure::Mode mode);

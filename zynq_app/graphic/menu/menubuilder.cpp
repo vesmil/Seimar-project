@@ -1,6 +1,7 @@
 #include "menubuilder.h"
 
 #include "library/controller/controller.h"
+#include "library/application/settings.h"
 #include "graphic/menu/items/valueitem.h"
 #include "graphic/menu/items/popupitem.h"
 
@@ -18,7 +19,6 @@ std::unique_ptr<SubmenuItem> MenuBuilder::buildFunctions(SubmenuItem* parentMenu
 {
     auto functionMenu = std::make_unique<SubmenuItem>("Functions", parentMenu, parentWidget);
 
-    // TODO split into submenus
     functionMenu->addItem(std::make_unique<ValueItem>("Zoom", controller->zoom.get(), functionMenu.get(), parentWidget, true));
 
     functionMenu->addItem(std::make_unique<ValueItem>("Focus mode", controller->autofocus.get(), functionMenu.get(), parentWidget, true));
@@ -57,9 +57,7 @@ std::unique_ptr<SubmenuItem> MenuBuilder::buildAdvanced(SubmenuItem* parentMenu,
     advMenu->addItem(std::make_unique<ValueItem>("Colorspace", controller->colorspace.get(), advMenu.get(), parentWidget));
     advMenu->addItem(std::make_unique<ValueItem>("Format", controller->format.get(), advMenu.get(), parentWidget));
 
-    // TODO remove this dangling pointers and create proper widget
-    ControlableWidget* widget = new ControlableWidget("...", parentWidget);
-    advMenu->addItem(std::make_unique<PopupItem>("IP address for RTP", widget, advMenu.get(), parentWidget));
+    // advMenu->addItem(std::make_unique<PopupItem>("IP address for RTP", controller->rtpAdress.get(), advMenu.get(), parentWidget));
 
     return advMenu;
 }

@@ -6,7 +6,7 @@
 /*!
  * \brief Complete pipeline - saving raw data from interpipelinesrc
  */
-class RawFilePipeline : public PipelineBase
+class RawFilePipeline : public Pipelinebase
 {
 public:
     RawFilePipeline();

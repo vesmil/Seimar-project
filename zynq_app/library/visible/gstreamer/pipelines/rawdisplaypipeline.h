@@ -6,7 +6,7 @@
 /*!
  * \brief Complete pipeline - displaying raw data
  */
-class RawDisplayPipeline : public PipelineBase
+class RawDisplayPipeline : public Pipelinebase
 {
 public:
     RawDisplayPipeline();

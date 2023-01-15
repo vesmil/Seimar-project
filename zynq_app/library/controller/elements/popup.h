@@ -3,14 +3,15 @@
 
 #include <QLabel>
 
-// NOTE this needs to be more versatile
-
-//! \brief QWidget with added controls
-class ControlableWidget : public QLabel
+//! \brief Interface for a displayable value
+class IControlablePopup
 {
 public:
-    ControlableWidget(const QString& text, QWidget* parentWidget);
-    void control(QKeyEvent* event);
+    virtual void open() = 0;
+    virtual void close() = 0;
+
+    virtual void control(QKeyEvent* event) = 0;
+    virtual QWidget* getWidget();
 };
 
 #endif // POPUP_H

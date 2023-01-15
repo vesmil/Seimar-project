@@ -3,7 +3,7 @@
 #include "library/application/settings.h"
 #include "library/visible/gstreamer/gsfacade.h"
 
-RawRtpPipeline::RawRtpPipeline() : PipelineBase()
+RawRtpPipeline::RawRtpPipeline() : Pipelinebase()
 {
     setSrcFromInternalPipeline("rtp-source");
     setQueue("rtp-queue");
@@ -23,7 +23,7 @@ void RawRtpPipeline::setUdpsink()
 {
     m_data.sink = GsFacade::makeElement("udpsink", "rtp-sink");
 
-    g_object_set(m_data.sink, "port", Settings::getInstance().rtp.port, "host", Settings::getInstance().rtp.ip_address.c_str(),
+    g_object_set(m_data.sink, "port", Settings::getInstance().rtp.port, "host", Settings::getInstance().rtp.ip_address.data(),
                  "sync", false, "async", false, nullptr);
 }
 

@@ -29,12 +29,11 @@ public:
     static GstElement* makeElement(const gchar *factoryName, const gchar *name);
 
 private:
-    // NOTE prob would move to settings
     static const int DEBUG_LEVEL = 2;
 
-    std::unique_ptr<PipelineBase> rtpPipe;
-    std::unique_ptr<PipelineBase> rawPipe;
-    std::unique_ptr<PipelineBase> displayPipe;
+    std::unique_ptr<Pipelinebase> rtpPipe;
+    std::unique_ptr<Pipelinebase> rawPipe;
+    std::unique_ptr<Pipelinebase> displayPipe;
 
     static bool m_interpipelineInited;
 };

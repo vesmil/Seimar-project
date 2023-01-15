@@ -11,7 +11,7 @@
 /*!
  * \brief QWidget used to display, control and store the whole menu
  */
-class Menu  : public QWidget
+class Menu  : public QLabel
 {
     Q_OBJECT
 
@@ -37,6 +37,9 @@ public:
 
 private:
     Menu();
+    Menu (const Menu&) = delete;
+    Menu& operator= (const Menu&) = delete;
+
     bool m_active = false;
 
     //! \brief Stores the whole menu in treelike structure
